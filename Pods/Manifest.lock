@@ -1,0 +1,26 @@
+PODS:
+  - IQKeyboardManager (4.0.10)
+  - Masonry (1.0.2)
+  - MBProgressHUD (0.9.2)
+  - SBJson (5.0.0)
+  - SDWebImage (4.1.0):
+    - SDWebImage/Core (= 4.1.0)
+  - SDWebImage/Core (4.1.0)
+
+DEPENDENCIES:
+  - IQKeyboardManager
+  - Masonry
+  - MBProgressHUD (~> 0.9.2)
+  - SBJson
+  - SDWebImage
+
+SPEC CHECKSUMS:
+  IQKeyboardManager: 593ee99b88381f4b9ccb22bd680f22606351bd41
+  Masonry: 7c429b56da9d4ee0bbb3ed77a5ea710d6a5df39e
+  MBProgressHUD: 1569cf7ace17a8bac47aabfbb8580a49690386d1
+  SBJson: 73c848dc34be51fda282fab12bda6c426f5ead08
+  SDWebImage: 0e435c14e402a6730315a0fb79f95e68654d55a4
+
+PODFILE CHECKSUM: 400c5ec8ecf6fa1397e03bb3e48c76c5f2afb804
+
+COCOAPODS: 1.1.1

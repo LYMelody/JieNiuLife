@@ -9,11 +9,12 @@
 #import "JNSYSexSelectViewController.h"
 #import "JNSHCommon.h"
 #import "Masonry.h"
-//#import "JNSYCommenMethods.h"
 #import "JNSYUserInfo.h"
 #import "JNSHSexCell.h"
 #import "SBJSON.h"
 #import "IBHttpTool.h"
+
+
 @interface JNSYSexSelectViewController ()<UITableViewDelegate,UITableViewDataSource>
 
 @property (nonatomic, retain)NSIndexPath *selectedIndexPath;
@@ -41,10 +42,6 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-    
-   
-    //_selectedIndexPath = [NSIndexPath indexPathWithIndex:1];
     
     UITableView *table = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight)];
     table.delegate = self;
@@ -139,6 +136,7 @@
     
 }
 
+//上传性别修改信息
 - (void)upLoadSexInfo:(NSString *)usersex {
     
     NSDictionary *dic =  @{
@@ -161,8 +159,6 @@
         NSString *code = dic[@"code"];
         if ([code isEqualToString:@"000000"]) {
             
-           //[self performSelector:@selector(back) withObject:nil afterDelay:1];
-           // [JNSYUserInfo getUserInfo].userSex = Text.text;
             
             if (_ChangeSexBlock) {
                 self.ChangeSexBlock();
@@ -183,6 +179,7 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
 
 /*
 #pragma mark - Navigation

@@ -56,8 +56,6 @@
         _HeaderImgView.image = [UIImage imageNamed:@"my_head_portrait"];
     }
     
-    //_HeaderImgView.image = [UIImage imageNamed:@"my_head_portrait"];
-    
     [self.view addSubview:_HeaderImgView];
     
     [_HeaderImgView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -73,7 +71,6 @@
 - (void)EditorHeaderImg {
     
     
-    NSLog(@"更换头像");
     
     [LSActionSheet showWithTitle:nil destructiveTitle:nil otherTitles:@[@"拍照",@"从手机相册选择",@"保存图片"] block:^(int index) {
         NSLog(@"-----%d",index);
@@ -152,11 +149,11 @@
     
 }
 
-
+//上传头像
 - (void)UpdateUserPicHeader:(NSString *)picHeader {
     
     NSDictionary *dic = @{
-                          //@"timestamp":[JNSHAutoSize getTimeNow],
+                          
                           @"userNick":@"",
                           @"picHeader":picHeader
                           };
@@ -176,7 +173,6 @@
         [HUD hide:YES];
         //设置_HeaderImgView头像
         [_HeaderImgView sd_setImageWithURL:[NSURL URLWithString:picHeader]];
-        //_HeaderImgView.image = [UIImage ima]
         //设置头像URL
         [JNSYUserInfo getUserInfo].picHeader = picHeader;
         
@@ -188,14 +184,12 @@
     
 }
 
-//上传头像
+//上传头像图片获取图片URL
 - (void)upLoadHeaderImg:(NSString *)fileBase64 {
     
     HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-   // HUD.label.text = @"正在上传头像";
     HUD.labelText = @"正在上传头像";
     NSDictionary *Dic = @{
-                          //@"timestamp":[JNSYAutoSize getTimeNow],
                           @"fileBase64":fileBase64,
                           @"type":@"CertFace"
                           };

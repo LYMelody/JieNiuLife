@@ -25,6 +25,8 @@
 #import "SBJSON.h"
 #import "IBHttpTool.h"
 #import "UIImageView+WebCache.h"
+
+
 @interface JNSHMyViewController ()<UITableViewDelegate,UITableViewDataSource,UIGestureRecognizerDelegate>
 
 @end
@@ -60,7 +62,7 @@
     
     //判断是否登录
     if ([JNSYUserInfo getUserInfo].isLoggedIn) {
-        //[self getBaseInfo];
+        [self getBaseInfo];
     }
     
     [table reloadData];
@@ -183,8 +185,6 @@
         //[JNSYAutoSize showMsg:error];
     }];
 
-    
-    
 }
 
 

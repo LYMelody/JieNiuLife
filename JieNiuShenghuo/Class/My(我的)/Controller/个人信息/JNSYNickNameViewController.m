@@ -77,7 +77,7 @@
     if (NickName) {
         Text.text = NickName;
     }else {
-        Text.text = @"捷牛送药";
+        Text.text = @"捷牛生活";
     }
     
     //[Text becomeFirstResponder];
@@ -116,18 +116,14 @@
     
 }
 
+//保存
 - (void)KeepAction {
     
     NSLog(@"keep");
     
-    
-    
-    
-    
     NSDictionary *dic =  @{
                            @"userNick":Text.text
                           };
-    
     
     NSString *action = @"UserBaseDetailEditState";
     
@@ -148,7 +144,7 @@
             hud.mode = MBProgressHUDModeText;
             hud.labelText = @"修改成功";
             [hud hide:YES afterDelay:1];
-            //[self performSelector:@selector(back) withObject:nil afterDelay:1];
+            
             [JNSYUserInfo getUserInfo].userName = Text.text;
             
             if (_changeNickBlock) {
@@ -162,9 +158,9 @@
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
     }];
-    
-    
 }
+
+
 - (void)back {
     
     [self.navigationController popViewControllerAnimated:YES];
@@ -193,15 +189,6 @@
 //    }
 //    
 //}
-
-- (void)upDateUserNickName {
-    
-    
-    
-    
-}
-
-
 
 
 

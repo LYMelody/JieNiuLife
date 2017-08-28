@@ -8,10 +8,6 @@
 
 #import "JNSYAccountMessageViewController.h"
 #import "JNSHCommon.h"
-//#import "JNSYAutoSize.h"
-//#import "JNSYUserInfo.h"
-//#import "IBHttpTool.h"
-//#import "SBJSON.h"
 #import "JNSYHeaderTableViewCell.h"
 #import "JNSHMyCommonCell.h"
 #import "JNSYHeaderEditorViewController.h"
@@ -25,6 +21,7 @@
 #import "IBHttpTool.h"
 #import "MBProgressHUD.h"
 #import "UIImageView+WebCache.h"
+
 @interface JNSYAccountMessageViewController ()<UITableViewDelegate,UITableViewDataSource,UIGestureRecognizerDelegate>
 
 
@@ -246,56 +243,6 @@
 
 }
 
-
-//- (void)getAccountMsg {
-//    
-//    //时间戳
-//    NSString *timeSp = [JNSYAutoSize getTimeNow];
-//    
-//    NSDictionary *dic = @{
-//                          @"timestamp":timeSp
-//                          };
-//    NSString *action = @"UserBaseDetailState";
-//    
-//    NSDictionary *requestDic = @{
-//                                 @"action":action,
-//                                 @"token":[JNSYUserInfo getUserInfo].userToken,
-//                                 @"data":dic
-//                                 };
-//    NSString *params = [requestDic JSONFragment];
-//    [IBHttpTool postWithURL:JNSYTestUrl params:params success:^(id result) {
-//        
-//        NSLog(@"%@",result);
-//        NSDictionary *resultdic = [result JSONValue];
-//        NSString *code = resultdic[@"code"];
-//        NSLog(@"%@,%@",resultdic,code);
-//        if([code isEqualToString:@"000000"]) {
-//            
-//            [JNSYUserInfo getUserInfo].userCode = resultdic[@"userCode"];
-//            [JNSYUserInfo getUserInfo].userPhone = resultdic[@"userPhone"];
-//            [JNSYUserInfo getUserInfo].userName = resultdic[@"userName"];
-//            [JNSYUserInfo getUserInfo].shopStates = resultdic[@"shopStates"];
-//            [JNSYUserInfo getUserInfo].userAccount = resultdic[@"userAccount"];
-//            [JNSYUserInfo getUserInfo].userCert = resultdic[@"userKey"];
-//            [JNSYUserInfo getUserInfo].userSex = resultdic[@"sex"];
-//            [JNSYUserInfo getUserInfo].birthday = resultdic[@"birthday"];
-//            [JNSYUserInfo getUserInfo].addressInfo = resultdic[@"addressInfo"];
-//            [JNSYUserInfo getUserInfo].picHeader = resultdic[@"picHeader"];
-//            [JNSYUserInfo getUserInfo].lastIp = resultdic[@"lastIp"];
-//            [JNSYUserInfo getUserInfo].lastTime = resultdic[@"lastTime"];
-//            
-//            [table reloadData];
-//            
-//        }else {
-//            NSString *msg = resultdic[@"msg"];
-//            [JNSYAutoSize showMsg:msg];
-//        }
-//        
-//    } failure:^(NSError *error) {
-//        NSLog(@"%@",error);
-//    }];
-//    
-//}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

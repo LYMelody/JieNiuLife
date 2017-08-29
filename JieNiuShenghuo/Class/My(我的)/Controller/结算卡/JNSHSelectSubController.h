@@ -10,4 +10,8 @@
 
 @interface JNSHSelectSubController : UIViewController
 
+@property(nonatomic,copy)NSString *city;
+
+@property(nonatomic,copy)NSString *bankName;
+
 @end

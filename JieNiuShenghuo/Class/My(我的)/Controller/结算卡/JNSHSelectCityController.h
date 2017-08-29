@@ -12,4 +12,6 @@
 
 @property(nonatomic,strong)NSArray *citylist;
 
+@property(nonatomic,copy)NSString *bankName;
+
 @end

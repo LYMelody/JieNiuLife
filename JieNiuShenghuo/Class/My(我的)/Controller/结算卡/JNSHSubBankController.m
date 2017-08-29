@@ -168,7 +168,8 @@
                 __strong typeof(self) strongSelf = weakSelf;
                 JNSHSelectSubController *SelcectVc = [[JNSHSelectSubController alloc] init];
                 SelcectVc.hidesBottomBarWhenPushed = YES;
-                
+                SelcectVc.city = city;
+                SelcectVc.bankName = strongSelf.bankName;
                 [strongSelf.navigationController pushViewController:SelcectVc animated:YES];
                 
             };
@@ -235,9 +236,7 @@
         make.left.equalTo(backImg).offset([JNSHAutoSize width:15]);
         make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:200], [JNSHAutoSize height:41]));
     }];
-    
-    
-    
+
     return backImg;
     
 }
@@ -250,14 +249,12 @@
         NSString *proName = ProArr[indexPath.row];
         Vc.citylist = Citydict[proName];
         Vc.hidesBottomBarWhenPushed = YES;
+        Vc.bankName = self.bankName;
         [self.navigationController pushViewController:Vc animated:YES];
         
     }
     
 }
-
-
-
 
 //- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
 //    

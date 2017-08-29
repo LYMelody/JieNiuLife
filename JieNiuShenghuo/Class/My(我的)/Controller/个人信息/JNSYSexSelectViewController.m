@@ -98,7 +98,7 @@
         cell.accessoryType = UITableViewCellAccessoryNone;
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
-    
+    cell.userInteractionEnabled = NO;
     return cell;
 }
 

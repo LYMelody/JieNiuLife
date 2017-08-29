@@ -104,16 +104,15 @@
         make.size.mas_equalTo(CGSizeMake(KscreenWidth - [JNSHAutoSize width:20], [JNSHAutoSize height:41]));
     }];
     
-    
     return view;
-    
-    
     
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     JNSHSelectSubController *SelectSub = [[JNSHSelectSubController alloc] init];
+    SelectSub.bankName = self.bankName;
+    SelectSub.city = self.citylist[indexPath.row];
     SelectSub.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:SelectSub animated:YES];
     

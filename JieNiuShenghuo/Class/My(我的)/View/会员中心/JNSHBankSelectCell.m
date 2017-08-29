@@ -81,14 +81,12 @@
         make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:26], [JNSHAutoSize height:26]));
     }];
     
-   
-    
     if (self.tag == 2) {
         
         [_bankNameLab mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerY.equalTo(self);
             make.left.equalTo(_bankLogoImg.mas_right).offset([JNSHAutoSize width:13]);
-            make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:80], [JNSHAutoSize height:20]));
+            make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:180], [JNSHAutoSize height:20]));
         }];
         
         

@@ -51,7 +51,6 @@
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:keepBtn];
     
     
-    
     UIImageView *BackImg = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight)];
     BackImg.backgroundColor = ColorTableBackColor;
     BackImg.userInteractionEnabled = YES;
@@ -113,7 +112,6 @@
         make.height.mas_equalTo(SeperateLineWidth);
     }];
     
-    
 }
 
 //保存
@@ -159,7 +157,6 @@
         NSLog(@"%@",error);
     }];
 }
-
 
 - (void)back {
     

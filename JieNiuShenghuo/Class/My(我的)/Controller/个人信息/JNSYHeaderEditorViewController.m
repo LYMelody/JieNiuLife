@@ -46,7 +46,7 @@
     self.navigationItem.rightBarButtonItem = rightBtn;
     
     _HeaderImgView = [[UIImageView alloc] init];
-    _HeaderImgView.backgroundColor = ColorTableBackColor;
+    _HeaderImgView.backgroundColor = [UIColor clearColor];
     _HeaderImgView.contentMode = UIViewContentModeScaleAspectFit;
     _HeaderImgView.clipsToBounds = YES;
     
@@ -154,7 +154,7 @@
     
     NSDictionary *dic = @{
                           
-                          @"userNick":@"",
+                          @"userNick":[JNSYUserInfo getUserInfo].userName,
                           @"picHeader":picHeader
                           };
     NSString *action = @"UserBaseDetailEditState";
@@ -191,7 +191,7 @@
     HUD.labelText = @"正在上传头像";
     NSDictionary *Dic = @{
                           @"fileBase64":fileBase64,
-                          @"type":@"CertFace"
+                          @"type":@"Other"
                           };
     NSString *action = @"FileUploadState";
     

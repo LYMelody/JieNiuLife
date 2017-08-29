@@ -54,7 +54,6 @@
     _vipImgView.image = [UIImage imageNamed:@"my_head_vip"];
     _vipImgView.layer.masksToBounds = YES;
     _vipImgView.layer.cornerRadius = 5;
-    _vipImgView.hidden = YES;
     [self addSubview:_vipImgView];
     
     _rightIndicatorView = [[UIImageView alloc] init];
@@ -121,9 +120,9 @@
     _showVip = showVip;
     
     if (showVip) {
-        _vipImgView.hidden = NO;
+        _vipImgView.image = [UIImage imageNamed:@"my_head_vip"];
     }else {
-        _vipImgView.hidden = YES;
+        _vipImgView.image = [UIImage imageNamed:@"vip_head_vip_grey"];
     }
     
 }
@@ -137,13 +136,12 @@
         _logoInLab.hidden = YES;
         _nickNameLab.hidden = NO;
         _phoneLab.hidden = NO;
-        
-        
+        _vipImgView.hidden = NO;
     }else {
         
         _nickNameLab.hidden = YES;
         _phoneLab.hidden = YES;
-        
+        _vipImgView.hidden = YES;
         _logoInLab.hidden = NO;
         _headerView.image = [UIImage imageNamed:@"my_head_portrait_grey"];
     }

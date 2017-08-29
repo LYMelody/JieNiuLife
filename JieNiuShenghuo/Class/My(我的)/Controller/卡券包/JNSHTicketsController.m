@@ -9,6 +9,11 @@
 #import "JNSHTicketsController.h"
 #import "JNSHTicketsCell.h"
 #import "Masonry.h"
+#import "JNSHAutoSize.h"
+#import "JNSYUserInfo.h"
+#import "SBJSON.h"
+#import "IBHttpTool.h"
+
 @interface JNSHTicketsController ()<UITableViewDelegate,UITableViewDataSource>
 
 @end
@@ -38,6 +43,7 @@
     UIImageView *backimg = self.navigationController.navigationBar.subviews.firstObject;
     backimg.alpha = 0;
     
+    [self requestForTickets];
     
     //[self.navigationController setNavigationBarHidden:NO animated:NO];
 }
@@ -190,6 +196,45 @@
     
     return [JNSHAutoSize height:91];
     
+}
+
+//获取卡券包
+- (void)requestForTickets {
+    
+    NSDictionary *dic = @{
+                          @"isUse":@"0",
+                          @"size":@"10",
+                          @"page":@"0"
+                          };
+    NSString *action = @"UserVouchersList";
+    
+    NSDictionary *requstDic = @{
+                                @"action":action,
+                                @"data":dic,
+                                @"token":[JNSYUserInfo getUserInfo].userToken
+                                };
+    
+    NSString *params = [requstDic JSONFragment];
+    
+    [IBHttpTool postWithURL:JNSHTestUrl params:params success:^(id result) {
+        
+        NSDictionary *resultdic = [result JSONValue];
+        NSString *code = resultdic[@"code"];
+        NSLog(@"%@",resultdic);
+        NSString *msg = resultdic[@"msg"];
+        if ([code isEqualToString:@"000000"]) {
+            
+            
+        }else {
+            
+            [JNSHAutoSize showMsg:msg];
+            
+        }
+        
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
+
 }
 
 - (void)didReceiveMemoryWarning {

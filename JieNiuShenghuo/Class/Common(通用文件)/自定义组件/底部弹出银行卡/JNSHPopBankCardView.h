@@ -10,6 +10,8 @@
 
 typedef void(^AddNewCardBlock)(void);
 
+typedef void(^bankSelectBlock)(NSString *bankName, NSString *bankCode);
+
 @interface JNSHPopBankCardView : UIView<UITableViewDataSource,UITableViewDelegate>
 
 @property(nonatomic,strong)UIView *contentView;
@@ -19,6 +21,8 @@ typedef void(^AddNewCardBlock)(void);
 @property(nonatomic,assign)NSInteger currentIndex;
 
 @property(nonatomic,copy)AddNewCardBlock addnewCardBlock;
+
+@property(nonatomic,copy)bankSelectBlock bankselectBlock;
 
 @property(nonatomic,assign)NSInteger typetag;
 

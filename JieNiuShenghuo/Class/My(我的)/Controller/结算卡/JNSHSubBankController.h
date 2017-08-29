@@ -10,4 +10,6 @@
 
 @interface JNSHSubBankController : UIViewController
 
+@property(nonatomic,copy)NSString *bankName;
+
 @end

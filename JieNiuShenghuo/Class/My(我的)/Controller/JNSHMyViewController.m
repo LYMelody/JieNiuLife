@@ -37,6 +37,7 @@
     UIImageView *headImageView;
     UITableView *table;
     BOOL islogoedIn;
+    BOOL isVip;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -173,6 +174,15 @@
             [JNSYUserInfo getUserInfo].userPoints = resultdic[@"userPoints"];
             [JNSYUserInfo getUserInfo].branderCardFlg = resultdic[@"branderCardFlg"];
             [JNSYUserInfo getUserInfo].branderCardNo = resultdic[@"branderCardNo"];
+            [JNSYUserInfo getUserInfo].picHeader = resultdic[@"picHeader"];
+            [JNSYUserInfo getUserInfo].userVipFlag = [NSString stringWithFormat:@"%@",resultdic[@"vipFlg"]];
+            [JNSYUserInfo getUserInfo].userVipFlag = @"1";
+            if ([[JNSYUserInfo getUserInfo].userVipFlag isEqualToString:@"1"]) {
+                
+                isVip = YES;
+                
+            }
+            
             
         }else {
             NSString *msg = resultdic[@"msg"];
@@ -183,12 +193,10 @@
     } failure:^(NSError *error) {
         
         //[JNSYAutoSize showMsg:error];
+        
     }];
 
 }
-
-
-
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
@@ -211,21 +219,26 @@
             
             JNSHMyHeaderCell *Cell = [[JNSHMyHeaderCell alloc] init];
             Cell.headerView.image = [UIImage imageNamed:@"my_head_portrait"];
-            Cell.nickNameLab.text = @"小二家";
-            Cell.phoneLab.text = @"188****8888";
+            Cell.nickNameLab.text = [JNSYUserInfo getUserInfo].userNick;
+            Cell.phoneLab.text = [[JNSYUserInfo getUserInfo].userPhone stringByReplacingCharactersInRange:NSMakeRange(3, 4) withString:@"****"];
             islogoedIn = [JNSYUserInfo getUserInfo].isLoggedIn;
-            
+            //判断是否是Vip
+            if (isVip) {
+                Cell.showVip = YES;
+            }else {
+                Cell.showVip = NO;
+            }
             if ([JNSYUserInfo getUserInfo].picHeader) {
                 [Cell.headerView sd_setImageWithURL:[NSURL URLWithString:[JNSYUserInfo getUserInfo].picHeader]];
             }else {
                 Cell.headerView.image = [UIImage imageNamed:@"my_head_portrait"];
             }
-            
             if (islogoedIn) {
-                Cell.showVip = YES;
+                
                 Cell.isLogoedIn = YES;
+                Cell.nickNameLab.text = [JNSYUserInfo getUserInfo].userNick;
             }else {
-                Cell.showVip = NO;
+                
                 Cell.isLogoedIn = NO;
             }
             
@@ -353,42 +366,110 @@
     }
     
     if (indexPath.row == 3) {  //会员
-        JNSHVipViewController *VipVc = [[JNSHVipViewController alloc] init];
-        VipVc.hidesBottomBarWhenPushed = YES;
-        [self.navigationController pushViewController:VipVc animated:YES];
+        
+        if (islogoedIn) {
+            JNSHVipViewController *VipVc = [[JNSHVipViewController alloc] init];
+            VipVc.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:VipVc animated:YES];
+        }else {
+            JNSHLoginController *LogInVc = [[JNSHLoginController alloc] init];
+            
+            UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:LogInVc];
+            
+            [self presentViewController:nav animated:YES completion:nil];
+        }
+        
+       
     }else if (indexPath.row == 5) {  //实名认证
         
-        JNSHReallNameController *RealNameVc = [[JNSHReallNameController alloc] init];
-        RealNameVc.hidesBottomBarWhenPushed = YES;
-        [self.navigationController pushViewController:RealNameVc animated:YES];
+        if (islogoedIn) {
+            JNSHReallNameController *RealNameVc = [[JNSHReallNameController alloc] init];
+            RealNameVc.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:RealNameVc animated:YES];
+        }else {
+            JNSHLoginController *LogInVc = [[JNSHLoginController alloc] init];
+            
+            UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:LogInVc];
+            
+            [self presentViewController:nav animated:YES completion:nil];
+        }
         
+       
     }else if (indexPath.row == 6) { //结算卡
-        JNSHSettlementCardController *CardVc = [[JNSHSettlementCardController alloc] init];
-        CardVc.hidesBottomBarWhenPushed = YES;
-        //[self.navigationController pushViewController:CardVc animated:YES];
         
-        JNSHSettleDetailController *Detail = [[JNSHSettleDetailController alloc] init];
-        Detail.hidesBottomBarWhenPushed = YES;
-        [self.navigationController pushViewController:Detail animated:YES];
+        
+        if (islogoedIn) {
+            JNSHSettlementCardController *CardVc = [[JNSHSettlementCardController alloc] init];
+            CardVc.hidesBottomBarWhenPushed = YES;
+            //[self.navigationController pushViewController:CardVc animated:YES];
+            
+            JNSHSettleDetailController *Detail = [[JNSHSettleDetailController alloc] init];
+            Detail.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:Detail animated:YES];
+
+        }else {
+            JNSHLoginController *LogInVc = [[JNSHLoginController alloc] init];
+            
+            UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:LogInVc];
+            
+            [self presentViewController:nav animated:YES completion:nil];
+        }
+        
         
         
     }else if (indexPath.row == 8) {   //订单
-        JNSHOrderViewController *OrderVc = [[JNSHOrderViewController alloc] init];
-        OrderVc.hidesBottomBarWhenPushed = YES;
-        [self.navigationController pushViewController:OrderVc animated:YES];
+        
+        if (islogoedIn) {
+            JNSHOrderViewController *OrderVc = [[JNSHOrderViewController alloc] init];
+            OrderVc.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:OrderVc animated:YES];
+            
+        }else {
+            JNSHLoginController *LogInVc = [[JNSHLoginController alloc] init];
+            
+            UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:LogInVc];
+            
+            [self presentViewController:nav animated:YES completion:nil];
+        }
+        
+       
         
     }else if (indexPath.row == 9) {    //卡包券
         
-        JNSHTicketsController *ticketVc = [[JNSHTicketsController alloc] init];
-        ticketVc.hidesBottomBarWhenPushed = YES;
-        [self.navigationController pushViewController:ticketVc animated:YES];
+        
+        if (islogoedIn) {
+            JNSHTicketsController *ticketVc = [[JNSHTicketsController alloc] init];
+            ticketVc.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:ticketVc animated:YES];
+            
+        }else {
+            JNSHLoginController *LogInVc = [[JNSHLoginController alloc] init];
+            
+            UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:LogInVc];
+            
+            [self presentViewController:nav animated:YES completion:nil];
+        }
+
+        
+      
         
         
     }else if (indexPath.row == 11) {  //邀请码
         
-        JNSHInvateController *InvateVc = [[JNSHInvateController alloc] init];
-        InvateVc.hidesBottomBarWhenPushed = YES;
-        [self.navigationController pushViewController:InvateVc animated:YES];
+        if (islogoedIn) {
+            JNSHInvateController *InvateVc = [[JNSHInvateController alloc] init];
+            InvateVc.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:InvateVc animated:YES];
+            
+        }else {
+            JNSHLoginController *LogInVc = [[JNSHLoginController alloc] init];
+            
+            UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:LogInVc];
+            
+            [self presentViewController:nav animated:YES completion:nil];
+        }
+        
+        
         
     }
     

@@ -391,12 +391,11 @@
     
     [IBHttpTool postWithURL:JNSHTestUrl params:params success:^(id result) {
         
-        NSLog(@"%@",result);
-        
+       
         NSDictionary *resultdic = [result JSONValue];
         NSString *code = resultdic[@"code"];
         
-        NSLog(@"%@,%@",resultdic,code);
+        //NSLog(@"%@,%@",resultdic,code);
         if([code isEqualToString:@"000000"]) {
             
             //HUD
@@ -410,14 +409,14 @@
             [JNSYUserInfo getUserInfo].isLoggedIn = YES;
             [JNSYUserInfo getUserInfo].userCode = resultdic[@"userCode"];
             [JNSYUserInfo getUserInfo].userPhone = resultdic[@"userPhone"];
-            [JNSYUserInfo getUserInfo].userName = resultdic[@"userName"];
+            [JNSYUserInfo getUserInfo].userName = resultdic[@"userName"];                 //用户昵称
             [JNSYUserInfo getUserInfo].shopStates = resultdic[@"shopStates"];
             [JNSYUserInfo getUserInfo].userToken = resultdic[@"userToken"];
             [JNSYUserInfo getUserInfo].userKey = resultdic[@"userKey"];
             [JNSYUserInfo getUserInfo].noticeFlg = resultdic[@"noticeFlg"];
             [JNSYUserInfo getUserInfo].noticeTitle = resultdic[@"noticeTitle"];
             [JNSYUserInfo getUserInfo].noticeText = resultdic[@"noticeText"];
-            
+            [JNSYUserInfo getUserInfo].userNick = resultdic[@"userNick"];
             //获取广告图片
            // [self getadvertiseImage];
             

@@ -14,7 +14,15 @@
 #import "JNSHSubBankController.h"
 #import "LSActionSheet.h"
 #import "JNSHAlertView.h"
+#import "JNSHAutoSize.h"
+#import "JNSYUserInfo.h"
+#import "SBJSON.h"
+#import "IBHttpTool.h"
+#import "MBProgressHUD.h"
+#import "GTMBase64.h"
 @interface JNSHSettlementCardController ()<UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
+
+@property(nonatomic,copy)NSString *currentBank;
 
 @end
 
@@ -23,6 +31,10 @@
     NSString *name;
     NSString *cardNum;
     UITableView *table;
+    JNSHLabFldCell *NameCell;
+    JNSHLabFldCell *CardCell;
+    NSString *cardHttp;
+   
 }
 
 
@@ -34,6 +46,7 @@
     
     self.view.backgroundColor = ColorTableBackColor;
     
+    [table reloadData];
     
 }
 
@@ -97,6 +110,8 @@
         }
     }
     
+    //初始化银行
+   self.currentBank = @"102";
 }
 
 //绑定
@@ -109,8 +124,64 @@
     alertView.sureAlertBlock = ^{
         [alert dismiss];
     };
+    NSString *msg = @"";
     
-    [alertView show:@"请填写银行卡完整信息!" inView:self.view];
+    NSLog(@"subbankcode:%@",self.subBankCode);
+    
+    if ([NameCell.textFiled.text isEqualToString:@""]) {
+        msg = @"持卡人为空!";
+        [alertView show:msg inView:self.view];
+        return;
+    }else if ([CardCell.textFiled.text isEqualToString:@""]){
+        msg = @"卡号为空!";
+        [alertView show:msg inView:self.view];
+        return;
+    }else if (self.subBankCode == nil) {
+        msg = @"请选择支行信息";
+        [alertView show:msg inView:self.view];
+        return;
+    }else if (cardHttp == nil ) {
+        msg = @"请上传银行卡正面照";
+        [alertView show:msg inView:self.view];
+        return;
+    }
+    
+    
+    NSDictionary *dic = @{
+                          @"cardNo":CardCell.textFiled.text,
+                          @"cardCode":self.subBankCode,
+                          @"cardPhone":NameCell.textFiled.text,
+                          @"cardPic":cardHttp
+                          };
+    NSString *action = @"UserSettleCardBindState";
+    
+    NSDictionary *requstDic = @{
+                                @"action":action,
+                                @"data":dic,
+                                @"token":[JNSYUserInfo getUserInfo].userToken
+                                };
+    
+    NSString *params = [requstDic JSONFragment];
+    
+    [IBHttpTool postWithURL:JNSHTestUrl params:params success:^(id result) {
+        
+        NSDictionary *resultdic = [result JSONValue];
+        NSString *code = resultdic[@"code"];
+        NSLog(@"%@",resultdic);
+        NSString *msg = resultdic[@"msg"];
+        if ([code isEqualToString:@"000000"]) {
+            
+            [JNSHAutoSize showMsg:@"信息已提交!"];
+            
+        }else {
+            
+            [JNSHAutoSize showMsg:msg];
+            
+        }
+        
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
     
     
 }
@@ -131,35 +202,35 @@
     if (cell == nil) {
         cell = [[UITableViewCell alloc] init];
         if (indexPath.row == 0) {
-            JNSHLabFldCell *Cell = [[JNSHLabFldCell alloc] init];
-            Cell.leftLab.text = @"持 卡 人";
-            Cell.textFiled.placeholder = @"请输入持卡人姓名";
-            Cell.textFiled.clearButtonMode = UITextFieldViewModeAlways;
-            Cell.textFiled.delegate = self;
-            Cell.textFiled.tag = 100;
-            Cell.textFiled.text = name;
-            cell = Cell;
+            NameCell = [[JNSHLabFldCell alloc] init];
+            NameCell.leftLab.text = @"手 机 号";
+            NameCell.textFiled.placeholder = @"请输入预留手机号";
+            NameCell.textFiled.clearButtonMode = UITextFieldViewModeAlways;
+            NameCell.textFiled.delegate = self;
+            NameCell.textFiled.tag = 100;
+            NameCell.textFiled.text = name;
+            cell = NameCell;
         }else if (indexPath.row == 1) {
-            JNSHLabFldCell *Cell = [[JNSHLabFldCell alloc] init];
-            Cell.leftLab.text = @"卡      号";
-            Cell.textFiled.placeholder = @"请输入卡号";
-            Cell.textFiled.clearButtonMode = UITextFieldViewModeAlways;
-            Cell.textFiled.delegate = self;
-            Cell.textFiled.tag = 101;
-            Cell.textFiled.text = cardNum;
-            cell = Cell;
+            CardCell = [[JNSHLabFldCell alloc] init];
+            CardCell.leftLab.text = @"卡      号";
+            CardCell.textFiled.placeholder = @"请输入卡号";
+            CardCell.textFiled.clearButtonMode = UITextFieldViewModeAlways;
+            CardCell.textFiled.delegate = self;
+            CardCell.textFiled.tag = 101;
+            CardCell.textFiled.text = cardNum;
+            cell = CardCell;
         }else if (indexPath.row == 2) {
             JNSHLabFldCell *Cell = [[JNSHLabFldCell alloc] init];
             Cell.leftLab.text = @"选择银行";
             Cell.textFiled.enabled = NO;
-            Cell.textFiled.text = @"中国银行";
+            Cell.textFiled.text = @"中国工商银行";
             cell = Cell;
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }else if (indexPath.row == 3) {
             JNSHLabFldCell *Cell = [[JNSHLabFldCell alloc] init];
             Cell.leftLab.text = @"选择支行";
             Cell.textFiled.enabled = NO;
-            Cell.textFiled.text = @"城北支行";
+            Cell.textFiled.text = self.subBank;
             cell = Cell;
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }else if(indexPath.row == 4) {
@@ -185,7 +256,7 @@
 
 - (void)pickImage {
     
-    [LSActionSheet showWithTitle:nil destructiveTitle:nil otherTitles:@[@"拍照",@"从手机相册选择"] block:^(int index) {
+    [LSActionSheet showWithTitle:nil destructiveTitle:nil otherTitles:@[@"拍照"] block:^(int index) {
         NSLog(@"-----%d",index);
         
         UIImagePickerControllerSourceType sourcetype = UIImagePickerControllerSourceTypePhotoLibrary;
@@ -224,21 +295,70 @@
     
     UIImage *image = info[UIImagePickerControllerEditedImage];
     
-    //NSData *imgdata = UIImagePNGRepresentation(image);
+    NSData *imgdata = UIImagePNGRepresentation(image);
     
-    //NSString *encodedImagStr = [GTMBase64 stringByEncodingData:imgdata];
+    NSString *encodedImagStr = [GTMBase64 stringByEncodingData:imgdata];
     
-    //NSString *imageBase64 = [NSString stringWithFormat:@"%@%@",@"data:image/png;base64,",encodedImagStr];
+    NSString *imageBase64 = [NSString stringWithFormat:@"%@%@",@"data:image/png;base64,",encodedImagStr];
     
     NSIndexPath *indexPath = [NSIndexPath indexPathForRow:5 inSection:0];
     JNSHImgUploadCell *Cell = [table cellForRowAtIndexPath:indexPath];
     Cell.leftImg.image = image;
+    
+    [self uploadImg:imageBase64 type:@"Other"];
     
     //pop
     [picker dismissViewControllerAnimated:YES completion:nil];
     
     
 }
+
+//上传图片
+- (void)uploadImg:(NSString *)fileBase64 type:(NSString *)type {
+    
+    MBProgressHUD *HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    // HUD.label.text = @"正在上传头像";
+    HUD.labelText = @"正在上传图片";
+    NSDictionary *Dic = @{
+                          //@"timestamp":[JNSYAutoSize getTimeNow],
+                          @"fileBase64":fileBase64,
+                          @"type":type
+                          };
+    NSString *action = @"FileUploadState";
+    
+    NSDictionary *requestDic = @{
+                                 @"action":action,
+                                 @"data":Dic,
+                                 @"token":[JNSYUserInfo getUserInfo].userToken
+                                 };
+    NSString *paramas = [requestDic JSONFragment];
+    
+    [IBHttpTool postWithURL:JNSHTestUrl params:paramas success:^(id result) {
+        NSLog(@"%@",result);
+        NSDictionary *dic = [result JSONValue];
+        NSString *code = dic[@"code"];
+        
+        if ([code isEqualToString:@"000000"]) {
+            
+            cardHttp = dic[@"httpPath"];
+            
+            
+        }else {
+            NSString *msg = dic[@"msg"];
+            [JNSHAutoSize showMsg:msg];
+        }
+        
+        [HUD hide:YES];
+        
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+        [HUD hide:YES];
+    }];
+    
+    
+}
+
+
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     
@@ -260,11 +380,21 @@
         NSLog(@"选择银行");
         JNSHPopBankCardView *CardView = [[JNSHPopBankCardView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight)];
         CardView.typetag = 2;
+        __weak typeof(self) weakSelf = self;
+        
+        CardView.bankselectBlock = ^(NSString *bankName, NSString *bankCode) {
+            __strong typeof(self) strongSelf = weakSelf;
+            JNSHLabFldCell *Cell = [tableView cellForRowAtIndexPath:indexPath];
+            Cell.textFiled.text = bankName;
+            strongSelf.currentBank = bankCode;
+            
+        };
         [CardView showInView:self.view];
     }else if (indexPath.row == 3) { //选择支行
         NSLog(@"选择支行");
         
         JNSHSubBankController *subBankVc = [[JNSHSubBankController alloc] init];
+        subBankVc.bankName = self.currentBank;
         subBankVc.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:subBankVc animated:YES];
     }

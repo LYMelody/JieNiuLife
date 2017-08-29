@@ -18,7 +18,9 @@
 
 @property(nonatomic,copy)NSString *userKey;    //用户授权秘钥
 
-@property(nonatomic,copy)NSString *userName;    //用户昵称
+@property(nonatomic,copy)NSString *userName;    //用户名
+
+@property(nonatomic,copy)NSString *userNick;    //用户昵称
 
 @property(nonatomic,copy)NSString *userPhone;   //用户手机
 
@@ -56,6 +58,7 @@
 
 @property(nonatomic,copy)NSString *branderCardNo;          //绑定会员卡
 
+@property(nonatomic,copy)NSString *userVipFlag;         //用户是否为会员
 
 + (JNSYUserInfo *)getUserInfo;
 

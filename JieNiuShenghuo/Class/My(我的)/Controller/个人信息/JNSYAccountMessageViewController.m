@@ -93,10 +93,9 @@
     NSString *params = [requestDic JSONFragment];
     [IBHttpTool postWithURL:JNSHTestUrl params:params success:^(id result) {
         
-        NSLog(@"%@",result);
         NSDictionary *resultdic = [result JSONValue];
         NSString *code = resultdic[@"code"];
-        NSLog(@"%@,%@",resultdic,code);
+        //NSLog(@"%@,%@",resultdic,code);
         if([code isEqualToString:@"000000"]) {
             
             [JNSYUserInfo getUserInfo].userCode = resultdic[@"userCode"];

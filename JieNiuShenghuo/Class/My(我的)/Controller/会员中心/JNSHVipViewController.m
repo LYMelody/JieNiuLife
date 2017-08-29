@@ -11,6 +11,13 @@
 #import "Masonry.h"
 #import "JNSYHighLightImageView.h"
 #import "JNSHVipOrderViewController.h"
+#import "JNSHAutoSize.h"
+#import "JNSYUserInfo.h"
+#import "SBJSON.h"
+#import "IBHttpTool.h"
+
+
+
 @interface JNSHVipViewController ()
 
 @end
@@ -21,6 +28,11 @@
     UIImageView *halfYearImg;
     UILabel *totalPriceLab;
     BOOL isVip;
+    UILabel *ratingSubLab;
+    UILabel *birthSubLab;
+    UIImageView *diamondImg;
+    UILabel *VipLab;
+    UILabel *rightLab;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -34,26 +46,15 @@
     [self.navigationController.navigationBar setTitleTextAttributes:@{
                                                                       NSForegroundColorAttributeName:[UIColor whiteColor]
                                                                       }];
-//    UIView *starBr = [[[UIApplication sharedApplication] valueForKey:@"statusBarWindow"] valueForKey:@"statusBar"];
-//    
-//    if ([starBr respondsToSelector:@selector(setBackgroundColor:)]) {
-//        starBr.backgroundColor = ColorTabBarBackColor;
-//    }
-//    
-//    
-//    [self.navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"nav"] forBarMetrics:UIBarMetricsDefault];
-//    [self.navigationController.navigationBar setShadowImage:[[UIImage alloc] init]];
-    
-    
+
     //设置导航栏背景色为透明
     UIImageView *backImg = self.navigationController.navigationBar.subviews.firstObject;
     backImg.alpha = 0;
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-   
     
-   
+    
+    [self RequsetVipInfo];
+    
+    
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -102,7 +103,7 @@
         make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:51], [JNSHAutoSize height:51]));
     }];
     
-    UIImageView *diamondImg = [[UIImageView alloc] init];
+    diamondImg = [[UIImageView alloc] init];
     diamondImg.image = [UIImage imageNamed:@"my_head_vip"];
     if (!isVip) {
         diamondImg.image = [UIImage imageNamed:@"vip_head_vip_grey"];
@@ -116,7 +117,7 @@
     }];
     
     
-    UILabel *VipLab = [[UILabel alloc] init];
+    VipLab = [[UILabel alloc] init];
     VipLab.text = @"会员未开通";
     if (isVip) {
         VipLab.text = @"60天后会员到期";
@@ -132,7 +133,7 @@
         make.size.mas_equalTo(CGSizeMake(KscreenWidth, 15));
     }];
     
-    UILabel *rightLab = [[UILabel alloc] init];
+    rightLab = [[UILabel alloc] init];
     rightLab.text = @"开通会员，享受专属特权";
     rightLab.textColor = ColorText;
     rightLab.textAlignment = NSTextAlignmentCenter;
@@ -184,7 +185,7 @@
         make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:60], [JNSHAutoSize height:15]));
     }];
     
-    UILabel *ratingSubLab = [[UILabel alloc] init];
+    ratingSubLab = [[UILabel alloc] init];
     ratingSubLab.font = [UIFont systemFontOfSize:11];
     ratingSubLab.textColor = ColorLightText;
     ratingSubLab.textAlignment = NSTextAlignmentLeft;
@@ -286,7 +287,7 @@
         make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:60], [JNSHAutoSize height:15]));
     }];
     
-    UILabel *birthSubLab = [[UILabel alloc] init];
+    birthSubLab = [[UILabel alloc] init];
     birthSubLab.font = [UIFont systemFontOfSize:11];
     birthSubLab.textColor = ColorLightText;
     birthSubLab.textAlignment = NSTextAlignmentLeft;
@@ -404,7 +405,6 @@
         make.right.equalTo(nityImg).offset(-[JNSHAutoSize width:45]);
         make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:60], [JNSHAutoSize width:  20]));
     }];
-    
     
     UIImageView *midLine = [[UIImageView alloc] init];
     midLine.backgroundColor = ColorLineSeperate;
@@ -558,6 +558,55 @@
     totalPriceLab.attributedText = attri;
 }
 
+//获取会员信息
+- (void)RequsetVipInfo {
+    
+    NSDictionary *dic = @{
+                          @"timestamp":[JNSHAutoSize getTimeNow]
+                          };
+    NSString *action = @"UserVipInfo";
+    
+    NSDictionary *requstDic = @{
+                                @"action":action,
+                                @"data":dic,
+                                @"token":[JNSYUserInfo getUserInfo].userToken
+                                };
+    
+    NSString *params = [requstDic JSONFragment];
+    
+    [IBHttpTool postWithURL:JNSHTestUrl params:params success:^(id result) {
+        
+        NSDictionary *resultdic = [result JSONValue];
+        NSString *code = resultdic[@"code"];
+        NSLog(@"%@",resultdic);
+        NSString *msg = resultdic[@"msg"];
+        if ([code isEqualToString:@"000000"]) {
+            NSString *rate = resultdic[@"vipRate"];
+            NSString *birthdayCount = resultdic[@"birthdayCount"];
+            NSString *Vip = [NSString stringWithFormat:@"%@",resultdic[@"isVip"]];
+            if ([Vip isEqualToString:@"1"]) {
+                NSString *expireDay = resultdic[@"expireDay"];
+                diamondImg.image = [UIImage imageNamed:@"my_head_vip"];
+                VipLab.text = [NSString stringWithFormat:@"%@天后会员到期",expireDay];
+                rightLab.text = @"会员专属特权";
+            }
+            
+            
+            ratingSubLab.text = rate;
+            birthSubLab.text = [NSString stringWithFormat:@"送%@张抵用券",birthdayCount];
+            
+            
+        }else {
+            
+            [JNSHAutoSize showMsg:msg];
+            
+        }
+        
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
+
+}
 
 
 - (void)didReceiveMemoryWarning {

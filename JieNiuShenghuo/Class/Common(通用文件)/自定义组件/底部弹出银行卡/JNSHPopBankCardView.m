@@ -311,7 +311,7 @@
     _currentIndex = currentIndex;
     
     if (self.bankselectBlock) {
-        self.bankselectBlock(bankArray[currentIndex][@"bankName"], bankArray[currentIndex][@"bankCode"]);
+        self.bankselectBlock(bankArray[currentIndex][@"bankName"], bankArray[currentIndex][@"bankType"]);
     }
     
     

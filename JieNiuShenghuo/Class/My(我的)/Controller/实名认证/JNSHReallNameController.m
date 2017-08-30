@@ -40,6 +40,9 @@
     JNSHLabFldCell *NameCell;
     JNSHLabFldCell *CertCell;
     
+    UILabel *leftLab;
+    UIButton *editBtn;
+    BOOL CanEdit;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -48,6 +51,8 @@
     
     self.title = @"实名认证";
     self.view.backgroundColor = ColorTableBackColor;
+    
+    [self getRealNameInfo];
     
 }
 
@@ -65,6 +70,7 @@
     table.delegate = self;
     table.backgroundColor = ColorTableBackColor;
     table.separatorStyle = UITableViewCellSeparatorStyleNone;
+    table.showsVerticalScrollIndicator = NO;
     [self.view addSubview:table];
     
     //tablefootView
@@ -85,19 +91,19 @@
     headerView.backgroundColor = ColorTableBackColor;
     headerView.userInteractionEnabled = YES;
     
-    UILabel *leftLab = [[UILabel alloc] init];
-    leftLab.font = [UIFont systemFontOfSize:15];
+    leftLab = [[UILabel alloc] init];
+    leftLab.font = [UIFont systemFontOfSize:13];
     leftLab.textAlignment = NSTextAlignmentLeft;
-    leftLab.text = @"未通过";
+    leftLab.textColor = blueColor;
     [headerView addSubview:leftLab];
     
     [leftLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(headerView);
         make.left.equalTo(headerView).offset([JNSHAutoSize width:15]);
-        make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:100], [JNSHAutoSize height:20]));
+        make.size.mas_equalTo(CGSizeMake(KscreenWidth, [JNSHAutoSize height:20]));
     }];
     
-    UIButton *editBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    editBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [editBtn setTitle:@"编辑资料" forState:UIControlStateNormal];
     [editBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [editBtn setBackgroundColor:ColorTabBarBackColor];
@@ -114,8 +120,89 @@
 
     table.tableHeaderView = headerView;
     
+    table.tableHeaderView.hidden = YES;
+    
+    CanEdit = YES;
+    
 }
 
+//获取实名认证信息
+- (void)getRealNameInfo {
+    
+    NSDictionary *dic = @{
+                          @"timestamp":[JNSHAutoSize getTimeNow]
+                          };
+    NSString *action = @"UserRealInfoState";
+    
+    NSDictionary *requstDic = @{
+                                @"action":action,
+                                @"data":dic,
+                                @"token":[JNSYUserInfo getUserInfo].userToken
+                                };
+    
+    NSString *params = [requstDic JSONFragment];
+    
+    [IBHttpTool postWithURL:JNSHTestUrl params:params success:^(id result) {
+        
+        NSDictionary *resultdic = [result JSONValue];
+        NSString *code = resultdic[@"code"];
+        NSLog(@"%@",resultdic);
+        NSString *msg = resultdic[@"msg"];
+        if ([code isEqualToString:@"000000"]) {
+            
+            NSString *showMsg = resultdic[@"showMsg"];
+            NSString *isEdit = [NSString stringWithFormat:@"%@",resultdic[@"isEdit"]];
+            NSString *userAccount = resultdic[@"userAccount"];
+            NSString *userCert = resultdic[@"userCert"];
+            
+            //设置实名认证状态
+            if (msg) {
+                table.tableHeaderView.hidden = NO;
+                leftLab.text = showMsg;
+                if ([msg isEqualToString:@"未通过"]) {
+                    editBtn.hidden = NO;
+                }else {
+                    editBtn.hidden = YES;
+                }
+            }
+            //设置是否可以编辑
+            if ([isEdit isEqualToString:@"0"]) { //不能编辑
+                
+                CanEdit = NO;
+                
+                table.tableFooterView.hidden = YES;
+                
+            }else {
+                CanEdit = YES;
+                table.tableFooterView.hidden = NO;
+            }
+            //设置用户姓名
+            if (userAccount) {
+                name = userAccount;
+            }
+            //设置用户身份证
+            if (userCert) {
+                IDCard = userCert;
+            }
+            
+            //设置实名认证图片
+            CertFaceHttp = resultdic[@"pic1"];
+            CertBackHttp = resultdic[@"pic2"];
+            HoldCertHttp = resultdic[@"pic3"];
+            [table reloadData];
+            
+        }else {
+            
+            [JNSHAutoSize showMsg:msg];
+            
+        }
+        
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
+}
+
+//提交实名认证
 - (void)commit {
     
     NSLog(@"提交");
@@ -287,6 +374,11 @@
         }
         
     }
+    
+    if (!CanEdit) {
+        cell.userInteractionEnabled = NO;
+    }
+    
     
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;

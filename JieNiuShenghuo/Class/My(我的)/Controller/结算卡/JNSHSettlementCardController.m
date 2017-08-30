@@ -20,6 +20,7 @@
 #import "IBHttpTool.h"
 #import "MBProgressHUD.h"
 #import "GTMBase64.h"
+#import "UIImageView+WebCache.h"
 @interface JNSHSettlementCardController ()<UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 
 @property(nonatomic,copy)NSString *currentBank;
@@ -126,7 +127,7 @@
     };
     NSString *msg = @"";
     
-    NSLog(@"subbankcode:%@",self.subBankCode);
+    //NSLog(@"subbankcode:%@",self.subBankCode);
     
     if ([NameCell.textFiled.text isEqualToString:@""]) {
         msg = @"持卡人为空!";
@@ -182,8 +183,6 @@
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
     }];
-    
-    
 }
 
 
@@ -209,6 +208,7 @@
             NameCell.textFiled.delegate = self;
             NameCell.textFiled.tag = 100;
             NameCell.textFiled.text = name;
+            NameCell.textFiled.keyboardType = UIKeyboardTypeNumberPad;
             cell = NameCell;
         }else if (indexPath.row == 1) {
             CardCell = [[JNSHLabFldCell alloc] init];
@@ -342,6 +342,13 @@
             
             cardHttp = dic[@"httpPath"];
             
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:5 inSection:0];
+            
+            JNSHImgUploadCell *Cell = [table cellForRowAtIndexPath:indexPath];
+            
+            [Cell.leftImg sd_setImageWithURL:[NSURL URLWithString:cardHttp]];
+            
+            
             
         }else {
             NSString *msg = dic[@"msg"];
@@ -387,7 +394,7 @@
             JNSHLabFldCell *Cell = [tableView cellForRowAtIndexPath:indexPath];
             Cell.textFiled.text = bankName;
             strongSelf.currentBank = bankCode;
-            
+            strongSelf.subBank = bankName;
         };
         [CardView showInView:self.view];
     }else if (indexPath.row == 3) { //选择支行

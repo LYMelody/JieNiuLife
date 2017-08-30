@@ -63,7 +63,7 @@
     
     [_rightLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(self);
-        if ([_leftLab.text isEqualToString:@"出生年月"] || [_leftLab.text isEqualToString:@"当前版本"]) {
+        if ([_leftLab.text isEqualToString:@"出生年月"] || [_leftLab.text isEqualToString:@"当前版本"]  || [_leftLab.text isEqualToString:@"日分润"]){
             make.right.equalTo(self).offset(-15);
         }else {
             make.right.equalTo(self).offset(-32);

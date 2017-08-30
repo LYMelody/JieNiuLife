@@ -20,6 +20,7 @@
 #import "JNSHTicketsController.h"
 #import "JNSHInvateController.h"
 #import "JNSHLoginController.h"
+#import "JNSHBecomeAgentViewController.h"
 #import "JNSYUserInfo.h"
 #import "JNSHAutoSize.h"
 #import "SBJSON.h"
@@ -177,6 +178,26 @@
             [JNSYUserInfo getUserInfo].picHeader = resultdic[@"picHeader"];
             [JNSYUserInfo getUserInfo].userVipFlag = [NSString stringWithFormat:@"%@",resultdic[@"vipFlg"]];
             [JNSYUserInfo getUserInfo].userVipFlag = @"1";
+            [JNSYUserInfo getUserInfo].SettleCard = resultdic[@"userBank"];
+            
+            //实名认证状态
+            NSString *userStatus = resultdic[@"userStatus"];
+            if ([userStatus isEqualToString:@"11"]) {
+                [JNSYUserInfo getUserInfo].userStatus = @"待审核";
+            }else if ([userStatus isEqualToString:@"12"]){
+                [JNSYUserInfo getUserInfo].userStatus = @"审核驳回";
+            }else if ([userStatus isEqualToString:@"20"]) {
+                [JNSYUserInfo getUserInfo].userStatus = @"审核通过";
+            }else if([userStatus isEqualToString:@"10"]){
+                [JNSYUserInfo getUserInfo].userStatus = @"初始化";
+            }else if ([userStatus isEqualToString:@"19"]) {
+                [JNSYUserInfo getUserInfo].userStatus = @"初审通过";
+            }else if ([userStatus isEqualToString:@"30"]) {
+                [JNSYUserInfo getUserInfo].userStatus = @"系统风控";
+            }else {
+                [JNSYUserInfo getUserInfo].userStatus = @"停用删除";
+            }
+            
             if ([[JNSYUserInfo getUserInfo].userVipFlag isEqualToString:@"1"]) {
                 
                 isVip = YES;
@@ -262,7 +283,7 @@
             JNSHMyCommonCell *Cell = [[JNSHMyCommonCell alloc] init];
             Cell.titleImage.image = [UIImage imageNamed:@"my_Certification"];
             Cell.titleLab.text = @"实名认证";
-            Cell.rightLab.text = @"待审核";
+            Cell.rightLab.text = [JNSYUserInfo getUserInfo].userStatus;
             Cell.showTopLine = YES;
             cell = Cell;
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -469,6 +490,22 @@
             [self presentViewController:nav animated:YES completion:nil];
         }
         
+        
+        
+    }else if (indexPath.row == 15) {
+        
+        if (islogoedIn) {
+            JNSHBecomeAgentViewController *BecomeAgentVc = [[JNSHBecomeAgentViewController alloc] init];
+            BecomeAgentVc.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:BecomeAgentVc animated:YES];
+            
+        }else {
+            JNSHLoginController *LogInVc = [[JNSHLoginController alloc] init];
+            
+            UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:LogInVc];
+            
+            [self presentViewController:nav animated:YES completion:nil];
+        }
         
         
     }

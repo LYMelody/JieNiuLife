@@ -40,8 +40,6 @@
 
 @property(nonatomic,copy)NSString *birthday;       //用户生日
 
-@property(nonatomic,copy)NSString *addressInfo;     //用户默认地址
-
 @property(nonatomic,copy)NSString *picHeader;      //用户头像
 
 @property(nonatomic,copy)NSString *lastIp;          //最后登录IP
@@ -59,6 +57,11 @@
 @property(nonatomic,copy)NSString *branderCardNo;          //绑定会员卡
 
 @property(nonatomic,copy)NSString *userVipFlag;         //用户是否为会员
+
+@property(nonatomic,copy)NSString *SettleCard;         //结算卡
+
+@property(nonatomic,copy)NSString *userStatus;        //实名认证状态
+
 
 + (JNSYUserInfo *)getUserInfo;
 

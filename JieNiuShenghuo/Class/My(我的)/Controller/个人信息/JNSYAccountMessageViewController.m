@@ -106,7 +106,7 @@
             [JNSYUserInfo getUserInfo].userCert = resultdic[@"userKey"];
             [JNSYUserInfo getUserInfo].userSex = resultdic[@"sex"];
             [JNSYUserInfo getUserInfo].birthday = resultdic[@"birthday"];
-            [JNSYUserInfo getUserInfo].addressInfo = resultdic[@"addressInfo"];
+            //[JNSYUserInfo getUserInfo].addressInfo = resultdic[@"addressInfo"];
             [JNSYUserInfo getUserInfo].picHeader = resultdic[@"picHeader"];
             [JNSYUserInfo getUserInfo].lastIp = resultdic[@"lastIp"];
             [JNSYUserInfo getUserInfo].lastTime = resultdic[@"lastTime"];

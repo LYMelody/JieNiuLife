@@ -36,7 +36,9 @@
     [self.view addSubview:backImg];
     
     
-    UITableView *table = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight ) style:UITableViewStylePlain];
+    self.automaticallyAdjustsScrollViewInsets = NO;
+    
+    UITableView *table = [[UITableView alloc] initWithFrame:CGRectMake(0, 64, KscreenWidth, KscreenHeight - 64) style:UITableViewStylePlain];
     table.delegate = self;
     table.dataSource = self;
     table.separatorStyle = UITableViewCellSeparatorStyleNone;

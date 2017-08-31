@@ -52,7 +52,7 @@
     self.title = @"实名认证";
     self.view.backgroundColor = ColorTableBackColor;
     
-    [self getRealNameInfo];
+    
     
 }
 
@@ -124,6 +124,8 @@
     
     CanEdit = YES;
     
+    [self getRealNameInfo];
+    
 }
 
 //获取实名认证信息
@@ -171,10 +173,12 @@
                 CanEdit = NO;
                 
                 table.tableFooterView.hidden = YES;
+                table.tableHeaderView.hidden = YES;
                 
             }else {
                 CanEdit = YES;
                 table.tableFooterView.hidden = NO;
+                
             }
             //设置用户姓名
             if (userAccount) {
@@ -182,7 +186,7 @@
             }
             //设置用户身份证
             if (userCert) {
-                IDCard = userCert;
+                IDCard = [userCert stringByReplacingCharactersInRange:NSMakeRange(6, 8) withString:@"********"];
             }
             
             //设置实名认证图片

@@ -45,8 +45,7 @@
     backImg.backgroundColor = ColorTabBarBackColor;
     backImg.userInteractionEnabled = YES;
     [self.view addSubview:backImg];
-    
-    
+
     UIImageView *whiteImg = [[UIImageView alloc] initWithFrame:CGRectMake(0, 64, KscreenWidth , KscreenHeight)];
     whiteImg.backgroundColor = ColorTableBackColor;
     whiteImg.userInteractionEnabled = YES;

@@ -27,7 +27,6 @@
 #import "IBHttpTool.h"
 #import "UIImageView+WebCache.h"
 
-
 @interface JNSHMyViewController ()<UITableViewDelegate,UITableViewDataSource,UIGestureRecognizerDelegate>
 
 @end
@@ -169,7 +168,7 @@
             
             [JNSYUserInfo getUserInfo].userCode = resultdic[@"userCode"];
             [JNSYUserInfo getUserInfo].userPhone = resultdic[@"userPhone"];
-            [JNSYUserInfo getUserInfo].userName = resultdic[@"userName"];
+            //[JNSYUserInfo getUserInfo].userName = resultdic[@"userName"];
             [JNSYUserInfo getUserInfo].userAccount = resultdic[@"userAccount"];
             [JNSYUserInfo getUserInfo].userCert = resultdic[@"userCert"];
             [JNSYUserInfo getUserInfo].userPoints = resultdic[@"userPoints"];
@@ -291,7 +290,12 @@
             JNSHMyCommonCell *Cell = [[JNSHMyCommonCell alloc] init];
             Cell.titleImage.image = [UIImage imageNamed:@"my_card"];
             Cell.titleLab.text = @"结算卡";
-            Cell.rightLab.text = @"待绑定";
+            if ([JNSYUserInfo getUserInfo].userAccount) {
+                Cell.rightLab.text = @"已绑定";
+                Cell.rightLab.textColor = greenColor;
+            }else {
+                Cell.rightLab.text = @"待绑定";
+            }
             Cell.showBottomLine = YES;
             cell = Cell;
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;

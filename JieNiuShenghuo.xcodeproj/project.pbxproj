@@ -1477,7 +1477,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1AF0BD0AF8A5DCE6C50A4CED /* Pods-JieNiuShenghuo.debug.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "LaunchImage-1";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = ZP26G972X9;
 				ENABLE_BITCODE = NO;
 				GCC_PREFIX_HEADER = /Users/rongfeng/Desktop/JieNiuShenghuo/JieNiuShenghuo/JNSHPreFixHeader.h;
@@ -1487,6 +1488,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jieniu.JieNiuShenghuo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/**";
 			};
 			name = Debug;
@@ -1495,7 +1497,8 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = A58C80079A87D3A17CC3322E /* Pods-JieNiuShenghuo.release.xcconfig */;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "LaunchImage-1";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = ZP26G972X9;
 				ENABLE_BITCODE = NO;
 				GCC_PREFIX_HEADER = /Users/rongfeng/Desktop/JieNiuShenghuo/JieNiuShenghuo/JNSHPreFixHeader.h;
@@ -1505,6 +1508,7 @@
 				ONLY_ACTIVE_ARCH = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = com.jieniu.JieNiuShenghuo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/**";
 			};
 			name = Release;

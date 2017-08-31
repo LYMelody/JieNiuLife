@@ -9,6 +9,8 @@
 #import "AppDelegate.h"
 #import "JNSHMainBarController.h"
 #import "JNSYUserInfo.h"
+
+
 @interface AppDelegate ()
 
 @end
@@ -19,7 +21,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
     
-    [NSThread sleepForTimeInterval:1];
+    //[NSThread sleepForTimeInterval:1];
     
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.window.backgroundColor = ColorTabBarBackColor;
@@ -35,10 +37,33 @@
    
     [application setStatusBarHidden:NO];
     
-    
     [JNSYUserInfo getUserInfo].userKey = KEY;
     [JNSYUserInfo getUserInfo].userToken = TOKEN;
     
+    UIImageView *lanchView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"tubiao-1"]];
+    lanchView.frame = CGRectMake(-KscreenWidth*0.1/2.0, -KscreenHeight*0.1/2.0, KscreenWidth*1.1, KscreenHeight*1.1);
+   // lanchView.center = self.window.center;
+    NSLog(@"%@",NSStringFromCGSize(lanchView.frame.size));
+    
+    lanchView.transform = CGAffineTransformMakeScale(1.0, 1.0);
+    
+    NSLog(@"%@",NSStringFromCGSize(lanchView.frame.size));
+    
+    [self.window addSubview:lanchView];
+    
+    [self.window bringSubviewToFront:lanchView];
+    
+    UIImageView *frontImg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"启动页-"]];
+    frontImg.frame = CGRectMake(0, 0, KscreenWidth, KscreenHeight);
+    [self.window addSubview:frontImg];
+    [self.window bringSubviewToFront:frontImg];
+    
+    [UIView animateWithDuration:2 animations:^{
+        lanchView.transform = CGAffineTransformMakeScale(0.9, 0.9);
+    } completion:^(BOOL finished) {
+        [lanchView removeFromSuperview];
+        [frontImg removeFromSuperview];
+    }];
     
     return YES;
 }

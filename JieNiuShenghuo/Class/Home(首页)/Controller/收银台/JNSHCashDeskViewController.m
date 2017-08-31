@@ -10,6 +10,10 @@
 #import "Masonry.h"
 #import "JNSHAlertView.h"
 #import "JNSHOrderSureViewController.h"
+#import "JNSYUserInfo.h"
+#import "SBJSON.h"
+#import "IBHttpTool.h"
+#import "JNSHLoginController.h"
 @interface JNSHCashDeskViewController ()
 
 @end
@@ -283,15 +287,71 @@
         //[self show:@"请进行实名认证" cancle:@"取消" sureStr:@"去认证"];
        
         
-        JNSHOrderSureViewController *OrderSureVc = [[JNSHOrderSureViewController alloc] init];
-        OrderSureVc.hidesBottomBarWhenPushed = YES;
-        [self.navigationController pushViewController:OrderSureVc animated:YES];
+
         
-        
-        
+        if (![JNSYUserInfo getUserInfo].isLoggedIn) {
+            JNSHLoginController *LogInVc = [[JNSHLoginController alloc] init];
+            
+            UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:LogInVc];
+            
+            [self presentViewController:nav animated:YES completion:nil];
+            
+        }else {
+            
+            [self SetOrder];
+        }
     }
     
 }
+
+//消费下单
+- (void)SetOrder{
+    
+    NSString *time = [JNSHAutoSize getTimeNow];
+    
+    NSDictionary *dic = @{
+                          @"payType":@"1",
+                          @"orderType":@"11",
+                          @"amount":moneyLab.text,
+                          @"goodsName":[JNSYUserInfo getUserInfo].userName,
+                          @"linkId":time
+                          };
+    NSString *action = @"PayOrderCreate";
+    
+    NSDictionary *requstDic = @{
+                                @"action":action,
+                                @"data":dic,
+                                @"token":[JNSYUserInfo getUserInfo].userToken
+                                };
+    
+    NSString *params = [requstDic JSONFragment];
+    
+    [IBHttpTool postWithURL:JNSHTestUrl params:params success:^(id result) {
+        
+        NSDictionary *resultdic = [result JSONValue];
+        NSString *code = resultdic[@"code"];
+        NSLog(@"%@",resultdic);
+        NSString *msg = resultdic[@"msg"];
+        if ([code isEqualToString:@"000000"]) {
+            
+            JNSHOrderSureViewController *OrderSureVc = [[JNSHOrderSureViewController alloc] init];
+            OrderSureVc.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:OrderSureVc animated:YES];
+            
+            
+        }else {
+            
+            [JNSHAutoSize showMsg:msg];
+            
+        }
+        
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
+    
+}
+
+
 
 - (void) show:(NSString *)msg cancle:(NSString *)cancleStr sureStr:(NSString *)sureStr {
     

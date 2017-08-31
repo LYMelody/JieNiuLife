@@ -218,6 +218,7 @@
             CardCell.textFiled.delegate = self;
             CardCell.textFiled.tag = 101;
             CardCell.textFiled.text = cardNum;
+            CardCell.textFiled.keyboardType = UIKeyboardTypeNumberPad;
             cell = CardCell;
         }else if (indexPath.row == 2) {
             JNSHLabFldCell *Cell = [[JNSHLabFldCell alloc] init];

@@ -111,12 +111,6 @@
     [_sureBtn addTarget:self action:@selector(sure) forControlEvents:UIControlEventTouchUpInside];
     [_contentView addSubview:_sureBtn];
     
-    [_sureBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerX.equalTo(_messageLab);
-        make.top.equalTo(_contentView).offset([JNSHAutoSize height:82]);
-        make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:110], [JNSHAutoSize height:30]));
-    }];
-    
     
     if (cancel != nil) {
         
@@ -127,6 +121,15 @@
             make.right.equalTo(_contentView).offset(-[JNSHAutoSize width:80]);
             make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:80], [JNSHAutoSize height:30]));
         }];
+        
+    }else {
+        
+        [_sureBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerX.equalTo(_messageLab);
+            make.top.equalTo(_contentView).offset([JNSHAutoSize height:82]);
+            make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:110], [JNSHAutoSize height:30]));
+        }];
+
     }
     
     

@@ -11,6 +11,10 @@
 #import "Masonry.h"
 #import "Controller.h"
 #import "JNSHAlertView.h"
+#import "JNSYUserInfo.h"
+#import "SBJSON.h"
+#import "IBHttpTool.h"
+
 @interface JNSHInvateHistoryController ()<UITableViewDelegate,UITableViewDataSource>
 
 @end
@@ -135,6 +139,8 @@
     }
     
     
+    [self getFriendsList:@"0"];
+    
 }
 
 //查看已兑换名单
@@ -162,6 +168,45 @@
     [alertView show:@"确定用3个邀请名额兑换\n30天会员权益?" inView:self.view];
     
 }
+
+//获取邀请好友列表
+- (void)getFriendsList:(NSString *)isCharge {
+    
+    NSDictionary *dic = @{
+                          @"isCharge":isCharge
+                          };
+    NSString *action = @"UserInviteList";
+    
+    NSDictionary *requstDic = @{
+                                @"action":action,
+                                @"data":dic,
+                                @"token":[JNSYUserInfo getUserInfo].userToken
+                                };
+    
+    NSString *params = [requstDic JSONFragment];
+    
+    [IBHttpTool postWithURL:JNSHTestUrl params:params success:^(id result) {
+        
+        NSDictionary *resultdic = [result JSONValue];
+        NSString *code = resultdic[@"code"];
+        NSLog(@"%@",resultdic);
+        NSString *msg = resultdic[@"msg"];
+        if ([code isEqualToString:@"000000"]) {
+            
+            
+        }else {
+            
+            [JNSHAutoSize showMsg:msg];
+            
+        }
+        
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
+    
+    
+}
+
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     

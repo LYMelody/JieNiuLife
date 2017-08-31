@@ -11,6 +11,10 @@
 #import "JNSHCommonButton.h"
 #import "JNSHSettlementCardController.h"
 #import "JNSHDetailCardImgCell.h"
+#import "JNSYUserInfo.h"
+#import "SBJSON.h"
+#import "IBHttpTool.h"
+#import "UIImageView+WebCache.h"
 @interface JNSHSettleDetailController ()<UITableViewDelegate,UITableViewDataSource>
 
 @end
@@ -19,7 +23,11 @@
     
     
     UITableView *table;
-    
+    JNSHLabFldCell *NameCell;
+    JNSHLabFldCell *CardCell;
+    JNSHLabFldCell *BankCell;
+    JNSHLabFldCell *SubBankCell;
+    JNSHDetailCardImgCell *ImgCell;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -29,6 +37,9 @@
     self.title = @"结算卡详情";
     
     self.view.backgroundColor = ColorTableBackColor;
+    
+   
+    
 }
 
 
@@ -81,6 +92,9 @@
         }
     }
     
+    //获取结算卡详情
+    [self GetSettleCard];
+    
 }
 
 - (void)changeCard {
@@ -92,6 +106,59 @@
     [self.navigationController pushViewController:subVc animated:YES];
     
 }
+
+//获取绑定结算卡信息
+- (void)GetSettleCard {
+    
+    NSDictionary *dic = @{
+                          @"timestamp":[JNSHAutoSize getTimeNow]
+                          
+                          };
+    NSString *action = @"UserSettleCardListState";
+    
+    NSDictionary *requstDic = @{
+                                @"action":action,
+                                @"data":dic,
+                                @"token":[JNSYUserInfo getUserInfo].userToken
+                                };
+    
+    NSString *params = [requstDic JSONFragment];
+    
+    [IBHttpTool postWithURL:JNSHTestUrl params:params success:^(id result) {
+        
+        NSDictionary *resultdic = [result JSONValue];
+        NSString *code = resultdic[@"code"];
+        NSLog(@"%@",resultdic);
+        NSString *msg = resultdic[@"msg"];
+        if ([code isEqualToString:@"000000"]) {
+            
+            NSString *isBind = [NSString stringWithFormat:@"%@",resultdic[@"isBind"]];
+            NSString *cardBank = [NSString stringWithFormat:@"%@",resultdic[@"cardBank"]];
+            NSString *cardCnaps = [NSString stringWithFormat:@"%@",resultdic[@"cardCnaps"]];
+            NSString *cardNo = [NSString stringWithFormat:@"%@",resultdic[@"cardNo"]];
+            NSString *cardPic = [NSString stringWithFormat:@"%@",resultdic[@"cardPic"]];
+            if ([isBind isEqualToString:@"1"]) {
+                NameCell.textFiled.text = [JNSYUserInfo getUserInfo].userAccount;
+                CardCell.textFiled.text = cardNo;
+                BankCell.textFiled.text = cardBank;
+                SubBankCell.textFiled.text = cardCnaps;
+                [ImgCell.cardImg sd_setImageWithURL:[NSURL URLWithString:cardPic]];
+            }
+            
+            
+        }else {
+            
+            [JNSHAutoSize showMsg:msg];
+            
+        }
+        
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
+    
+    
+}
+
 
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -112,39 +179,39 @@
             cell.backgroundColor = ColorTableBackColor;
         }
         if (indexPath.row == 1) {
-            JNSHLabFldCell *Cell = [[JNSHLabFldCell alloc] init];
-            Cell.leftLab.text = @"持 卡 人";
-            Cell.textFiled.placeholder = @"请输入持卡人姓名";
-            Cell.textFiled.text = @"张三";
-            Cell.textFiled.enabled = NO;
-            cell = Cell;
+            NameCell = [[JNSHLabFldCell alloc] init];
+            NameCell.leftLab.text = @"持 卡 人";
+            NameCell.textFiled.placeholder = @"请输入持卡人姓名";
+            // Cell.textFiled.text = @"张三";
+            NameCell.textFiled.enabled = NO;
+            cell = NameCell;
         }else if (indexPath.row == 2) {
-            JNSHLabFldCell *Cell = [[JNSHLabFldCell alloc] init];
-            Cell.leftLab.text = @"卡      号";
-            Cell.textFiled.placeholder = @"请输入卡号";
-            Cell.textFiled.text = @"1232 **** **** **** 4566";
-            Cell.textFiled.enabled = NO;
-            cell = Cell;
+            CardCell = [[JNSHLabFldCell alloc] init];
+            CardCell.leftLab.text = @"卡      号";
+            CardCell.textFiled.placeholder = @"请输入卡号";
+            //Cell.textFiled.text = @"1232 **** **** **** 4566";
+            CardCell.textFiled.enabled = NO;
+            cell = CardCell;
         }else if (indexPath.row == 3) {
-            JNSHLabFldCell *Cell = [[JNSHLabFldCell alloc] init];
-            Cell.leftLab.text = @"选择银行";
-            Cell.textFiled.enabled = NO;
-            Cell.textFiled.text = @"中国银行";
-            cell = Cell;
+            BankCell = [[JNSHLabFldCell alloc] init];
+            BankCell.leftLab.text = @"选择银行";
+            BankCell.textFiled.enabled = NO;
+            //Cell.textFiled.text = @"中国银行";
+            cell = BankCell;
            
         }else if (indexPath.row == 4) {
-            JNSHLabFldCell *Cell = [[JNSHLabFldCell alloc] init];
-            Cell.leftLab.text = @"选择支行";
-            Cell.textFiled.enabled = NO;
-            Cell.textFiled.text = @"城北支行";
-            cell = Cell;
+            SubBankCell = [[JNSHLabFldCell alloc] init];
+            SubBankCell.leftLab.text = @"选择支行";
+            SubBankCell.textFiled.enabled = NO;
+            //Cell.textFiled.text = @"城北支行";
+            cell = SubBankCell;
         }else if(indexPath.row == 5) {
             cell.backgroundColor = ColorTableBackColor;
         }else if (indexPath.row == 6) {
             
-            JNSHDetailCardImgCell *Cell = [[JNSHDetailCardImgCell alloc] init];
+            ImgCell = [[JNSHDetailCardImgCell alloc] init];
             
-            cell = Cell;
+            cell = ImgCell;
         }
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;

@@ -10,4 +10,8 @@
 
 @interface JNSHOrderSureViewController : UIViewController
 
+@property(nonatomic,copy)NSString *orderNo;
+
+@property(nonatomic,copy)NSString *orderTime;
+
 @end

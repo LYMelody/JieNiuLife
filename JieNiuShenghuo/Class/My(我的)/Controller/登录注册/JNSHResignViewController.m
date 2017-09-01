@@ -106,7 +106,7 @@
     [footView addSubview:ResignBtn];
     
     [ResignBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(remberBtn.mas_bottom).offset([JNSHAutoSize height:60]);
+        make.top.equalTo(remberBtn.mas_bottom).offset([JNSHAutoSize height:35]);
         make.left.equalTo(footView).offset([JNSHAutoSize width:15]);
         make.right.equalTo(footView).offset(-[JNSHAutoSize width:15]);
         make.height.mas_equalTo([JNSHAutoSize height:41]);

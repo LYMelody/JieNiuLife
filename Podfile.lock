@@ -1,26 +1,45 @@
 PODS:
-  - IQKeyboardManager (4.0.10)
+  - IQKeyboardManager (4.0.13)
   - Masonry (1.0.2)
   - MBProgressHUD (0.9.2)
+  - MOBFoundation (3.0.2)
   - SBJson (5.0.0)
   - SDWebImage (4.1.0):
     - SDWebImage/Core (= 4.1.0)
   - SDWebImage/Core (4.1.0)
+  - ShareSDK3 (4.0.1):
+    - MOBFoundation
+    - ShareSDK3/ShareSDK (= 4.0.1)
+  - ShareSDK3/ShareSDK (4.0.1):
+    - MOBFoundation
+  - ShareSDK3/ShareSDKPlatforms/SinaWeibo (4.0.1):
+    - MOBFoundation
+  - ShareSDK3/ShareSDKPlatforms/WeChat (4.0.1):
+    - MOBFoundation
+  - ShareSDK3/ShareSDKUI (4.0.1):
+    - MOBFoundation
 
 DEPENDENCIES:
   - IQKeyboardManager
   - Masonry
   - MBProgressHUD (~> 0.9.2)
+  - MOBFoundation
   - SBJson
   - SDWebImage
+  - ShareSDK3
+  - ShareSDK3/ShareSDKPlatforms/SinaWeibo
+  - ShareSDK3/ShareSDKPlatforms/WeChat
+  - ShareSDK3/ShareSDKUI
 
 SPEC CHECKSUMS:
-  IQKeyboardManager: 593ee99b88381f4b9ccb22bd680f22606351bd41
+  IQKeyboardManager: 8eab4d8111418414619d1df8e4779ce5d0f8d7e2
   Masonry: 7c429b56da9d4ee0bbb3ed77a5ea710d6a5df39e
   MBProgressHUD: 1569cf7ace17a8bac47aabfbb8580a49690386d1
+  MOBFoundation: d5e27c4638d911d3c7501aa5df458955d4814359
   SBJson: 73c848dc34be51fda282fab12bda6c426f5ead08
   SDWebImage: 0e435c14e402a6730315a0fb79f95e68654d55a4
+  ShareSDK3: 6983a9b5209b63f2f4297fb0328d9a8dd6abd5f1
 
-PODFILE CHECKSUM: 400c5ec8ecf6fa1397e03bb3e48c76c5f2afb804
+PODFILE CHECKSUM: a613db3bc5cb579cc91cfcdabca959cf9b0904cf
 
 COCOAPODS: 1.1.1

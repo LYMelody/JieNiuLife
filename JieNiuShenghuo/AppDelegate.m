@@ -10,6 +10,16 @@
 #import "JNSHMainBarController.h"
 #import "JNSYUserInfo.h"
 
+//ShareSDK
+#import <ShareSDK/ShareSDK.h>
+#import <ShareSDKConnector/ShareSDKConnector.h>
+#import "WXApi.h"
+#import "WeiboSDK.h"
+
+
+#define ShareAPPKey @"20a05793b4000"
+#define ShareAPPSecet @"a561847dbe57010c896062d0730516a1"
+
 
 @interface AppDelegate ()
 
@@ -40,30 +50,72 @@
     [JNSYUserInfo getUserInfo].userKey = KEY;
     [JNSYUserInfo getUserInfo].userToken = TOKEN;
     
-    UIImageView *lanchView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"tubiao-1"]];
-    lanchView.frame = CGRectMake(-KscreenWidth*0.1/2.0, -KscreenHeight*0.1/2.0, KscreenWidth*1.1, KscreenHeight*1.1);
-   // lanchView.center = self.window.center;
-    NSLog(@"%@",NSStringFromCGSize(lanchView.frame.size));
-    
-    lanchView.transform = CGAffineTransformMakeScale(1.0, 1.0);
-    
-    NSLog(@"%@",NSStringFromCGSize(lanchView.frame.size));
-    
+    UIImageView *lanchView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"图层-2-拷贝-2"]];
+    lanchView.frame = CGRectMake(0, 0, KscreenWidth, KscreenHeight);
     [self.window addSubview:lanchView];
-    
     [self.window bringSubviewToFront:lanchView];
     
-    UIImageView *frontImg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"启动页-"]];
+    //
+    UIImageView *logoImg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"启动页2-"]];
+    logoImg.frame = CGRectMake(0, 0, KscreenWidth, KscreenHeight);
+    [self.window addSubview:logoImg];
+    [self.window bringSubviewToFront:logoImg];
+    
+    UIImageView *frontImg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"启动页1-"]];
     frontImg.frame = CGRectMake(0, 0, KscreenWidth, KscreenHeight);
     [self.window addSubview:frontImg];
     [self.window bringSubviewToFront:frontImg];
     
     [UIView animateWithDuration:2 animations:^{
-        lanchView.transform = CGAffineTransformMakeScale(0.9, 0.9);
+        logoImg.transform = CGAffineTransformMakeScale(0.9, 0.9);
     } completion:^(BOOL finished) {
-        [lanchView removeFromSuperview];
-        [frontImg removeFromSuperview];
+        
+        [UIView animateWithDuration:0.5 animations:^{
+            
+            lanchView.alpha = 0.0;
+            logoImg.alpha = 0.0;
+            frontImg.alpha = 0.0;
+            
+        } completion:^(BOOL finished) {
+            [lanchView removeFromSuperview];
+            [logoImg removeFromSuperview];
+            [frontImg removeFromSuperview];
+        }];
+        
+        
     }];
+    
+    //初始化ShareSDK
+    
+    [ShareSDK registerActivePlatforms:@[
+                                       @(SSDKPlatformTypeWechat),
+                                       @(SSDKPlatformTypeSinaWeibo)] onImport:^(SSDKPlatformType platformType) {
+                                           switch (platformType) {
+                                               case SSDKPlatformTypeSinaWeibo:
+                                                   [ShareSDKConnector connectWeibo:[WeiboSDK class]];
+                                                   break;
+                                               case SSDKPlatformTypeWechat:
+                                                   [ShareSDKConnector connectWeChat:[WXApi class]];
+                                                   break;
+                                                   
+                                               default:
+                                                   break;
+                                           }
+                                       } onConfiguration:^(SSDKPlatformType platformType, NSMutableDictionary *appInfo) {
+                                           switch (platformType) {
+                                               case SSDKPlatformTypeSinaWeibo:
+                                                   [appInfo SSDKSetupSinaWeiboByAppKey:@"4170893334" appSecret:@"cf551ab577ed24a0b1152ec449cb5858" redirectUri:@"http://ktb.4006007909.com/down" authType:SSDKAuthTypeBoth];
+                                                   break;
+                                               case SSDKPlatformTypeWechat:
+                                                   [appInfo SSDKSetupWeChatByAppId:@""
+                                                                         appSecret:@""];
+                                                   break;
+                                               default:
+                                                   break;
+                                           }
+                                       }];
+    
+    
     
     return YES;
 }

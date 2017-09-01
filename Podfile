@@ -7,6 +7,11 @@ target 'JieNiuShenghuo' do
   pod 'SBJson'
   pod 'MBProgressHUD', '~> 0.9.2'
   pod 'SDWebImage'
-
+  pod 'ShareSDK3'
+  pod 'MOBFoundation'
+  pod 'ShareSDK3/ShareSDKUI'
+  pod 'ShareSDK3/ShareSDKPlatforms/WeChat'
+  pod 'ShareSDK3/ShareSDKPlatforms/SinaWeibo'
+  
 end 
 

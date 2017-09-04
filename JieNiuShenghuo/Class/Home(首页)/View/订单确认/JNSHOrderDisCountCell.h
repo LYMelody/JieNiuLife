@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
+typedef void(^ContinueVipSelectBlock)(void);
+
+
 @interface JNSHOrderDisCountCell : UITableViewCell
 
 @property(nonatomic,strong)UILabel *leftLab;
@@ -19,5 +22,7 @@
 @property(nonatomic,strong)UIImageView *bottomLine;
 
 @property(nonatomic,assign)BOOL isShowBottomLine;
+
+@property(nonatomic,copy)ContinueVipSelectBlock continueVipBlock;
 
 @end

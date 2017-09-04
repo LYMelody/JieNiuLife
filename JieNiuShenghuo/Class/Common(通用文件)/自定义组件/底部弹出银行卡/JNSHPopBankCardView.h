@@ -26,6 +26,8 @@ typedef void(^bankSelectBlock)(NSString *bankName, NSString *bankCode);
 
 @property(nonatomic,assign)NSInteger typetag;
 
+@property(nonatomic,strong)NSArray *bankArray;
+
 - (void)showInView:(UIView *)view;
 
 - (void)dismiss;

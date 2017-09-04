@@ -225,7 +225,7 @@
         }
     }else if (sender.tag == 9) {   //.
         
-        if (![moneyLab.text isEqualToString:@"0"] ) {
+       
             
             if ([moneyLab.text containsString:@"."]) {  //判断之前有没有小数点
                 return;
@@ -236,7 +236,7 @@
                     moneyLab.text = [NSString stringWithFormat:@"%@%@",moneyLab.text,sender.titleLabel.text];
                 }
             }
-        }
+        
         
     }else if (sender.tag == 10) {  //0
         if (![moneyLab.text isEqualToString:@"0"]) {
@@ -286,9 +286,6 @@
         
         //[self show:@"请进行实名认证" cancle:@"取消" sureStr:@"去认证"];
        
-        
-
-        
         if (![JNSYUserInfo getUserInfo].isLoggedIn) {
             JNSHLoginController *LogInVc = [[JNSHLoginController alloc] init];
             
@@ -336,8 +333,10 @@
             
             JNSHOrderSureViewController *OrderSureVc = [[JNSHOrderSureViewController alloc] init];
             OrderSureVc.hidesBottomBarWhenPushed = YES;
+            OrderSureVc.amount = moneyLab.text;
+            OrderSureVc.orderNo = resultdic[@"orderNo"];
+            OrderSureVc.orderTime = resultdic[@"orderTime"];
             [self.navigationController pushViewController:OrderSureVc animated:YES];
-            
             
         }else {
             

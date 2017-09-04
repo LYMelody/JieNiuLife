@@ -14,7 +14,11 @@
 #import "JNSHBrandCell.h"
 #import "JNSHPopYXQView.h"
 #import "JNSHPayResultViewController.h"
-@interface JNSHPayOrderViewController ()<UITableViewDelegate,UITableViewDataSource>
+#import "JNSYUserInfo.h"
+#import "SBJSON.h"
+#import "IBHttpTool.h"
+
+@interface JNSHPayOrderViewController ()<UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate>
 
 @end
 
@@ -23,7 +27,8 @@
     NSTimer *timer;
     NSInteger index;
     JNSHGetCodeCell *CodeCell;
-    
+    JNSHLabFldCell *YxqCell;
+    JNSHLabFldCell *CVVCell;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -116,21 +121,21 @@
         if (indexPath.row == 0) {
             JNSHTitleCell *Cell = [[JNSHTitleCell alloc] init];
             Cell.leftLab.text = @"支付金额";
-            Cell.rightLab.text = @"￥10000.00";
+            Cell.rightLab.text = [NSString stringWithFormat:@"￥%@",self.payMoney];
             Cell.rightLab.textColor = [UIColor redColor];
             cell = Cell;
         }else if (indexPath.row == 1) {
             
             JNSHTitleCell *Cell = [[JNSHTitleCell alloc] init];
-            Cell.leftLab.text = @"姓名";
-            Cell.rightLab.text = @"史达克";
+            Cell.leftLab.text = @"姓      名";
+            Cell.rightLab.text = [JNSYUserInfo getUserInfo].userAccount;
             cell = Cell;
             
         }else if (indexPath.row == 2) {
             
             JNSHTitleCell *Cell = [[JNSHTitleCell alloc] init];
             Cell.leftLab.text = @"身份证号";
-            Cell.rightLab.text = @"411327********4216";
+            Cell.rightLab.text = [[JNSYUserInfo getUserInfo].userCert stringByReplacingCharactersInRange:NSMakeRange(6, 8) withString:@"********"];
             cell = Cell;
             
         }else if (indexPath.row == 3) {
@@ -143,30 +148,33 @@
         }else if (indexPath.row == 4) {
             
             JNSHTitleCell *Cell = [[JNSHTitleCell alloc] init];
-            Cell.leftLab.text = @"中信银行";
-            Cell.rightLab.text = @"4033888888881232";
+            Cell.leftLab.text = self.bankName;
+            Cell.rightLab.text = self.bankNo;
             cell = Cell;
             
         }else if (indexPath.row == 5) {
             
-            JNSHLabFldCell *Cell = [[JNSHLabFldCell alloc] init];
-            Cell.leftLab.text = @"有效期";
-            Cell.textFiled.placeholder = @"请选择有效期";
-            Cell.textFiled.enabled = NO;
-            cell = Cell;
+            YxqCell = [[JNSHLabFldCell alloc] init];
+            YxqCell.leftLab.text = @"有效期";
+            YxqCell.textFiled.placeholder = @"请选择有效期";
+            YxqCell.textFiled.enabled = NO;
+            cell = YxqCell;
             
         }else if (indexPath.row == 6) {
             
-            JNSHLabFldCell *Cell = [[JNSHLabFldCell alloc] init];
-            Cell.leftLab.text = @"CVV2";
-            Cell.textFiled.placeholder = @"银行卡背面后三位";
-            cell = Cell;
+            CVVCell = [[JNSHLabFldCell alloc] init];
+            CVVCell.leftLab.text = @"CVV";
+            CVVCell.textFiled.placeholder = @"银行卡背面后三位";
+            CVVCell.textFiled.keyboardType = UIKeyboardTypeNumberPad;
+            CVVCell.textFiled.secureTextEntry = YES;
+            CVVCell.textFiled.delegate = self;
+            cell = CVVCell;
             
         }else if (indexPath.row == 7) {
             
             JNSHLabFldCell *Cell = [[JNSHLabFldCell alloc] init];
             Cell.leftLab.text = @"预留手机号";
-            Cell.textFiled.text = @"188****4521";
+            Cell.textFiled.text = [[JNSYUserInfo getUserInfo].userPhone stringByReplacingCharactersInRange:NSMakeRange(3, 4) withString:@"****"];
             Cell.textFiled.placeholder = @"请输入手机号";
             Cell.textFiled.clearButtonMode = UITextFieldViewModeAlways;
             cell = Cell;
@@ -203,21 +211,74 @@
         };
         
         [YXQView showInView:self.view];
-        
-        
+
     }
 }
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    
+    if (range.location > 2) {
+        return NO;
+    }
+    
+    return YES;
+}
+
 
 //获取验证码
 - (void)getcode {
     
     CodeCell.codeBtn.enabled = NO;
     
-    timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(countDown) userInfo:nil repeats:YES];
-    index = 60;
+    if ([YxqCell.textFiled.text isEqualToString:@""]) {
+        [JNSHAutoSize showMsg:@"有效期为空!"];
+         CodeCell.codeBtn.enabled = YES;
+        return;
+    }else if([CVVCell.textFiled.text isEqualToString:@""]) {
+        [JNSHAutoSize showMsg:@"CVV为空!"];
+         CodeCell.codeBtn.enabled = YES;
+        return;
+    }
     
+    //发起验证码请求
+    NSDictionary *dic = @{
+                          @"orderNo":self.orderNo,
+                          @"cardAccount":[JNSYUserInfo getUserInfo].userAccount,
+                          @"cardCert":[JNSYUserInfo getUserInfo].userCert,
+                          @"cardPhone":[JNSYUserInfo getUserInfo].userPhone,
+                          @"cardCvv":CVVCell.textFiled.text,
+                          @"cardYxq":YxqCell.textFiled.text
+                          };
+    NSString *action = @"PayOrderNocardSms";
+    
+    NSDictionary *requestDic = @{
+                                 @"action":action,
+                                 @"data":dic,
+                                 @"token":[JNSYUserInfo getUserInfo].userToken
+                                 };
+    NSString *params = [requestDic JSONFragment];
+    
+    [IBHttpTool postWithURL:JNSHTestUrl params:params success:^(id result) {
+        NSDictionary *resultdic = [result JSONValue];
+        NSString *code = resultdic[@"code"];
+        NSString *msg = resultdic[@"msg"];
+        NSLog(@"%@",resultdic);
+        if([code isEqualToString:@"000000"]) {
+            
+            timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(countDown) userInfo:nil repeats:YES];
+            index = 60;
+            
+        }else {
+            [JNSHAutoSize showMsg:msg];
+        }
+    
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
+
 }
 
+//定时器方法
 - (void)countDown {
     
     index--;
@@ -234,8 +295,7 @@
         CodeCell.codeBtn.enabled = NO;
         
     }
-    
-    
+
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {

@@ -64,6 +64,11 @@
     
     NSLog(@"续费");
     
+    if (self.continueVipBlock) {
+        self.continueVipBlock();
+    }
+    
+    
 }
 
 

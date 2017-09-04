@@ -18,13 +18,12 @@
 #define popHeight 247
 
 
-
 @implementation JNSHPopBankCardView {
     
    
     NSInteger count;
     
-    NSArray *bankArray;
+    NSArray *bankArrayCode;
     
 }
 
@@ -97,17 +96,13 @@
         make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:140], [JNSHAutoSize height:20]));
     }];
     
-    bankArray = [[NSArray alloc] init];
+    bankArrayCode = [[NSArray alloc] init];
     
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, [JNSHAutoSize height:46], KscreenWidth, [JNSHAutoSize height:(popHeight - 46 - ((self.typetag ==  1)?46:0))]) style:UITableViewStylePlain];
     _tableView.delegate = self;
     _tableView.dataSource = self;
     
     [self.contentView addSubview:self.tableView];
-
-    
-    [self requestForBanks];
-    
     
     if (self.typetag == 1) {
         
@@ -161,8 +156,12 @@
             make.centerY.equalTo(AddBackImg);
             make.right.equalTo(AddBackImg).offset(-[JNSHAutoSize width:18]);
         }];
+    }else {
+        
+        //获取银行卡列表
+         [self requestForBanks];
+        
     }
-    
     
 }
 
@@ -189,7 +188,7 @@
         NSString *msg = resultdic[@"msg"];
         if ([code isEqualToString:@"000000"]) {
             
-            bankArray = resultdic[@"bankTypes"];
+            bankArrayCode = resultdic[@"bankTypes"];
             
             [self.tableView reloadData];
             
@@ -203,14 +202,11 @@
         NSLog(@"%@",error);
     }];
     
-    
 }
-
 
 //添加新卡片
 - (void)tapAdd {
     
-
     if (self.addnewCardBlock) {
         self.addnewCardBlock();
     }
@@ -253,10 +249,13 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    return bankArray.count;
+    if ((self.typetag == 1) && (self.bankArray.count > 0)) {
+        return self.bankArray.count;
+    }
+    
+    return bankArrayCode.count;
     
 }
-
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
@@ -268,9 +267,20 @@
     
     if (cell == nil) {
         cell = [[JNSHBankSelectCell alloc] init];
-        if (bankArray.count > 0) {
-             cell.bankNameLab.text = bankArray[indexPath.row][@"bankName"];
+        if (self.typetag == 1) {
+            if (self.bankArray.count > 0) {
+                
+                cell.bankNameLab.text = self.bankArray[indexPath.row][@"bankName"];
+                NSString *str = self.bankArray[indexPath.row][@"bankNum"];
+                cell.bankCardLab.text = [NSString stringWithFormat:@"信用卡    %@",[self.bankArray[indexPath.row][@"bankNum"] stringByReplacingCharactersInRange:NSMakeRange(str.length - 8 - 4, 8) withString:@"********"]];
+            }
+        }else {
+            if (bankArrayCode.count > 0) {
+                cell.bankNameLab.text = bankArrayCode[indexPath.row][@"bankName"];
+            }
+ 
         }
+        
         if (self.typetag == 1) {
             cell.tag = 1;
         }else {
@@ -310,9 +320,21 @@
     
     _currentIndex = currentIndex;
     
-    if (self.bankselectBlock) {
-        self.bankselectBlock(bankArray[currentIndex][@"bankName"], bankArray[currentIndex][@"bankType"]);
+    
+    if (self.typetag == 1) {
+        
+        if (self.bankselectBlock) {
+            self.bankselectBlock(self.bankArray[currentIndex][@"bankName"], self.bankArray[currentIndex][@"bankNum"]);
+        }
+        
+    }else {
+        
+        if (self.bankselectBlock) {
+            self.bankselectBlock(bankArrayCode[currentIndex][@"bankName"], bankArrayCode[currentIndex][@"bankType"]);
+        }
     }
+    
+    
     
     
     [self.tableView reloadData];

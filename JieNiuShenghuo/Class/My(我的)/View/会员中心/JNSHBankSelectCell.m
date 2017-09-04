@@ -95,7 +95,7 @@
         [_bankNameLab mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(self).offset([JNSHAutoSize height:10]);
             make.left.equalTo(_bankLogoImg.mas_right).offset([JNSHAutoSize width:13]);
-            make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:80], [JNSHAutoSize height:20]));
+            make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:180], [JNSHAutoSize height:20]));
         }];
         
         [_bankCardLab mas_makeConstraints:^(MASConstraintMaker *make) {

@@ -129,7 +129,7 @@
     NSInteger year = self.curYear - _yearRange + [_pickerView selectedRowInComponent:0];
     NSInteger month = [_pickerView selectedRowInComponent:1] + 1;
     
-    return [NSString stringWithFormat:@"%ld/%.2ld",(long)year,(long)month];
+    return [NSString stringWithFormat:@"%.2ld/%ld",(long)month,(long)year];
 }
 
 #pragma mark pickerViewDataSource
@@ -165,7 +165,7 @@
         row = self.curYear-_yearRange+row;
         return [NSString stringWithFormat:@"%ld年",(long)row];
     }else {
-        return [NSString stringWithFormat:@"%d月",row+1];
+        return [NSString stringWithFormat:@"%ld月",row+1];
     }
     
 }
@@ -193,10 +193,7 @@
     [UIView animateWithDuration:0.3 animations:^{
         self.contentView.frame = CGRectMake(0, KscreenHeight - [JNSHAutoSize height:popHeight], KscreenWidth, [JNSHAutoSize height:popHeight]);
     }];
-    
-    
 }
-
 
 - (void)dismiss {
     
@@ -217,8 +214,7 @@
     if (self.selectdateblock) {
         self.selectdateblock(self.selectDate);
     }
-    
-    
+
     //NSLog(@"selectdate:%@",self.selectDate);
     
     [self dismiss];

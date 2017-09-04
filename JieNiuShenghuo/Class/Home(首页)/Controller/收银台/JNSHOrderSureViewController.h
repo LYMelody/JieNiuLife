@@ -14,4 +14,7 @@
 
 @property(nonatomic,copy)NSString *orderTime;
 
+@property(nonatomic,copy)NSString *amount;
+
+
 @end

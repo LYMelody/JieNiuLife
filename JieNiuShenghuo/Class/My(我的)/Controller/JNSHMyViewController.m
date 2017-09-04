@@ -176,7 +176,7 @@
             [JNSYUserInfo getUserInfo].branderCardNo = resultdic[@"branderCardNo"];
             [JNSYUserInfo getUserInfo].picHeader = resultdic[@"picHeader"];
             [JNSYUserInfo getUserInfo].userVipFlag = [NSString stringWithFormat:@"%@",resultdic[@"vipFlg"]];
-            [JNSYUserInfo getUserInfo].userVipFlag = @"1";
+            //[JNSYUserInfo getUserInfo].userVipFlag = @"1";
             [JNSYUserInfo getUserInfo].SettleCard = resultdic[@"userBank"];
             
             //实名认证状态
@@ -197,6 +197,7 @@
                 [JNSYUserInfo getUserInfo].userStatus = @"停用删除";
             }
             
+            //判断是否是Vip
             if ([[JNSYUserInfo getUserInfo].userVipFlag isEqualToString:@"1"]) {
                 
                 isVip = YES;
@@ -273,7 +274,12 @@
             JNSHMyCommonCell *Cell = [[JNSHMyCommonCell alloc] init];
             Cell.titleImage.image = [UIImage imageNamed:@"my_vip"];
             Cell.titleLab.text = @"会员中心";
-            Cell.rightLab.text = @"20天后到期";
+            if (isVip) {
+                Cell.rightLab.text = @"20天后到期";
+            }else {
+                Cell.rightLab.text = @"立即开通";
+            }
+            
             Cell.showBottomLine = YES;
             Cell.showTopLine = YES;
             cell = Cell;

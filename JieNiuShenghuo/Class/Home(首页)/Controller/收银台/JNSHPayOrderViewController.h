@@ -10,4 +10,12 @@
 
 @interface JNSHPayOrderViewController : UIViewController
 
+@property(nonatomic,copy)NSString *payMoney;
+
+@property(nonatomic,copy)NSString *bankName;
+
+@property(nonatomic,copy)NSString *bankNo;
+
+@property(nonatomic,copy)NSString *orderNo;
+
 @end

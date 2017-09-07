@@ -1,5 +1,8 @@
 PODS:
   - IQKeyboardManager (4.0.13)
+  - JCore (1.1.5)
+  - JPush (3.0.6):
+    - JCore (~> 1.1.1)
   - Masonry (1.0.2)
   - MBProgressHUD (0.9.2)
   - MOBFoundation (3.0.2)
@@ -21,6 +24,7 @@ PODS:
 
 DEPENDENCIES:
   - IQKeyboardManager
+  - JPush
   - Masonry
   - MBProgressHUD (~> 0.9.2)
   - MOBFoundation
@@ -33,6 +37,8 @@ DEPENDENCIES:
 
 SPEC CHECKSUMS:
   IQKeyboardManager: 8eab4d8111418414619d1df8e4779ce5d0f8d7e2
+  JCore: 9bd9c770c877c583d98b90a68792b8361974c231
+  JPush: c41be50eb1a574a66aeb68d237f00a4ec6ec3a82
   Masonry: 7c429b56da9d4ee0bbb3ed77a5ea710d6a5df39e
   MBProgressHUD: 1569cf7ace17a8bac47aabfbb8580a49690386d1
   MOBFoundation: d5e27c4638d911d3c7501aa5df458955d4814359
@@ -40,6 +46,6 @@ SPEC CHECKSUMS:
   SDWebImage: 0e435c14e402a6730315a0fb79f95e68654d55a4
   ShareSDK3: 6983a9b5209b63f2f4297fb0328d9a8dd6abd5f1
 
-PODFILE CHECKSUM: a613db3bc5cb579cc91cfcdabca959cf9b0904cf
+PODFILE CHECKSUM: ec76b3968ca01dfef5da2a326b3336e762cb8931
 
 COCOAPODS: 1.1.1

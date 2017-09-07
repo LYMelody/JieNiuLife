@@ -84,6 +84,10 @@
 		CC983CBC1F4C283C00249B2C /* JNSHPopYXQView.m in Sources */ = {isa = PBXBuildFile; fileRef = CC983CBB1F4C283C00249B2C /* JNSHPopYXQView.m */; };
 		CC9E84351F344B6F00AEDF2C /* JNSHMyHeaderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CC9E84341F344B6F00AEDF2C /* JNSHMyHeaderCell.m */; };
 		CC9E84381F34530400AEDF2C /* JNSHMyCommonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CC9E84371F34530400AEDF2C /* JNSHMyCommonCell.m */; };
+		CCA7843F1F5F9E8C00AC5288 /* JNSHMessageListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CCA7843E1F5F9E8C00AC5288 /* JNSHMessageListCell.m */; };
+		CCA784421F5FC1F600AC5288 /* JNSHSystemViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CCA784411F5FC1F600AC5288 /* JNSHSystemViewController.m */; };
+		CCA784451F5FC6A600AC5288 /* JNSHSystemMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CCA784441F5FC6A600AC5288 /* JNSHSystemMessageCell.m */; };
+		CCB1A2B81F60E5350004E6EE /* JNSHTicketsSuccessView.m in Sources */ = {isa = PBXBuildFile; fileRef = CCB1A2B71F60E5350004E6EE /* JNSHTicketsSuccessView.m */; };
 		CCB6FAB81F4140F9005C29FA /* JNSHSettlementCardController.m in Sources */ = {isa = PBXBuildFile; fileRef = CCB6FAB71F4140F9005C29FA /* JNSHSettlementCardController.m */; };
 		CCB6FABB1F418BFE005C29FA /* JNSHSubBankController.m in Sources */ = {isa = PBXBuildFile; fileRef = CCB6FABA1F418BFE005C29FA /* JNSHSubBankController.m */; };
 		CCB6FABF1F41975D005C29FA /* JNSHSubBankCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CCB6FABE1F41975D005C29FA /* JNSHSubBankCell.m */; };
@@ -121,6 +125,7 @@
 		CCF890EC1F38407C0045FD4D /* LSActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = CCF890EB1F38407C0045FD4D /* LSActionSheet.m */; };
 		CCF890EF1F38455C0045FD4D /* JNSHAccountInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CCF890EE1F38455C0045FD4D /* JNSHAccountInfoCell.m */; };
 		CCF890F21F3865B90045FD4D /* JNSHSexCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CCF890F11F3865B90045FD4D /* JNSHSexCell.m */; };
+		CCFA50C61F5E79FA00492CB2 /* JNSHNoticeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CCFA50C51F5E79FA00492CB2 /* JNSHNoticeViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -277,6 +282,14 @@
 		CC9E84341F344B6F00AEDF2C /* JNSHMyHeaderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNSHMyHeaderCell.m; sourceTree = "<group>"; };
 		CC9E84361F34530400AEDF2C /* JNSHMyCommonCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNSHMyCommonCell.h; sourceTree = "<group>"; };
 		CC9E84371F34530400AEDF2C /* JNSHMyCommonCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNSHMyCommonCell.m; sourceTree = "<group>"; };
+		CCA7843D1F5F9E8C00AC5288 /* JNSHMessageListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNSHMessageListCell.h; sourceTree = "<group>"; };
+		CCA7843E1F5F9E8C00AC5288 /* JNSHMessageListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNSHMessageListCell.m; sourceTree = "<group>"; };
+		CCA784401F5FC1F600AC5288 /* JNSHSystemViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNSHSystemViewController.h; sourceTree = "<group>"; };
+		CCA784411F5FC1F600AC5288 /* JNSHSystemViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNSHSystemViewController.m; sourceTree = "<group>"; };
+		CCA784431F5FC6A600AC5288 /* JNSHSystemMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNSHSystemMessageCell.h; sourceTree = "<group>"; };
+		CCA784441F5FC6A600AC5288 /* JNSHSystemMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNSHSystemMessageCell.m; sourceTree = "<group>"; };
+		CCB1A2B61F60E5350004E6EE /* JNSHTicketsSuccessView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JNSHTicketsSuccessView.h; path = "JieNiuShenghuo/Class/Home(首页)/View/JNSHTicketsSuccessView.h"; sourceTree = SOURCE_ROOT; };
+		CCB1A2B71F60E5350004E6EE /* JNSHTicketsSuccessView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JNSHTicketsSuccessView.m; path = "JieNiuShenghuo/Class/Home(首页)/View/JNSHTicketsSuccessView.m"; sourceTree = SOURCE_ROOT; };
 		CCB6FAB61F4140F9005C29FA /* JNSHSettlementCardController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNSHSettlementCardController.h; sourceTree = "<group>"; };
 		CCB6FAB71F4140F9005C29FA /* JNSHSettlementCardController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNSHSettlementCardController.m; sourceTree = "<group>"; };
 		CCB6FAB91F418BFE005C29FA /* JNSHSubBankController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNSHSubBankController.h; sourceTree = "<group>"; };
@@ -350,6 +363,9 @@
 		CCF890EE1F38455C0045FD4D /* JNSHAccountInfoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNSHAccountInfoCell.m; sourceTree = "<group>"; };
 		CCF890F01F3865B90045FD4D /* JNSHSexCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNSHSexCell.h; sourceTree = "<group>"; };
 		CCF890F11F3865B90045FD4D /* JNSHSexCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNSHSexCell.m; sourceTree = "<group>"; };
+		CCFA50C21F5E448200492CB2 /* JieNiuShenghuo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = JieNiuShenghuo.entitlements; sourceTree = "<group>"; };
+		CCFA50C41F5E79FA00492CB2 /* JNSHNoticeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNSHNoticeViewController.h; sourceTree = "<group>"; };
+		CCFA50C51F5E79FA00492CB2 /* JNSHNoticeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNSHNoticeViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -617,6 +633,7 @@
 		CC95DCDF1F315F4500539A03 /* JieNiuShenghuo */ = {
 			isa = PBXGroup;
 			children = (
+				CCFA50C21F5E448200492CB2 /* JieNiuShenghuo.entitlements */,
 				CC95DCFA1F31620400539A03 /* Class */,
 				CC95DD111F31620400539A03 /* Images */,
 				CC95DCE01F315F4500539A03 /* Supporting Files */,
@@ -705,6 +722,7 @@
 				CC95DD001F31620400539A03 /* JNSHHomeViewController.h */,
 				CC95DD011F31620400539A03 /* JNSHHomeViewController.m */,
 				CC983CA61F4BCF2800249B2C /* 收银台 */,
+				CCFA50C31F5E79D600492CB2 /* 消息 */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -719,6 +737,9 @@
 		CC95DD031F31620400539A03 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				CCB1A2B61F60E5350004E6EE /* JNSHTicketsSuccessView.h */,
+				CCB1A2B71F60E5350004E6EE /* JNSHTicketsSuccessView.m */,
+				CCA7843C1F5F9E6900AC5288 /* 消息(cell) */,
 				CC983CAD1F4BD98B00249B2C /* 订单确认 */,
 			);
 			path = View;
@@ -932,6 +953,17 @@
 			path = "订单确认";
 			sourceTree = "<group>";
 		};
+		CCA7843C1F5F9E6900AC5288 /* 消息(cell) */ = {
+			isa = PBXGroup;
+			children = (
+				CCA7843D1F5F9E8C00AC5288 /* JNSHMessageListCell.h */,
+				CCA7843E1F5F9E8C00AC5288 /* JNSHMessageListCell.m */,
+				CCA784431F5FC6A600AC5288 /* JNSHSystemMessageCell.h */,
+				CCA784441F5FC6A600AC5288 /* JNSHSystemMessageCell.m */,
+			);
+			path = "消息(cell)";
+			sourceTree = "<group>";
+		};
 		CCB6FAB51F4140AC005C29FA /* 结算卡 */ = {
 			isa = PBXGroup;
 			children = (
@@ -1130,6 +1162,17 @@
 			path = LSActionSheet;
 			sourceTree = "<group>";
 		};
+		CCFA50C31F5E79D600492CB2 /* 消息 */ = {
+			isa = PBXGroup;
+			children = (
+				CCFA50C41F5E79FA00492CB2 /* JNSHNoticeViewController.h */,
+				CCFA50C51F5E79FA00492CB2 /* JNSHNoticeViewController.m */,
+				CCA784401F5FC1F600AC5288 /* JNSHSystemViewController.h */,
+				CCA784411F5FC1F600AC5288 /* JNSHSystemViewController.m */,
+			);
+			path = "消息";
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1166,6 +1209,11 @@
 						CreatedOnToolsVersion = 8.3.3;
 						DevelopmentTeam = ZP26G972X9;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.Push = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
@@ -1257,6 +1305,7 @@
 			files = (
 				CCCD32051F3AE9ED00BCD7C7 /* JNSHAutoSize.m in Sources */,
 				CC2C445C1F44148800B4982B /* DAYComponentView.m in Sources */,
+				CCA784421F5FC1F600AC5288 /* JNSHSystemViewController.m in Sources */,
 				CCCD7E761F39B32C009E15F5 /* JNSHAboutUsViewController.m in Sources */,
 				CCF890CB1F383DF60045FD4D /* JNSYNickNameViewController.m in Sources */,
 				CCF890F21F3865B90045FD4D /* JNSHSexCell.m in Sources */,
@@ -1270,9 +1319,12 @@
 				CC64BB361F4FD85900A1B692 /* NSString+AES256.m in Sources */,
 				CCF890EC1F38407C0045FD4D /* LSActionSheet.m in Sources */,
 				CC8A6B051F56D34600666CDF /* JNSHTradeNumCell.m in Sources */,
+				CCA784451F5FC6A600AC5288 /* JNSHSystemMessageCell.m in Sources */,
+				CCA7843F1F5F9E8C00AC5288 /* JNSHMessageListCell.m in Sources */,
 				CC64BB131F4FD49000A1B692 /* AFURLRequestSerialization.m in Sources */,
 				CC983CBC1F4C283C00249B2C /* JNSHPopYXQView.m in Sources */,
 				CC5D85331F42AB3200C13022 /* JNSHDetailCardImgCell.m in Sources */,
+				CCB1A2B81F60E5350004E6EE /* JNSHTicketsSuccessView.m in Sources */,
 				CCF890DC1F383FF80045FD4D /* GTMBase64.m in Sources */,
 				CCF890CC1F383DF60045FD4D /* JNSYSexSelectViewController.m in Sources */,
 				CC64BB271F4FD49700A1B692 /* SBJsonBase.m in Sources */,
@@ -1304,6 +1356,7 @@
 				CC64BB241F4FD49700A1B692 /* NSObject+SBJSON.m in Sources */,
 				CCF890C81F383DF60045FD4D /* JNSYAccountMessageViewController.m in Sources */,
 				CC5D85301F42A51400C13022 /* JNSHSettleDetailController.m in Sources */,
+				CCFA50C61F5E79FA00492CB2 /* JNSHNoticeViewController.m in Sources */,
 				CCEE84281F4563AB00161397 /* JNSHOrderDetailController.m in Sources */,
 				CCC440F61F3D579900672F60 /* JNSHCommonButton.m in Sources */,
 				CCCD7E791F39B33B009E15F5 /* JNSHFeedBackViewController.m in Sources */,
@@ -1478,6 +1531,8 @@
 			baseConfigurationReference = 1AF0BD0AF8A5DCE6C50A4CED /* Pods-JieNiuShenghuo.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "LaunchImage-1";
+				CODE_SIGN_ENTITLEMENTS = JieNiuShenghuo/JieNiuShenghuo.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = ZP26G972X9;
 				ENABLE_BITCODE = NO;
@@ -1486,7 +1541,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.jieniu.JieNiuShenghuo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jieniu.jieniushenghuo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/**";
@@ -1498,6 +1553,8 @@
 			baseConfigurationReference = A58C80079A87D3A17CC3322E /* Pods-JieNiuShenghuo.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = "LaunchImage-1";
+				CODE_SIGN_ENTITLEMENTS = JieNiuShenghuo/JieNiuShenghuo.entitlements;
+				CODE_SIGN_IDENTITY = "iPhone Developer: Huiping Zhou (LDRA57SQ58)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = ZP26G972X9;
 				ENABLE_BITCODE = NO;
@@ -1506,7 +1563,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				ONLY_ACTIVE_ARCH = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = com.jieniu.JieNiuShenghuo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jieniu.jieniushenghuo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/**";

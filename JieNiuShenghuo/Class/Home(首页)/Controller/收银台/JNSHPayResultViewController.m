@@ -28,11 +28,17 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    UIImageView *navBackImg = [[UIImageView alloc] init];
+    navBackImg.userInteractionEnabled = YES;
+    navBackImg.frame = CGRectMake(0, 0, KscreenWidth, 64);
+    navBackImg.backgroundColor = ColorTabBarBackColor;
+    [self.view addSubview:navBackImg];
+    
     //返回按钮
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:self action:nil];
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     
-    UITableView *table = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight) style:UITableViewStylePlain];
+    UITableView *table = [[UITableView alloc] initWithFrame:CGRectMake(0, 64, KscreenWidth, KscreenHeight - 64) style:UITableViewStylePlain];
     table.delegate = self;
     table.dataSource = self;
     table.backgroundColor = ColorTableBackColor;

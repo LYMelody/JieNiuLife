@@ -308,7 +308,7 @@
     
     NSDictionary *dic = @{
                           @"payType":@"1",
-                          @"orderType":@"11",
+                          @"orderType":@"10",
                           @"amount":moneyLab.text,
                           @"goodsName":[JNSYUserInfo getUserInfo].userName,
                           @"linkId":time

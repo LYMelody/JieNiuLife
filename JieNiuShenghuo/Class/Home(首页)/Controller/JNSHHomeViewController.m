@@ -13,7 +13,15 @@
 #import "JNSHProgressView.h"
 #import "JNSHTimeCountDownView.h"
 #import "JNSHCashDeskViewController.h"
+#import "JNSHNoticeViewController.h"
+#import "MBProgressHUD.h"
+#import "JNSHTicketsSuccessView.h"
+#import "JNSHTicketsController.h"
+#import "JNSHLoginController.h"
+#import "JNSYUserInfo.h"
 @interface JNSHHomeViewController ()
+
+@property(nonatomic,strong)UIButton *TestBtn;
 
 @end
 
@@ -24,7 +32,8 @@
     UILabel *progressLab;
     NSTimer *timer;
     JNSHTimeCountDownView *ConutDownView;
-    
+    UILabel *messageCountLab;
+    //UIButton *TestBtn;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -39,12 +48,21 @@
                                                                       }];
     
     
+    
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
 
     self.view.backgroundColor = ColorTableBackColor;
+    
+    
+    UIImageView *navBackImg = [[UIImageView alloc] init];
+    navBackImg.userInteractionEnabled = YES;
+    navBackImg.frame = CGRectMake(0, 0, KscreenWidth, 64);
+    navBackImg.backgroundColor = ColorTabBarBackColor;
+    [self.view addSubview:navBackImg];
+    
     
     //返回按钮
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:self action:nil];
@@ -55,12 +73,29 @@
     MessageBtn.frame = CGRectMake(0, 0, 38, 38);
     [MessageBtn setImage:[UIImage imageNamed:@"home_message"] forState:UIControlStateNormal];
     [MessageBtn addTarget:self action:@selector(messageTap) forControlEvents:UIControlEventTouchUpInside];
+    
+    messageCountLab = [[UILabel alloc] init];
+    messageCountLab.textColor = ColorTabBarBackColor;
+    messageCountLab.backgroundColor = [UIColor whiteColor];
+    messageCountLab.font = [UIFont systemFontOfSize:9];
+    messageCountLab.textAlignment = NSTextAlignmentCenter;
+    messageCountLab.layer.cornerRadius = 7.5;
+    messageCountLab.layer.masksToBounds = YES;
+    messageCountLab.text = @"1";
+    [MessageBtn addSubview:messageCountLab];
+    
+    [messageCountLab mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(MessageBtn.mas_top).offset([JNSHAutoSize height:10]);
+        make.centerX.equalTo(MessageBtn.mas_right).offset(-[JNSHAutoSize width:10]);
+        make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:15], [JNSHAutoSize height:15]));
+    }];
+    
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:MessageBtn];
     
     //广告轮播
     UIImageView *ADimgView = [[UIImageView alloc] init];
     ADimgView.backgroundColor = [UIColor grayColor];
-    ADimgView.frame = CGRectMake(0, 0, KscreenWidth, KscreenHeight*0.37);
+    ADimgView.frame = CGRectMake(0,64, KscreenWidth, KscreenHeight*0.37 - 64);
     [self.view addSubview:ADimgView];
     
     //四个功能按钮
@@ -254,7 +289,12 @@
     
     
     ConutDownView = [[JNSHTimeCountDownView alloc] initWithFrame:CGRectMake(KscreenWidth - [JNSHAutoSize width:80], [JNSHAutoSize height:10], [JNSHAutoSize width:65], [JNSHAutoSize height:20])];
-    ConutDownView.time = 1000;
+    //ConutDownView.time = 1000;
+   
+    
+    
+    
+    NSLog(@"%ld",ConutDownView.time);
     
     [titleBackImg addSubview:ConutDownView];
     
@@ -272,6 +312,41 @@
         make.width.mas_equalTo([JNSHAutoSize width:100]);
         make.height.mas_equalTo([JNSHAutoSize height:15]);
     }];
+    
+    //获取当时时间
+    NSDate *date = [NSDate date];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateStyle:NSDateFormatterMediumStyle];
+    [formatter setTimeStyle:NSDateFormatterShortStyle];
+    [formatter setDateFormat:@"HH:mm:ss"];
+    NSTimeZone *timezone = [NSTimeZone timeZoneWithName:@"Asia/Shanghai"];
+    [formatter setTimeZone:timezone];
+    NSString *timeNow = [formatter stringFromDate:date];
+    NSLog(@"现在时间:%@",timeNow);
+    NSString *hour = [timeNow substringToIndex:2];
+    NSString *min = [timeNow substringWithRange:NSMakeRange(3, 2)];
+    NSString *second = [timeNow substringWithRange:NSMakeRange(6, 2)];
+    NSLog(@"hour:%@,min:%@,second:%@",hour,min,second);
+    
+    if ([hour integerValue] < 10) {
+        
+        ConutDownView.time = ((10 - [hour integerValue] - 1)*60+(60-[min integerValue]))*60+(60 - [second integerValue]);
+        timeLab.text = @"距下场开始";
+        
+    }else if(([hour integerValue] >= 10) &&([hour integerValue] < 14) ){
+        
+        ConutDownView.time = ((14 - [hour integerValue] - 1)*60+(60-[min integerValue]))*60+(60 - [second integerValue]);
+        timeLab.text = @"距本场结束";
+        
+    }else if(([hour integerValue] >= 14) &&([hour integerValue] < 18)){
+        
+        ConutDownView.time = ((18 - [hour integerValue] - 1)*60+(60-[min integerValue]))*60+(60 - [second integerValue]);
+        timeLab.text = @"距本场结束";
+        
+    }else {
+        ConutDownView.time = 0;
+    }
+    
     
     //试手气
     UIImageView *ticketBackImg = [[UIImageView alloc] init];
@@ -319,17 +394,17 @@
         make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:100], [JNSHAutoSize height:20]));
     }];
     
-    UIButton *TestBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-    [TestBtn setTitle:@"试手气" forState:UIControlStateNormal];
-    [TestBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [TestBtn setBackgroundColor:[UIColor redColor]];
-    TestBtn.titleLabel.font = [UIFont systemFontOfSize:11];
-    TestBtn.layer.cornerRadius = 3;
-    [TestBtn addTarget:self action:@selector(test) forControlEvents:UIControlEventTouchUpInside];
+    _TestBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [_TestBtn setTitle:@"试手气" forState:UIControlStateNormal];
+    [_TestBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [_TestBtn setBackgroundColor:[UIColor redColor]];
+    _TestBtn.titleLabel.font = [UIFont systemFontOfSize:11];
+    _TestBtn.layer.cornerRadius = 3;
+    [_TestBtn addTarget:self action:@selector(test) forControlEvents:UIControlEventTouchUpInside];
     
-    [ticketBackImg addSubview:TestBtn];
+    [ticketBackImg addSubview:_TestBtn];
     
-    [TestBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_TestBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(ticketImg);
         make.right.equalTo(self.view).offset(-[JNSHAutoSize width:15]);
         make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:60], [JNSHAutoSize height:20]));
@@ -353,7 +428,6 @@
         make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:60], [JNSHAutoSize height:12]));
     }];
     
-    
     timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(countDown) userInfo:nil repeats:YES];
     
 }
@@ -369,7 +443,6 @@
     if (time <= 0) {
         [timer invalidate];
     }
-
 }
 
 //试手气
@@ -377,17 +450,56 @@
     
     NSLog(@"试手气");
     
+    if (![JNSYUserInfo getUserInfo].isLoggedIn) {
+        
+        JNSHLoginController *LogInVc = [[JNSHLoginController alloc] init];
+        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:LogInVc];
+        [self presentViewController:nav animated:YES completion:nil];
+        
+    }else {
+        
+        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        hud.labelText = @"加载中...";
+        [hud hide:YES afterDelay:1.5];
+        
+        [self performSelector:@selector(showImage) withObject:nil afterDelay:1.5];
+        
+    }
+
+}
+
+//抢券成功，弹出视图
+- (void)showImage {
+    
     ProgressView.progress = 0.8;
     
     progressLab.text = [NSString stringWithFormat:@"已抢%.0f%%",ProgressView.progress*100];
     
+    [self.TestBtn setBackgroundColor:LightGrayColor];
+    [self.TestBtn setTitle:@"已领取" forState:UIControlStateNormal];
+    self.TestBtn.enabled  = NO;
+    JNSHTicketsSuccessView *TickView = [[JNSHTicketsSuccessView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight)];
+    TickView.watchTicksBlock = ^{
+        
+        JNSHTicketsController *tickvC = [[JNSHTicketsController alloc] init];
+        tickvC.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:tickvC animated:YES];
+        
+    };
+    [TickView showinView:self.view.window];
+    
 }
+
 
 //消息按钮
 - (void)messageTap {
     
+    messageCountLab.hidden = YES;
+
+    JNSHNoticeViewController *NoticeVc = [[JNSHNoticeViewController alloc] init];
+    NoticeVc.hidesBottomBarWhenPushed = YES;
     
-    
+    [self.navigationController pushViewController:NoticeVc animated:YES];
     
 }
 

@@ -25,7 +25,6 @@
     
     if ([super initWithFrame:frame]) {
         
-        
         _secondLab = [[UILabel alloc] init];
         _secondLab.font = [UIFont systemFontOfSize:13];
         _secondLab.textColor = [UIColor whiteColor];
@@ -115,7 +114,7 @@
     
     NSInteger hour = time/60/60;
     
-    NSInteger min = (time - hour*60)/60;
+    NSInteger min = (time - hour*60*60)/60;
     
     NSInteger second = time - (hour*60 + min)*60;
     

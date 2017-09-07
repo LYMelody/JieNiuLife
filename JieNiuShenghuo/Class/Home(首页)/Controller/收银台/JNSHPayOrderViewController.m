@@ -29,6 +29,7 @@
     JNSHGetCodeCell *CodeCell;
     JNSHLabFldCell *YxqCell;
     JNSHLabFldCell *CVVCell;
+    JNSHCommonButton *CommitBtn;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -45,11 +46,19 @@
     
     [super viewDidLoad];
     
+    UIImageView *navBackImg = [[UIImageView alloc] init];
+    navBackImg.userInteractionEnabled = YES;
+    navBackImg.frame = CGRectMake(0, 0, KscreenWidth, 64);
+    navBackImg.backgroundColor = ColorTabBarBackColor;
+    [self.view addSubview:navBackImg];
+
+    
+    
     //返回按钮
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:self action:nil];
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     
-    UITableView *table = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight) style:UITableViewStylePlain];
+    UITableView *table = [[UITableView alloc] initWithFrame:CGRectMake(0, 64, KscreenWidth, KscreenHeight - 64) style:UITableViewStylePlain];
     table.dataSource = self;
     table.delegate = self;
     table.backgroundColor = ColorTableBackColor;
@@ -71,7 +80,7 @@
     footView.backgroundColor = ColorTableBackColor;
     footView.userInteractionEnabled = YES;
     
-    JNSHCommonButton *CommitBtn = [[JNSHCommonButton alloc] initWithFrame:CGRectMake([JNSHAutoSize width:15], [JNSHAutoSize height:40], (KscreenWidth - [JNSHAutoSize width:30]), [JNSHAutoSize height:41])];
+    CommitBtn = [[JNSHCommonButton alloc] initWithFrame:CGRectMake([JNSHAutoSize width:15], [JNSHAutoSize height:40], (KscreenWidth - [JNSHAutoSize width:30]), [JNSHAutoSize height:41])];
     [CommitBtn addTarget:self action:@selector(commit) forControlEvents:UIControlEventTouchUpInside];
     [CommitBtn setTitle:@"下一步" forState:UIControlStateNormal];
     [footView addSubview:CommitBtn];
@@ -96,11 +105,47 @@
 - (void)commit {
     
     NSLog(@"下一步");
+    CommitBtn.enabled = NO;
+    if ([CodeCell.textFiled.text isEqualToString:@""]) {
+        [JNSHAutoSize showMsg:@"验证码为空"];
+        CommitBtn.enabled = YES;
+        return;
+    }
     
-    JNSHPayResultViewController *PayResultVc = [[JNSHPayResultViewController alloc] init];
-    PayResultVc.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:PayResultVc animated:YES];
+    NSDictionary *dic = @{
+                          @"orderNo":self.orderNo,
+                          @"smsCode":CodeCell.textFiled.text
+                          };
     
+    NSString *action = @"PayOrderNocardConfirm";
+    NSDictionary *requuestDic = @{
+                                  @"action":action,
+                                  @"data":dic,
+                                  @"token":[JNSYUserInfo getUserInfo].userToken
+                                  };
+    NSString *params = [requuestDic JSONFragment];
+    [IBHttpTool postWithURL:JNSHTestUrl params:params success:^(id result) {
+        NSDictionary *resultdic = [result JSONValue];
+        NSString *code = resultdic[@"code"];
+        NSString *msg = resultdic[@"msg"];
+        NSLog(@"%@",resultdic);
+        if([code isEqualToString:@"000000"]) {
+            
+            JNSHPayResultViewController *PayResultVc = [[JNSHPayResultViewController alloc] init];
+            PayResultVc.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:PayResultVc animated:YES];
+           
+            
+        }else {
+            [JNSHAutoSize showMsg:msg];
+        }
+        
+        CommitBtn.enabled = YES;
+        
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+        CommitBtn.enabled = YES;
+    }];
     
 }
 
@@ -184,6 +229,7 @@
             CodeCell = [[JNSHGetCodeCell alloc] init];
             CodeCell.leftLab.text = @"验证码";
             CodeCell.textFiled.placeholder = @"请输入验证码";
+            CodeCell.textFiled.keyboardType = UIKeyboardTypeNumberPad;
             __weak typeof(self) weakSelf = self;
             
             CodeCell.getcodeBlock = ^{

@@ -53,7 +53,6 @@
     
     [self addGestureRecognizer:tap];
     
-    
     _contentView = [[UIView alloc] init];
     _contentView.backgroundColor = [UIColor whiteColor];
     _contentView.layer.cornerRadius = 10;
@@ -77,7 +76,6 @@
     _messageLab.textAlignment = NSTextAlignmentCenter;
     _messageLab.numberOfLines = 0;
     [_contentView addSubview:_messageLab];
-    
     
     self.cancleBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [self.cancleBtn setTitle:cancel forState:UIControlStateNormal];
@@ -111,7 +109,6 @@
     [_sureBtn addTarget:self action:@selector(sure) forControlEvents:UIControlEventTouchUpInside];
     [_contentView addSubview:_sureBtn];
     
-    
     if (cancel != nil) {
         
         [_sureBtn setBackgroundColor:ColorTabBarBackColor];
@@ -131,18 +128,10 @@
         }];
 
     }
-    
-    
 }
 
 - (void)sure {
-    
-//    if () {
-//        <#statements#>
-//    }
-//    
-//    [self dismiss];
-    
+
     if (self.sureAlertBlock) {
         self.sureAlertBlock();
     }

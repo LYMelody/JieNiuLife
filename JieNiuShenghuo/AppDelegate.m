@@ -15,13 +15,21 @@
 #import <ShareSDKConnector/ShareSDKConnector.h>
 #import "WXApi.h"
 #import "WeiboSDK.h"
+//JPush
+#import "JPUSHService.h"
+#import <UserNotifications/UserNotifications.h>
+//如果需要使用idfa功能所需要引入的头文件
+//#import <AdSupport/AdSupport.h>
 
-
+//JPushSDK DEFINE
+#define JPushAPPKey @"29eb4671de05f1476e7f499d"
+#define JPushAppSecert @"d954da47ac64ee8819c89b20"
+//shareSDK DEFINE
 #define ShareAPPKey @"20a05793b4000"
 #define ShareAPPSecet @"a561847dbe57010c896062d0730516a1"
 
 
-@interface AppDelegate ()
+@interface AppDelegate ()<JPUSHRegisterDelegate>
 
 @end
 
@@ -115,9 +123,64 @@
                                            }
                                        }];
     
-    
-    
+    /*************************  JPush ******************************/
+    //注册APNS
+    JPUSHRegisterEntity *entity = [[JPUSHRegisterEntity alloc] init];
+    entity.types = JPAuthorizationOptionAlert|JPAuthorizationOptionBadge|JPAuthorizationOptionSound;
+    if ([[UIDevice currentDevice].systemVersion floatValue] >= 8.0) {
+        
+        
+    }
+    [JPUSHService registerForRemoteNotificationConfig:entity delegate:self];
+    //初始化JPush
+    [JPUSHService setupWithOption:launchOptions appKey:JPushAPPKey channel:@"APP Store" apsForProduction:NO];
+
     return YES;
+}
+
+#define mark - apns
+
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
+    
+    [JPUSHService registerDeviceToken:deviceToken];
+    
+}
+
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
+    
+    NSLog(@"did Fail To Register For Remote Notifications With Error: %@", error);
+    
+}
+
+#define mark - JPUSHRegisterDelegate
+
+- (void)jpushNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(NSInteger))completionHandler {
+    
+    NSDictionary *userInfo = notification.request.content.userInfo;
+    completionHandler(UNNotificationPresentationOptionAlert);
+    
+    NSLog(@"content:%@userinfo:%@",notification.request.content,userInfo);
+    
+}
+
+- (void)jpushNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)())completionHandler {
+    
+    completionHandler(UNNotificationPresentationOptionAlert);
+    
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
+    
+    [JPUSHService handleRemoteNotification:userInfo];
+    
+    completionHandler(UIBackgroundFetchResultNewData);
+    
+}
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+    
+    [JPUSHService handleRemoteNotification:userInfo];
+    
 }
 
 

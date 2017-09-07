@@ -435,7 +435,7 @@
            
             [HUD hide:YES];
           
-            NSString *msg = resultdic[@"respMsg"];
+            NSString *msg = resultdic[@"msg"];
             [JNSHAutoSize showMsg:msg];
             
         }

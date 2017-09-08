@@ -10,6 +10,10 @@
 #import "Masonry.h"
 #import "JNSHCommitEmailViewController.h"
 #import "JNSHAgentPayViewController.h"
+#import "UIViewController+Cloudox.h"
+#import "UINavigationController+Cloudox.h"
+
+
 @interface JNSHBecomeAgentViewController ()
 
 @end
@@ -24,7 +28,7 @@
     
     self.view.backgroundColor = ColorTabBarBackColor;
     
-    
+    self.navBarBgAlpha = @"1.0";
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -46,7 +50,7 @@
     backImg.userInteractionEnabled = YES;
     [self.view addSubview:backImg];
 
-    UIImageView *whiteImg = [[UIImageView alloc] initWithFrame:CGRectMake(0, 64, KscreenWidth , KscreenHeight)];
+    UIImageView *whiteImg = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth , KscreenHeight)];
     whiteImg.backgroundColor = ColorTableBackColor;
     whiteImg.userInteractionEnabled = YES;
     [backImg addSubview:whiteImg];

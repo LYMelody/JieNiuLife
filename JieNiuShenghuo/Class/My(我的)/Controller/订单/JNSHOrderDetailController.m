@@ -9,6 +9,9 @@
 #import "JNSHOrderDetailController.h"
 #import "JNSHLabFldCell.h"
 #import "Masonry.h"
+#import "UIViewController+Cloudox.h"
+#import "UINavigationController+Cloudox.h"
+
 @interface JNSHOrderDetailController ()<UITableViewDelegate,UITableViewDataSource>
 
 @end
@@ -22,6 +25,7 @@
     
     self.view.backgroundColor = [UIColor whiteColor];
     
+    self.navBarBgAlpha = @"1.0";
     
 }
 

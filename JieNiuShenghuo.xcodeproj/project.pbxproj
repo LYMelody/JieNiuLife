@@ -109,6 +109,8 @@
 		CCEE84281F4563AB00161397 /* JNSHOrderDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = CCEE84271F4563AB00161397 /* JNSHOrderDetailController.m */; };
 		CCEE842C1F4573D700161397 /* JNSHTicketsController.m in Sources */ = {isa = PBXBuildFile; fileRef = CCEE842B1F4573D700161397 /* JNSHTicketsController.m */; };
 		CCEE84301F457DD100161397 /* JNSHTicketsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CCEE842F1F457DD100161397 /* JNSHTicketsCell.m */; };
+		CCF7E3531F627C8E00B29DC9 /* UINavigationController+Cloudox.m in Sources */ = {isa = PBXBuildFile; fileRef = CCF7E3501F627C8E00B29DC9 /* UINavigationController+Cloudox.m */; };
+		CCF7E3541F627C8E00B29DC9 /* UIViewController+Cloudox.m in Sources */ = {isa = PBXBuildFile; fileRef = CCF7E3521F627C8E00B29DC9 /* UIViewController+Cloudox.m */; };
 		CCF890C81F383DF60045FD4D /* JNSYAccountMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CCF890BF1F383DF60045FD4D /* JNSYAccountMessageViewController.m */; };
 		CCF890C91F383DF60045FD4D /* JNSYBornDateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CCF890C11F383DF60045FD4D /* JNSYBornDateViewController.m */; };
 		CCF890CA1F383DF60045FD4D /* JNSYHeaderEditorViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CCF890C31F383DF60045FD4D /* JNSYHeaderEditorViewController.m */; };
@@ -330,6 +332,10 @@
 		CCEE842B1F4573D700161397 /* JNSHTicketsController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNSHTicketsController.m; sourceTree = "<group>"; };
 		CCEE842E1F457DD100161397 /* JNSHTicketsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNSHTicketsCell.h; sourceTree = "<group>"; };
 		CCEE842F1F457DD100161397 /* JNSHTicketsCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNSHTicketsCell.m; sourceTree = "<group>"; };
+		CCF7E34F1F627C8E00B29DC9 /* UINavigationController+Cloudox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UINavigationController+Cloudox.h"; sourceTree = "<group>"; };
+		CCF7E3501F627C8E00B29DC9 /* UINavigationController+Cloudox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UINavigationController+Cloudox.m"; sourceTree = "<group>"; };
+		CCF7E3511F627C8E00B29DC9 /* UIViewController+Cloudox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+Cloudox.h"; sourceTree = "<group>"; };
+		CCF7E3521F627C8E00B29DC9 /* UIViewController+Cloudox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+Cloudox.m"; sourceTree = "<group>"; };
 		CCF890BE1F383DF60045FD4D /* JNSYAccountMessageViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNSYAccountMessageViewController.h; sourceTree = "<group>"; };
 		CCF890BF1F383DF60045FD4D /* JNSYAccountMessageViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNSYAccountMessageViewController.m; sourceTree = "<group>"; };
 		CCF890C01F383DF60045FD4D /* JNSYBornDateViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNSYBornDateViewController.h; sourceTree = "<group>"; };
@@ -758,6 +764,7 @@
 		CC95DD051F31620400539A03 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				CCF7E34E1F627C8E00B29DC9 /* category */,
 				CC95DD221F3163EA00539A03 /* JNSHMyViewController.h */,
 				CC95DD231F3163EA00539A03 /* JNSHMyViewController.m */,
 				CC64BAEF1F4E63C400A1B692 /* 登录注册 */,
@@ -1092,6 +1099,17 @@
 			path = "卡券包";
 			sourceTree = "<group>";
 		};
+		CCF7E34E1F627C8E00B29DC9 /* category */ = {
+			isa = PBXGroup;
+			children = (
+				CCF7E34F1F627C8E00B29DC9 /* UINavigationController+Cloudox.h */,
+				CCF7E3501F627C8E00B29DC9 /* UINavigationController+Cloudox.m */,
+				CCF7E3511F627C8E00B29DC9 /* UIViewController+Cloudox.h */,
+				CCF7E3521F627C8E00B29DC9 /* UIViewController+Cloudox.m */,
+			);
+			path = category;
+			sourceTree = "<group>";
+		};
 		CCF890BD1F383DF60045FD4D /* 个人信息 */ = {
 			isa = PBXGroup;
 			children = (
@@ -1310,6 +1328,7 @@
 				CCF890CB1F383DF60045FD4D /* JNSYNickNameViewController.m in Sources */,
 				CCF890F21F3865B90045FD4D /* JNSHSexCell.m in Sources */,
 				CCB6FAC61F41BDB3005C29FA /* JNSHSelectCityController.m in Sources */,
+				CCF7E3541F627C8E00B29DC9 /* UIViewController+Cloudox.m in Sources */,
 				CC64BB341F4FD85900A1B692 /* IBHttpTool.m in Sources */,
 				CC5D852D1F42824700C13022 /* JNSHSelectSubController.m in Sources */,
 				CC5D853E1F42E64E00C13022 /* JNSHOrderStatusView.m in Sources */,
@@ -1369,6 +1388,7 @@
 				CC64BB111F4FD49000A1B692 /* AFSecurityPolicy.m in Sources */,
 				CC95DD211F3163C500539A03 /* JNSHServiceViewController.m in Sources */,
 				CC95DD121F31620400539A03 /* JNSHHomeViewController.m in Sources */,
+				CCF7E3531F627C8E00B29DC9 /* UINavigationController+Cloudox.m in Sources */,
 				CC86B2191F4683B80074345B /* JNSHInvateHistoryController.m in Sources */,
 				CC64BB141F4FD49000A1B692 /* AFURLResponseSerialization.m in Sources */,
 				CC64BB261F4FD49700A1B692 /* SBJSON.m in Sources */,

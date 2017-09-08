@@ -208,7 +208,7 @@
         }else if (indexPath.row == 6) {
             
             CVVCell = [[JNSHLabFldCell alloc] init];
-            CVVCell.leftLab.text = @"CVV";
+            CVVCell.leftLab.text = @"CVV2";
             CVVCell.textFiled.placeholder = @"银行卡背面后三位";
             CVVCell.textFiled.keyboardType = UIKeyboardTypeNumberPad;
             CVVCell.textFiled.secureTextEntry = YES;

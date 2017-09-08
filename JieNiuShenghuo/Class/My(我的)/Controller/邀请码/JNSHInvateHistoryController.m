@@ -14,6 +14,8 @@
 #import "JNSYUserInfo.h"
 #import "SBJSON.h"
 #import "IBHttpTool.h"
+#import "UIViewController+Cloudox.h"
+#import "UINavigationController+Cloudox.h"
 
 @interface JNSHInvateHistoryController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -30,8 +32,7 @@
     
     self.view.backgroundColor = [UIColor whiteColor];
     
-    UIImageView *backimg = self.navigationController.navigationBar.subviews.firstObject;
-    backimg.alpha = 1;
+   self.navBarBgAlpha = @"1.0";
     
     
 }
@@ -44,12 +45,8 @@
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:self action:nil];
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     
-    UIImageView *backimg = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight)];
-    backimg.userInteractionEnabled = YES;
-    backimg.backgroundColor = ColorTabBarBackColor;
-    [self.view addSubview:backimg];
     
-    UITableView *table = [[UITableView alloc] initWithFrame:CGRectMake(0, 64, KscreenWidth, KscreenHeight - 64)];
+    UITableView *table = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight - 64)];
     table.delegate = self;
     table.dataSource = self;
     table.backgroundColor = ColorTableBackColor;

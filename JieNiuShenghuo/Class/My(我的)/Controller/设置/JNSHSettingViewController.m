@@ -17,6 +17,9 @@
 #import "JNSHAboutUsViewController.h"
 #import "JNSHFeedBackViewController.h"
 #import "JNSYUserInfo.h"
+#import "UIViewController+Cloudox.h"
+#import "UINavigationController+Cloudox.h"
+
 @interface JNSHSettingViewController ()<UITableViewDelegate,UITableViewDataSource>
 
 @end
@@ -40,6 +43,7 @@
     
     [table reloadData];
     
+    self.navBarBgAlpha = @"1.0";
 }
 
 - (void)viewDidLoad {
@@ -49,12 +53,12 @@
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:self action:nil];
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     
-    UIImageView *backImg = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight)];
-    backImg.backgroundColor = ColorTabBarBackColor;
-    backImg.userInteractionEnabled = YES;
-    [self.view addSubview:backImg];
+//    UIImageView *backImg = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight)];
+//    backImg.backgroundColor = ColorTabBarBackColor;
+//    backImg.userInteractionEnabled = YES;
+//    [self.view addSubview:backImg];
     
-    table = [[UITableView alloc] initWithFrame:CGRectMake(0, 64, KscreenWidth, KscreenHeight - 64) style:UITableViewStylePlain];
+    table = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight) style:UITableViewStylePlain];
     table.delegate = self;
     table.dataSource = self;
     table.backgroundColor = ColorTableBackColor;

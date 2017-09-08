@@ -13,6 +13,8 @@
 #import "JNSYUserInfo.h"
 #import "SBJSON.h"
 #import "IBHttpTool.h"
+#import "UIViewController+Cloudox.h"
+#import "UINavigationController+Cloudox.h"
 
 @interface JNSHTicketsController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -40,9 +42,10 @@
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:NO];
     
-    UIImageView *backimg = self.navigationController.navigationBar.subviews.firstObject;
-    backimg.alpha = 0;
-    
+//    UIImageView *backimg = self.navigationController.navigationBar.subviews.firstObject;
+//    backimg.alpha = 0;
+    self.navBarBgAlpha = @"1.0";
+    self.navigationController.navigationBar.translucent = NO;
     [self requestForTickets];
     
     //[self.navigationController setNavigationBarHidden:NO animated:NO];
@@ -73,7 +76,11 @@
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:self action:nil];
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     
-    UITableView *table = [[UITableView alloc] initWithFrame:CGRectMake(0, 64, KscreenWidth, KscreenHeight - 64) style:UITableViewStylePlain];
+    UIImageView *navImg = [[UIImageView alloc] initWithFrame:CGRectMake(0, -64, KscreenWidth, 64)];
+    navImg.backgroundColor = [UIColor whiteColor];
+    [self.view addSubview:navImg];
+    
+    UITableView *table = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight - 64) style:UITableViewStylePlain];
     table.delegate = self;
     table.dataSource = self;
     table.backgroundColor = ColorTableBackColor;
@@ -107,7 +114,7 @@
         table.tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, CGFLOAT_MIN)];
     }
     
-    UIImageView *backImg = [[UIImageView alloc] initWithFrame:CGRectMake(0, 64, KscreenWidth, KscreenHeight - 64)];
+    UIImageView *backImg = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight - 64)];
     backImg.backgroundColor = ColorTableBackColor;
     [self.view addSubview:backImg];
     

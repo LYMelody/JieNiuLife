@@ -10,6 +10,8 @@
 #import "JNSHAccountInfoCell.h"
 #import "JNSHTradeNumCell.h"
 #import "JNSHAgentCell.h"
+#import "UIViewController+Cloudox.h"
+#import "UINavigationController+Cloudox.h"
 
 @interface JNSHAgentDetailViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -22,7 +24,7 @@
     
     self.title = @"代理商";
     self.view.backgroundColor = ColorTabBarBackColor;
-    
+    self.navBarBgAlpha = @"1.0";
 }
 
 - (void)viewDidLoad {
@@ -38,7 +40,7 @@
     
     self.automaticallyAdjustsScrollViewInsets = NO;
     
-    UITableView *table = [[UITableView alloc] initWithFrame:CGRectMake(0, 64, KscreenWidth, KscreenHeight - 64) style:UITableViewStylePlain];
+    UITableView *table = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight - 64) style:UITableViewStylePlain];
     table.delegate = self;
     table.dataSource = self;
     table.separatorStyle = UITableViewCellSeparatorStyleNone;

@@ -234,13 +234,13 @@
         self.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
     }];
 
-    self.contentView.frame = CGRectMake(0, 64+ [JNSHAutoSize height:46], KscreenWidth, [JNSHAutoSize height:0]);
-    self.calendarView.frame = CGRectMake([JNSHAutoSize width:15], [JNSHAutoSize height:154], KscreenWidth - [JNSHAutoSize width:15]*2, [JNSHAutoSize height:0]);
+    self.contentView.frame = CGRectMake(0,  [JNSHAutoSize height:46], KscreenWidth, [JNSHAutoSize height:0]);
+    self.calendarView.frame = CGRectMake([JNSHAutoSize width:15], [JNSHAutoSize height:90], KscreenWidth - [JNSHAutoSize width:15]*2, [JNSHAutoSize height:0]);
     //self.headerView.frame = CGRectMake(0, [JNSHAutoSize height:110], KscreenWidth, [JNSHAutoSize height:0]);
     [UIView animateWithDuration:0.2 animations:^{
         //self.headerView.frame = CGRectMake(0, [JNSHAutoSize height:110], KscreenWidth, [JNSHAutoSize height:44]);
-        self.contentView.frame = CGRectMake(0, 64+ [JNSHAutoSize height:46], KscreenWidth, [JNSHAutoSize height:300]);
-        self.calendarView.frame = CGRectMake([JNSHAutoSize width:15], [JNSHAutoSize height:154], KscreenWidth - [JNSHAutoSize width:15]*2, [JNSHAutoSize height:250]);
+        self.contentView.frame = CGRectMake(0, [JNSHAutoSize height:46], KscreenWidth, [JNSHAutoSize height:300]);
+        self.calendarView.frame = CGRectMake([JNSHAutoSize width:15], [JNSHAutoSize height:90], KscreenWidth - [JNSHAutoSize width:15]*2, [JNSHAutoSize height:250]);
     }];
     
     

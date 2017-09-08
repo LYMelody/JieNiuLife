@@ -26,8 +26,10 @@
 #import "SBJSON.h"
 #import "IBHttpTool.h"
 #import "UIImageView+WebCache.h"
+#import "UIViewController+Cloudox.h"
+#import "UINavigationController+Cloudox.h"
 
-@interface JNSHMyViewController ()<UITableViewDelegate,UITableViewDataSource,UIGestureRecognizerDelegate>
+@interface JNSHMyViewController ()<UITableViewDelegate,UITableViewDataSource,UIGestureRecognizerDelegate,UINavigationControllerDelegate>
 
 @end
 
@@ -45,19 +47,18 @@
     
     [super viewWillAppear:animated];
 
-    
-    //self.navigationController.navigationBar.translucent = NO;
-    
+    self.navigationController.navigationBar.translucent = NO;
     //[[UINavigationBar appearance] setTranslucent:NO];
-    
     //隐藏黑线
     self.navigationController.navigationBar.subviews[0].subviews[0].hidden = YES;
     
     [super viewDidAppear:animated];
     
-    barBackImg = self.navigationController.navigationBar.subviews.firstObject;
-    barBackImg.alpha = 0;
+//    barBackImg = self.navigationController.navigationBar.subviews.firstObject;
+//    barBackImg.alpha = 0;
     self.navigationItem.title = @"";
+    
+    self.navBarBgAlpha = @"0.0";
     
     self.navigationController.interactivePopGestureRecognizer.delegate = self;
     
@@ -67,11 +68,11 @@
     }
     
     [table reloadData];
+    self.navigationController.delegate = self;
     
 }
 
 -(BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
-    
     
     if (self.childViewControllers.count == 1) {
         return NO;
@@ -83,13 +84,6 @@
     return YES;
 }
 
-- (void)viewWillDisappear:(BOOL)animated {
-    
-    
-    //self.navigationController.navigationBar.translucent = YES;
-    
-    barBackImg.alpha = 1;
-}
 
 - (void)viewDidLoad {
     
@@ -111,9 +105,9 @@
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:SettingBtn];
     
     //取消tableView自动布局
-    self.automaticallyAdjustsScrollViewInsets = NO;
+    //self.automaticallyAdjustsScrollViewInsets = NO;
     
-    table = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight - 49 ) style:UITableViewStylePlain];
+    table = [[UITableView alloc] initWithFrame:CGRectMake(0, -64, KscreenWidth, KscreenHeight) style:UITableViewStylePlain];
     table.delegate = self;
     table.dataSource = self;
     table.backgroundColor = ColorTableBackColor;
@@ -384,7 +378,6 @@
         if (islogoedIn) {
             JNSYAccountMessageViewController *AccountVc = [[JNSYAccountMessageViewController alloc] init];
             AccountVc.hidesBottomBarWhenPushed = YES;
-    
             [self.navigationController pushViewController:AccountVc animated:YES];
         }else {
             JNSHLoginController *LogInVc = [[JNSHLoginController alloc] init];
@@ -534,11 +527,12 @@
         //隐藏黑线
         self.navigationController.navigationBar.subviews[0].subviews[0].hidden = NO;
         
-        barBackImg.alpha = 1;
+        //barBackImg.alpha = 1;
+        self.navBarBgAlpha = @"1.0";
         self.navigationItem.title = @"我";
         
     }else if (y < 64) {
-        barBackImg.alpha = 0;
+        self.navBarBgAlpha = @"0.0";
         self.navigationItem.title = @"";
         
     }
@@ -550,10 +544,7 @@
         frame.size.height = -y;
         headImageView.frame = frame;
     }
-    
-    
 }
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

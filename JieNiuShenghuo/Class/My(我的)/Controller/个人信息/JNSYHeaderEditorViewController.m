@@ -17,6 +17,8 @@
 #import "GTMBase64.h"
 #import "MBProgressHUD.h"
 #import "UIImageView+WebCache.h"
+#import "UIViewController+Cloudox.h"
+#import "UINavigationController+Cloudox.h"
 
 @interface JNSYHeaderEditorViewController ()<UIActionSheetDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 
@@ -34,7 +36,10 @@
     self.title = @"个人头像";
     self.navigationController.navigationBar.hidden = NO;
     self.tabBarController.tabBar.hidden = YES;
+    self.navigationController.navigationBar.translucent = NO;
     
+    self.navBarBgAlpha = @"1.0";
+    self.edgesForExtendedLayout = UIRectEdgeNone;
 }
 
 - (void)viewDidLoad {
@@ -49,6 +54,8 @@
     _HeaderImgView.backgroundColor = [UIColor clearColor];
     _HeaderImgView.contentMode = UIViewContentModeScaleAspectFit;
     _HeaderImgView.clipsToBounds = YES;
+    
+    
     
     if ([JNSYUserInfo getUserInfo].picHeader) {
         [_HeaderImgView sd_setImageWithURL:[NSURL URLWithString:[JNSYUserInfo getUserInfo].picHeader]];
@@ -145,7 +152,9 @@
     _HeaderImgView.image = image;
     
     //pop
-    [picker dismissViewControllerAnimated:YES completion:nil];
+    [picker dismissViewControllerAnimated:YES completion:^{
+        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    }];
     
 }
 

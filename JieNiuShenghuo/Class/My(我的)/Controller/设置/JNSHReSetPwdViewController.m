@@ -14,6 +14,9 @@
 #import "IBHttpTool.h"
 #import "MBProgressHUD.h"
 #import "JNSHForgetPwdViewController.h"
+#import "UIViewController+Cloudox.h"
+#import "UINavigationController+Cloudox.h"
+
 @interface JNSHR_eSetPwdViewController ()<UITextFieldDelegate>
 
 @end
@@ -34,6 +37,8 @@
     self.title = @"修改密码";
     
     self.view.backgroundColor = ColorTableBackColor;
+    
+    self.navBarBgAlpha = @"1.0";
     
 }
 
@@ -61,7 +66,7 @@
     
     [whiteBackImgOne mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.equalTo(self.view);
-        make.top.equalTo(self.view).offset(20 + 64);
+        make.top.equalTo(self.view).offset(20);
         make.height.mas_equalTo(44);
     }];
     

@@ -33,6 +33,7 @@
     NSTimer *timer;
     JNSHTimeCountDownView *ConutDownView;
     UILabel *messageCountLab;
+    UILabel *timeLab;
     //UIButton *TestBtn;
 }
 
@@ -299,7 +300,7 @@
     [titleBackImg addSubview:ConutDownView];
     
     //timeLab
-    UILabel *timeLab = [[UILabel alloc] init];
+    timeLab = [[UILabel alloc] init];
     timeLab.text = @"距本场结束";
     timeLab.textColor = ColorLightText;
     timeLab.font = [UIFont systemFontOfSize:11];
@@ -312,41 +313,6 @@
         make.width.mas_equalTo([JNSHAutoSize width:100]);
         make.height.mas_equalTo([JNSHAutoSize height:15]);
     }];
-    
-    //获取当时时间
-    NSDate *date = [NSDate date];
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateStyle:NSDateFormatterMediumStyle];
-    [formatter setTimeStyle:NSDateFormatterShortStyle];
-    [formatter setDateFormat:@"HH:mm:ss"];
-    NSTimeZone *timezone = [NSTimeZone timeZoneWithName:@"Asia/Shanghai"];
-    [formatter setTimeZone:timezone];
-    NSString *timeNow = [formatter stringFromDate:date];
-    NSLog(@"现在时间:%@",timeNow);
-    NSString *hour = [timeNow substringToIndex:2];
-    NSString *min = [timeNow substringWithRange:NSMakeRange(3, 2)];
-    NSString *second = [timeNow substringWithRange:NSMakeRange(6, 2)];
-    NSLog(@"hour:%@,min:%@,second:%@",hour,min,second);
-    
-    if ([hour integerValue] < 10) {
-        
-        ConutDownView.time = ((10 - [hour integerValue] - 1)*60+(60-[min integerValue]))*60+(60 - [second integerValue]);
-        timeLab.text = @"距下场开始";
-        
-    }else if(([hour integerValue] >= 10) &&([hour integerValue] < 14) ){
-        
-        ConutDownView.time = ((14 - [hour integerValue] - 1)*60+(60-[min integerValue]))*60+(60 - [second integerValue]);
-        timeLab.text = @"距本场结束";
-        
-    }else if(([hour integerValue] >= 14) &&([hour integerValue] < 18)){
-        
-        ConutDownView.time = ((18 - [hour integerValue] - 1)*60+(60-[min integerValue]))*60+(60 - [second integerValue]);
-        timeLab.text = @"距本场结束";
-        
-    }else {
-        ConutDownView.time = 0;
-    }
-    
     
     //试手气
     UIImageView *ticketBackImg = [[UIImageView alloc] init];
@@ -428,9 +394,62 @@
         make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:60], [JNSHAutoSize height:12]));
     }];
     
+    //开启定时器
+    [self startTimer];
+    
+    //注册通知 (当应用从后台到前台重新获取当时时间计时)
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startTimer) name:UIApplicationWillEnterForegroundNotification object:nil];
+}
+
+- (void)startTimer {
+    
+    //获取当时时间
+    NSDate *date = [NSDate date];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateStyle:NSDateFormatterMediumStyle];
+    [formatter setTimeStyle:NSDateFormatterShortStyle];
+    [formatter setDateFormat:@"HH:mm:ss"];
+    NSTimeZone *timezone = [NSTimeZone timeZoneWithName:@"Asia/Shanghai"];
+    [formatter setTimeZone:timezone];
+    NSString *timeNow = [formatter stringFromDate:date];
+    NSLog(@"现在时间:%@",timeNow);
+    NSString *hour = [timeNow substringToIndex:2];
+    NSString *min = [timeNow substringWithRange:NSMakeRange(3, 2)];
+    NSString *second = [timeNow substringWithRange:NSMakeRange(6, 2)];
+    NSLog(@"hour:%@,min:%@,second:%@",hour,min,second);
+    
+    if ([hour integerValue] < 10) {
+        
+        ConutDownView.time = ((10 - [hour integerValue] - 1)*60+(60-[min integerValue]))*60+(60 - [second integerValue]);
+        timeLab.text = @"距下场开始";
+        
+    }else if(([hour integerValue] >= 10) &&([hour integerValue] < 14) ){
+        
+        ConutDownView.time = ((14 - [hour integerValue] - 1)*60+(60-[min integerValue]))*60+(60 - [second integerValue]);
+        timeLab.text = @"距本场结束";
+        
+    }else if(([hour integerValue] >= 14) &&([hour integerValue] < 18)){
+        
+        ConutDownView.time = ((18 - [hour integerValue] - 1)*60+(60-[min integerValue]))*60+(60 - [second integerValue]);
+        timeLab.text = @"距本场结束";
+        
+    }else {
+        ConutDownView.time = 0;
+    }
+    
+    //关闭之前的定时器
+    if (timer) {
+        [timer invalidate];
+    }
+    
+    if ([hour integerValue] >= 18) {
+        return;
+    }
+    
     timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(countDown) userInfo:nil repeats:YES];
     
 }
+
 
 //
 - (void)countDown {
@@ -442,6 +461,9 @@
     
     if (time <= 0) {
         [timer invalidate];
+        
+        [self startTimer];
+        
     }
 }
 
@@ -490,7 +512,6 @@
     
 }
 
-
 //消息按钮
 - (void)messageTap {
     
@@ -513,6 +534,15 @@
     [self.navigationController pushViewController:jnshCashDeskVc animated:YES];
     
 }
+
+
+- (void)dealloc {
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillEnterForegroundNotification object:nil];
+    
+    
+}
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

@@ -83,7 +83,7 @@
     [BackImg addSubview:Text];
     
     [Text mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.view).offset(10+64);
+        make.top.equalTo(self.view).offset(10);
         make.left.right.equalTo(self.view);
         make.height.mas_equalTo(40);
     }];

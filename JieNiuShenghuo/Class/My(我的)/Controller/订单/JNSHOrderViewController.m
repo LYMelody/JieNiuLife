@@ -14,6 +14,8 @@
 #import "DAYCalendarView.h"
 #import "JNSHCalendarView.h"
 #import "JNSHOrderDetailController.h"
+#import "UIViewController+Cloudox.h"
+#import "UINavigationController+Cloudox.h"
 
 
 
@@ -46,25 +48,21 @@
     [super viewWillAppear:animated];
     self.title = @"订单中心";
     self.view.backgroundColor = ColorTableBackColor;
-    
+    self.navBarBgAlpha = @"1.0";
     [table reloadData];
 }
 
 - (void)viewDidLoad {
+    
     [super viewDidLoad];
     
     //返回按钮
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:self action:nil];
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     
-    UIImageView *backImg = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, 64)];
-    backImg.backgroundColor = ColorTabBarBackColor;
-    backImg.userInteractionEnabled = YES;
-    [self.view addSubview:backImg];
-    
     [self setPickViews];
     
-    table = [[UITableView alloc] initWithFrame:CGRectMake(0, 64 +[JNSHAutoSize height:46], KscreenWidth, KscreenHeight - [JNSHAutoSize height:110]) style:UITableViewStylePlain];
+    table = [[UITableView alloc] initWithFrame:CGRectMake(0, [JNSHAutoSize height:46], KscreenWidth, KscreenHeight - [JNSHAutoSize height:46] - 64) style:UITableViewStylePlain];
     table.delegate = self;
     table.dataSource = self;
     table.backgroundColor = ColorTableBackColor;
@@ -85,7 +83,7 @@
     [self.view addSubview:dateImg];
     
     [dateImg mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.view).offset(64);
+        make.top.equalTo(self.view).offset(0);
         make.left.equalTo(self.view);
         make.size.mas_equalTo(CGSizeMake((KscreenWidth - 1)/2.0, [JNSHAutoSize height:41]));
     }];
@@ -177,7 +175,7 @@
         [calendar dismiss];
     }else {
         
-        calendar = [[JNSHCalendarView alloc] initWithFrame:CGRectMake(0,64 + [JNSHAutoSize height:46], KscreenWidth, KscreenHeight)];
+        calendar = [[JNSHCalendarView alloc] initWithFrame:CGRectMake(0, [JNSHAutoSize height:46], KscreenWidth, KscreenHeight)];
         calendar.userInteractionEnabled = YES;
         
         __weak typeof(self) weakSelf = self;

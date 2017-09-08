@@ -228,10 +228,21 @@
         self.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
     }];
     
+    float height = 64;
+    
+    //self.superview.inputViewController.navigationController.navigationBar.translucent
+    
+    
+    
+    if (self.superview.inputViewController.navigationController.navigationBar.translucent) {
+        height = 0;
+    }
+    
     self.contentView.frame = CGRectMake(0, KscreenHeight, KscreenWidth, 100);
     [UIView animateWithDuration:0.3 animations:^{
-         self.contentView.frame = CGRectMake(0, KscreenHeight - [JNSHAutoSize height:popHeight], KscreenWidth, [JNSHAutoSize height:popHeight]);
+        self.contentView.frame = CGRectMake(0, KscreenHeight - [JNSHAutoSize height:popHeight] - height, KscreenWidth, [JNSHAutoSize height:popHeight]);
     }];
+    
 }
 
 - (void)dismiss {

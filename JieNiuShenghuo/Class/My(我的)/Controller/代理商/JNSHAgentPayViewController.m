@@ -10,6 +10,9 @@
 #import "Masonry.h"
 #import "JNSHCommonButton.h"
 #import "JNSHAgentDetailViewController.h"
+#import "UIViewController+Cloudox.h"
+#import "UINavigationController+Cloudox.h"
+
 @interface JNSHAgentPayViewController ()
 
 @end
@@ -25,7 +28,7 @@
     self.title = @"代理商";
     self.view.backgroundColor = ColorTabBarBackColor;
     
-    
+    self.navBarBgAlpha = @"1.0";
 }
 
 - (void)viewDidLoad {
@@ -42,7 +45,7 @@
     backImg.userInteractionEnabled = YES;
     [self.view addSubview:backImg];
     
-    UIImageView *lightBackImg = [[UIImageView alloc] initWithFrame:CGRectMake(0, 64, KscreenWidth, KscreenHeight)];
+    UIImageView *lightBackImg = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight)];
     lightBackImg.backgroundColor = ColorTableBackColor;
     lightBackImg.userInteractionEnabled = YES;
     [backImg addSubview:lightBackImg];

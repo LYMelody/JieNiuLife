@@ -31,7 +31,7 @@
     
     self.title = @"订单确认";
     self.view.backgroundColor = ColorTabBarBackColor;
-    
+    self.navigationController.navigationBar.translucent = YES;
 }
 
 - (void)viewDidLoad {

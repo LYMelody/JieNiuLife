@@ -12,6 +12,8 @@
 #import "SBJSON.h"
 #import "IBHttpTool.h"
 #import "JNSHCommonButton.h"
+#import "UIViewController+Cloudox.h"
+#import "UINavigationController+Cloudox.h"
 
 @interface JNSHCommitEmailViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -23,7 +25,7 @@
     
     self.title = @"我要做代理";
     self.view.backgroundColor = [UIColor whiteColor];
-    
+    self.navBarBgAlpha = @"1.0";
 }
 
 

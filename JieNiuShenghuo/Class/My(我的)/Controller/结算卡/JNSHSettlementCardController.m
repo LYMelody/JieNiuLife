@@ -21,6 +21,9 @@
 #import "MBProgressHUD.h"
 #import "GTMBase64.h"
 #import "UIImageView+WebCache.h"
+#import "UIViewController+Cloudox.h"
+#import "UINavigationController+Cloudox.h"
+
 @interface JNSHSettlementCardController ()<UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate>
 
 @property(nonatomic,copy)NSString *currentBank;
@@ -44,7 +47,7 @@
     [super viewWillAppear:animated];
     
     self.title = @"添加结算卡";
-    
+    self.navBarBgAlpha = @"1.0";
     self.view.backgroundColor = ColorTableBackColor;
     
     [table reloadData];
@@ -60,12 +63,8 @@
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:self action:nil];
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     
-    UIImageView *backImg = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight)];
-    backImg.backgroundColor = ColorTabBarBackColor;
-    backImg.userInteractionEnabled = YES;
-    [self.view addSubview:backImg];
     
-    table = [[UITableView alloc] initWithFrame:CGRectMake(0, 64, KscreenWidth, KscreenHeight - 64) style:UITableViewStylePlain];
+    table = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight) style:UITableViewStylePlain];
     table.delegate = self;
     table.dataSource = self;
     table.backgroundColor = ColorTableBackColor;

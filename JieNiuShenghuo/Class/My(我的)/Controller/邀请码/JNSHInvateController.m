@@ -9,6 +9,8 @@
 #import "JNSHInvateController.h"
 #import "Masonry.h"
 #import "JNSHInvateHistoryController.h"
+#import "UIViewController+Cloudox.h"
+#import "UINavigationController+Cloudox.h"
 
 #import <ShareSDKUI/ShareSDKUI.h>
 #import <ShareSDKUI/SSUIEditorViewStyle.h>
@@ -43,8 +45,9 @@
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:NO];
     
-    UIImageView *backimg = self.navigationController.navigationBar.subviews.firstObject;
-    backimg.alpha = 0;
+    
+    self.navBarBgAlpha = @"1.0";
+    
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -70,6 +73,11 @@
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     
     
+    UIImageView *navImg = [[UIImageView alloc] initWithFrame:CGRectMake(0, -64, KscreenWidth, 64)];
+    navImg.backgroundColor = [UIColor whiteColor];
+    [self.view addSubview:navImg];
+    
+    
     UIButton *rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [rightBtn setImage:[UIImage imageNamed:@"invited_record"] forState:UIControlStateNormal];
     rightBtn.frame = CGRectMake(0, 0, 38, 38);
@@ -77,7 +85,7 @@
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:rightBtn];
     
-    UIImageView *backImg = [[UIImageView alloc] initWithFrame:CGRectMake(0 , 64, KscreenWidth, KscreenHeight - 64)];
+    UIImageView *backImg = [[UIImageView alloc] initWithFrame:CGRectMake(0 , 0, KscreenWidth, KscreenHeight - 64)];
     backImg.image = [UIImage imageNamed:@"形状-5-拷贝"];
     backImg.userInteractionEnabled = YES;
     [self.view addSubview:backImg];

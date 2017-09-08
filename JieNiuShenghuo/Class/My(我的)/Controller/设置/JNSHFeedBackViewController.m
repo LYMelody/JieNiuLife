@@ -41,7 +41,7 @@
     [self.view addSubview:titleLab];
     
     [titleLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.view).offset(74);
+        make.top.equalTo(self.view).offset(10);
         make.left.equalTo(self.view).offset(15);
         make.size.mas_equalTo(CGSizeMake(KscreenWidth - 20, 30));
     }];
@@ -118,7 +118,7 @@
         make.top.equalTo(textFiled.mas_bottom).offset(40);
         make.left.equalTo(self.view).offset(15);
         make.right.equalTo(self.view).offset(-15);
-        make.height.mas_equalTo(36);
+        make.height.mas_equalTo(41);
     }];
     
     

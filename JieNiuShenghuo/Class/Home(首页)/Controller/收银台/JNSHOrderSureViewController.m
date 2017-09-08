@@ -42,6 +42,7 @@
     
     self.title = @"订单确认";
     self.view.backgroundColor = ColorTabBarBackColor;
+    self.navigationController.navigationBar.translucent = NO;
 }
 
 
@@ -59,7 +60,7 @@
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:self action:nil];
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     
-    _table = [[UITableView alloc] initWithFrame:CGRectMake(0, 64, KscreenWidth, KscreenHeight - 64)];
+    _table = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight - 64)];
     _table.delegate = self;
     _table.dataSource = self;
     _table.backgroundColor = ColorTableBackColor;
@@ -423,7 +424,11 @@
     return YES;
 }
 
-
+- (void)viewWillDisappear:(BOOL)animated {
+    
+    self.navigationController.navigationBar.translucent = YES;
+    
+}
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

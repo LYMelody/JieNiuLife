@@ -15,7 +15,8 @@
 #import "JNSYUserInfo.h"
 #import "SBJSON.h"
 #import "IBHttpTool.h"
-
+#import "UIViewController+Cloudox.h"
+#import "UINavigationController+Cloudox.h"
 
 
 @interface JNSHVipViewController ()
@@ -47,21 +48,14 @@
                                                                       NSForegroundColorAttributeName:[UIColor whiteColor]
                                                                       }];
 
-    //设置导航栏背景色为透明
-    UIImageView *backImg = self.navigationController.navigationBar.subviews.firstObject;
-    backImg.alpha = 0;
+//    //设置导航栏背景色为透明
+//    UIImageView *backImg = self.navigationController.navigationBar.subviews.firstObject;
+//    backImg.alpha = 0;
     
-    
+    self.navBarBgAlpha = @"1.0";
+    self.navigationController.navigationBar.translucent = NO;
     [self RequsetVipInfo];
     
-    
-}
-
-- (void)viewWillDisappear:(BOOL)animated {
-    
-    //设置导航栏背景色为不透明
-    UIImageView *backImg = self.navigationController.navigationBar.subviews.firstObject;
-    backImg.alpha = 1;
     
 }
 
@@ -72,15 +66,17 @@
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:self action:nil];
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
    
+    self.automaticallyAdjustsScrollViewInsets = NO;
+    
     
     UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight - 51)];
     scrollView.showsVerticalScrollIndicator = NO;
     scrollView.backgroundColor = ColorTableBackColor;
     scrollView.userInteractionEnabled = YES;
-    scrollView.contentSize = CGSizeMake(KscreenWidth, KscreenHeight-[JNSHAutoSize height:110]);
+    scrollView.contentSize = CGSizeMake(KscreenWidth, KscreenHeight - 20);
     [self.view addSubview:scrollView];
     
-    //顶部背景色
+//    //顶部背景色
     UIImageView *headImageView = [[UIImageView alloc] init];
     headImageView.frame = CGRectMake(0, -500, KscreenWidth, 500);
     headImageView.backgroundColor = ColorTabBarBackColor;
@@ -606,6 +602,12 @@
         NSLog(@"%@",error);
     }];
 
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    
+    self.navigationController.navigationBar.translucent = YES;
+    
 }
 
 

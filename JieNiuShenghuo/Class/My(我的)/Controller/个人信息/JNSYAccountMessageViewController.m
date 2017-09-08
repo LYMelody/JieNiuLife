@@ -21,6 +21,8 @@
 #import "IBHttpTool.h"
 #import "MBProgressHUD.h"
 #import "UIImageView+WebCache.h"
+#import "UIViewController+Cloudox.h"
+#import "UINavigationController+Cloudox.h"
 
 @interface JNSYAccountMessageViewController ()<UITableViewDelegate,UITableViewDataSource,UIGestureRecognizerDelegate>
 
@@ -49,18 +51,20 @@
     
     [table reloadData];
     
+    self.navBarBgAlpha = @"1.0";
+    self.navigationController.navigationBar.translucent = NO;
 }
 
 - (void)viewDidLoad {
     
     [super viewDidLoad];
     
-    UIImageView *backImg = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight)];
-    backImg.backgroundColor = ColorTabBarBackColor;
-    backImg.userInteractionEnabled = YES;
-    [self.view addSubview:backImg];
+//    UIImageView *backImg = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight)];
+//    backImg.backgroundColor = ColorTabBarBackColor;
+//    backImg.userInteractionEnabled = YES;
+//    [self.view addSubview:backImg];
     
-    table = [[UITableView alloc] initWithFrame:CGRectMake(0, 64, KscreenWidth, KscreenHeight - 64) style:UITableViewStylePlain];
+    table = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight) style:UITableViewStylePlain];
     table.delegate = self;
     table.dataSource = self;
     table.backgroundColor = ColorTableBackColor;

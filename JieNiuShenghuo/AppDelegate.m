@@ -58,6 +58,8 @@
     [JNSYUserInfo getUserInfo].userKey = KEY;
     [JNSYUserInfo getUserInfo].userToken = TOKEN;
     
+    
+    //启动动画
     UIImageView *lanchView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"图层-2-拷贝-2"]];
     lanchView.frame = CGRectMake(0, 0, KscreenWidth, KscreenHeight);
     [self.window addSubview:lanchView];

@@ -45,10 +45,8 @@
     self.navigationController.navigationBar.translucent = NO;
 }
 
-
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
     
     UIImageView *navBackImg = [[UIImageView alloc] init];
     navBackImg.userInteractionEnabled = YES;
@@ -99,31 +97,81 @@
     //获取基本信息
     [self getBaseInfo];
     
+    //BankName = @"中信银行";
+    //BankNo = @"4033458695861234";
+    
 }
 
 //选择银行卡下一步、
 - (void)commit {
     
-    
     NSLog(@"下一步");
     
-//    JNSHOrderCodeViewController *CodeVc = [[JNSHOrderCodeViewController alloc] init];
-//    CodeVc.hidesBottomBarWhenPushed = YES;
-//    [self.navigationController pushViewController:CodeVc animated:YES];
+    if ([CardCell.textFiled.text isEqualToString:@""]) {
+        [JNSHAutoSize showMsg:@"请输入卡号"];
+        return;
+    }else if ([BankNo isEqualToString:@""] && ![CardCell.textFiled.text isEqualToString:@""]) {
+        BankNo = CardCell.textFiled.text;
+    }
     
-    JNSHPayOrderViewController *PayOrderVc = [[JNSHPayOrderViewController alloc] init];
-    PayOrderVc.payMoney = [NSString stringWithFormat:@"%@",_amount];
-    PayOrderVc.bankName = BankName;
-    PayOrderVc.bankNo = BankNo;
-    PayOrderVc.orderNo = self.orderNo;
-    PayOrderVc.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:PayOrderVc animated:YES];
-    
-    
+    //快捷支付绑卡
+    NSDictionary *dic = @{
+                          @"orderNo":self.orderNo,
+                          @"cardNo":BankNo
+                          };
+    NSString *action = @"PayOrderNocardBank";
+
+    NSDictionary *requestDic = @{
+                                 @"action":action,
+                                 @"data":dic,
+                                 @"token":[JNSYUserInfo getUserInfo].userToken
+                                 };
+    NSString *paras = [requestDic JSONFragment];
+
+    [IBHttpTool postWithURL:JNSHTestUrl params:paras success:^(id result) {
+        NSDictionary *resultdic = [result JSONValue];
+        NSString *code = resultdic[@"code"];
+        NSString *msg = resultdic[@"msg"];
+        
+        if ([code isEqualToString:@"000000"]) {
+          
+            self.orderNo = resultdic[@"orderNo"];
+            NSString *isBind = [NSString stringWithFormat:@"%@",resultdic[@"isBind"]];
+            BankNo = resultdic[@"cardNo"];
+            BankName = resultdic[@"cardBank"];
+            NSString *cardPhone = resultdic[@"cardPhone"];
+            if ([isBind isEqualToString:@"1"]) {  //已绑信用卡
+                JNSHOrderCodeViewController *CodeVc = [[JNSHOrderCodeViewController alloc] init];
+                CodeVc.hidesBottomBarWhenPushed = YES;
+                CodeVc.payMoney = [NSString stringWithFormat:@"%@",_amount];
+                CodeVc.bankNo = BankNo;
+                CodeVc.bankName = BankName;
+                CodeVc.orderNo = self.orderNo;
+                CodeVc.cardPhone =  cardPhone;
+                [self.navigationController pushViewController:CodeVc animated:YES];
+                
+            }else {   // 新信用卡首次支付
+                
+                JNSHPayOrderViewController *PayOrderVc = [[JNSHPayOrderViewController alloc] init];
+                PayOrderVc.payMoney = [NSString stringWithFormat:@"%@",_amount];
+                PayOrderVc.bankName = BankName;
+                PayOrderVc.bankNo = BankNo;
+                PayOrderVc.orderNo = self.orderNo;
+                PayOrderVc.cardPhone = cardPhone;
+                PayOrderVc.hidesBottomBarWhenPushed = YES;
+                [self.navigationController pushViewController:PayOrderVc animated:YES];
+                
+            }
+            
+        }else {
+            [JNSHAutoSize showMsg:msg];
+        }
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
 }
 
-
-//获取用户基本信息
+//获取用户基本信息 (获取姓名和身份证号)
 - (void)getBaseInfo {
     
     NSString *timestamp = [JNSHAutoSize getTimeNow];
@@ -179,14 +227,6 @@
                 [JNSYUserInfo getUserInfo].userStatus = @"停用删除";
             }
             
-//            //判断是否是Vip
-//            if ([[JNSYUserInfo getUserInfo].userVipFlag isEqualToString:@"1"]) {
-//                
-//                isVip = YES;
-//                
-//            }
-            
-            
         }else {
             NSString *msg = resultdic[@"msg"];
             [JNSHAutoSize showMsg:msg];
@@ -200,11 +240,9 @@
     
 }
 
-
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
     return 9;
-    
     
 }
 
@@ -233,35 +271,34 @@
             
             JNSHTitleCell *realChargeCell = [[JNSHTitleCell alloc] init];
             realChargeCell.leftLab.text = @"实际手续费";
-            float rate = 0;
-            if (isVip) {   //根据是否是会员确定费率
-                rate = 0.0039;
-            }else {
-                rate = 0.0053;
-            }
-            float fate = [self.amount integerValue]*rate + 3;
-            realChargeCell.rightLab.text = [NSString stringWithFormat:@"-￥%.2f",fate];
+            realChargeCell.rightLab.text = [NSString stringWithFormat:@"-￥%.2f",[self.rateFee integerValue]/100.0];
             cell = realChargeCell;
             cell.backgroundColor = [UIColor whiteColor];
             
         }else if (indexPath.row == 3) {
             JNSHOrderDisCountCell *Cell = [[JNSHOrderDisCountCell alloc] init];
             Cell.leftLab.text = @"原手续费";
-            float rate = [self.amount integerValue]*0.0053+3;
-            Cell.rightLab.text = [NSString stringWithFormat:@"-￥%.2f【10000*0.53%%+3】",rate];
+            Cell.rightLab.text = [NSString stringWithFormat:@"-￥%.2f【%@】",[self.rateNormalFee integerValue]/100.0,self.rateNormalFeeValue];
             cell = Cell;
         }else if (indexPath.row == 4) {
             JNSHOrderDisCountCell *Cell = [[JNSHOrderDisCountCell alloc] init];
-            Cell.leftLab.text = @"会员优惠";
-            float discont;
-            if(isVip) {
-                 discont = [self.amount integerValue] *(0.0053-0.0039);
+            
+            if ([self.vipFlag isEqualToString:@"0"]) {
+                Cell.leftLab.text = @"会员可优惠";
+                [Cell.rightBtn setTitle:@"立即开通" forState:UIControlStateNormal];
+                Cell.rightBtn.hidden = NO;
+            }else if ([self.vipFlag isEqualToString:@"1"]) {
+                Cell.leftLab.text = @"会员优惠";
+                Cell.rightBtn.hidden = YES;
             }else {
-                discont = 0;
+                Cell.leftLab.text = @"会员优惠";
+                [Cell.rightBtn setTitle:@"立即续费" forState:UIControlStateNormal];
+                Cell.rightBtn.hidden = NO;
             }
-            Cell.rightLab.text = [NSString stringWithFormat:@"￥%.2f",discont];
+            
+            Cell.rightLab.text = [NSString stringWithFormat:@"￥%.2f",[self.vipDiscount integerValue]/100.0];
             Cell.rightLab.textColor = blueColor;
-            Cell.rightBtn.hidden = NO;
+            
             __weak typeof(self) weakSelf = self;
             Cell.continueVipBlock = ^{
                 __strong typeof(self) strongSelf = weakSelf;
@@ -273,25 +310,23 @@
         }else if (indexPath.row == 5) {
             JNSHOrderDisCountCell *Cell = [[JNSHOrderDisCountCell alloc] init];
             Cell.leftLab.text = @"卡券抵扣";
+            if([self.voucheersFlag isEqualToString:@"1"]) {  //有抵扣券
+                Cell.rightLab.text = [NSString stringWithFormat:@"￥%.2f",[self.vouchersPrice integerValue]/100.0];
+                
+            }else {
+                NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithString:@"￥0.00 【无可用】"];
+                [attr addAttribute:NSForegroundColorAttributeName value:ColorTabBarBackColor range:NSMakeRange(attr.length - 5, 5)];
+                Cell.rightLab.attributedText = attr;
+            }
             
-            NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithString:@"￥0.00 【无可用】"];
-            [attr addAttribute:NSForegroundColorAttributeName value:ColorTabBarBackColor range:NSMakeRange(attr.length - 5, 5)];
-            Cell.rightLab.attributedText = attr;
             Cell.isShowBottomLine = YES;
             cell = Cell;
         }
         else if (indexPath.row == 6) {
             JNSHTitleCell *finalCashCell = [[JNSHTitleCell alloc] init];
             finalCashCell.leftLab.text = @"到账金额";
-            float rate = 0;
-            if (isVip) {   //根据是否是会员确定费率
-                rate = 0.0039;
-            }else {
-                rate = 0.0053;
-            }
-            float fate = [self.amount integerValue]*rate + 3;
-            finalAmount = [self.amount floatValue] - fate;
-            finalCashCell.rightLab.text = [NSString stringWithFormat:@"￥%.2f",finalAmount];
+            
+            finalCashCell.rightLab.text = [NSString stringWithFormat:@"￥%.2f",[self.settleReal integerValue]/100.0];
             finalCashCell.rightLab.textColor = [UIColor redColor];
             cell = finalCashCell;
             cell.backgroundColor = [UIColor whiteColor];
@@ -302,13 +337,24 @@
             cell.backgroundColor = ColorTableBackColor;
             
         }else if (indexPath.row == 8) {
-            JNSHLabFldCell *cardCell = [[JNSHLabFldCell alloc] init];
-            cardCell.leftLab.text = @"中信银行";
-            cardCell.textFiled.text = @"4033********1234";
-            cardCell.textFiled.delegate = self;
-            cardCell.textFiled.keyboardType = UIKeyboardTypeNumberPad;
-            cardCell.textFiled.enabled = NO;
-            cell = cardCell;
+            CardCell = [[JNSHLabFldCell alloc] init];
+            if (self.bindCards.count > 0) {
+                
+                CardCell.leftLab.text = self.bindCards[0][@"cardBank"];
+                CardCell.textFiled.text = [self.bindCards[0][@"cardNo"] stringByReplacingCharactersInRange:NSMakeRange(4, 8) withString:@"********"];
+                BankNo = self.bindCards[0][@"cardNo"];
+                BankName = self.bindCards[0][@"cardBank"];
+                CardCell.textFiled.enabled = NO;
+            }else {
+                CardCell.leftLab.text = @"新信用卡";
+                CardCell.textFiled.text = @"";
+                [CardCell.textFiled becomeFirstResponder];
+            }
+            
+            CardCell.textFiled.delegate = self;
+            CardCell.textFiled.keyboardType = UIKeyboardTypeNumberPad;
+            
+            cell = CardCell;
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
     }
@@ -354,13 +400,17 @@
         
         Popview = [[JNSHPopBankCardView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight)];
         Popview.typetag = 1;
-        Popview.bankArray = bankArray;
+        Popview.bankArray = self.bindCards;
        
         Popview.addnewCardBlock = ^{
             cell.leftLab.text = @"新信用卡";
             cell.textFiled.text = @"";
             cell.textFiled.enabled = YES;
             [cell.textFiled becomeFirstResponder];
+            
+            BankNo = @"";
+            BankName = @"新信用卡";
+            
         };
         
         Popview.bankselectBlock = ^(NSString *bankName, NSString *bankCode) {
@@ -379,42 +429,16 @@
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
     
-    NSDictionary *dic = @{
-                          @"orderNo":self.orderNo,
-                          @"cardNo":textField.text
-                          };
-    NSString *action = @"PayOrderNocardBank";
-    
-    NSDictionary *requestDic = @{
-                                 @"action":action,
-                                 @"data":dic,
-                                 @"token":[JNSYUserInfo getUserInfo].userToken
-                                 };
-    NSString *paras = [requestDic JSONFragment];
-    
-    [IBHttpTool postWithURL:JNSHTestUrl params:paras success:^(id result) {
-        NSDictionary *resultdic = [result JSONValue];
-        NSString *code = resultdic[@"code"];
-        NSString *msg = resultdic[@"msg"];
-        if ([code isEqualToString:@"000000"]) {
-            
-            
-        }else {
-            [JNSHAutoSize showMsg:msg];
-        }
-    } failure:^(NSError *error) {
-        NSLog(@"%@",error);
-    }];
+    BankNo = textField.text;
     
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     
     if (range.location == 0) {
-        
         CardCell.leftLab.text = @"新信用卡";
     }else {
-        CardCell.leftLab.text = @"中信银行";
+        
     }
     
     if(range.location > 19) {  //限20位

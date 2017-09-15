@@ -17,7 +17,7 @@
 #import "IBHttpTool.h"
 #import "UIViewController+Cloudox.h"
 #import "UINavigationController+Cloudox.h"
-
+#import "JNSHOrderSureViewController.h"
 
 @interface JNSHVipViewController ()
 
@@ -28,12 +28,19 @@
     UIImageView *nityImg;
     UIImageView *halfYearImg;
     UILabel *totalPriceLab;
+    NSString *totalPrice;
     BOOL isVip;
     UILabel *ratingSubLab;
     UILabel *birthSubLab;
     UIImageView *diamondImg;
     UILabel *VipLab;
     UILabel *rightLab;
+    UILabel *leftLab;
+    UILabel *NityrightLab;
+    UILabel *halfYearLab;
+    UILabel *halfLab;
+    NSArray *mealDic;
+    NSString *vipcode;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -53,9 +60,10 @@
 //    backImg.alpha = 0;
     
     self.navBarBgAlpha = @"1.0";
+    //隐藏黑线
+    self.navigationController.navigationBar.subviews[0].subviews[0].hidden = YES;
     self.navigationController.navigationBar.translucent = NO;
     [self RequsetVipInfo];
-    
     
 }
 
@@ -67,7 +75,6 @@
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
    
     self.automaticallyAdjustsScrollViewInsets = NO;
-    
     
     UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight - 51)];
     scrollView.showsVerticalScrollIndicator = NO;
@@ -81,7 +88,6 @@
     headImageView.frame = CGRectMake(0, -500, KscreenWidth, 500);
     headImageView.backgroundColor = ColorTabBarBackColor;
     [scrollView addSubview:headImageView];
-    
     
     //头像
     UIImageView *headerBackView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, [JNSHAutoSize height:101])];
@@ -111,7 +117,6 @@
         make.centerY.equalTo(headImg.mas_bottom).offset(-[JNSHAutoSize height:5]);
         make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:20], [JNSHAutoSize height:20]));
     }];
-    
     
     VipLab = [[UILabel alloc] init];
     VipLab.text = @"会员未开通";
@@ -194,7 +199,6 @@
         make.left.equalTo(ratingLab);
         make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:60], [JNSHAutoSize height:15]));
     }];
-    
     
     //安全保险
     JNSYHighLightImageView *safeBackImg = [[JNSYHighLightImageView alloc] init];
@@ -374,7 +378,7 @@
         make.size.mas_equalTo(CGSizeMake(KscreenWidth, [JNSHAutoSize height:46]));
     }];
    
-    UILabel *leftLab = [[UILabel alloc] init];
+    leftLab = [[UILabel alloc] init];
     leftLab.text = @"季度会员（90天）";
     leftLab.font = [UIFont systemFontOfSize:14];
     leftLab.textColor = ColorText;
@@ -388,7 +392,7 @@
         make.size.mas_equalTo(CGSizeMake(KscreenWidth / 2.0, [JNSHAutoSize height:20]));
     }];
     
-    UILabel *NityrightLab = [[UILabel alloc] init];
+    NityrightLab = [[UILabel alloc] init];
     NityrightLab.text = @"￥55";
     NityrightLab.textColor = [UIColor redColor];
     NityrightLab.font = [UIFont systemFontOfSize:14];
@@ -414,7 +418,6 @@
         make.height.mas_equalTo(SeperateLineWidth);
     }];
     
-    
     //半年会员
     halfYearImg = [[UIImageView alloc] init];
     halfYearImg.backgroundColor = [UIColor whiteColor];
@@ -428,7 +431,7 @@
         make.size.mas_equalTo(CGSizeMake(KscreenWidth, [JNSHAutoSize height:46]));
     }];
     
-    UILabel *halfYearLab = [[UILabel alloc] init];
+    halfYearLab = [[UILabel alloc] init];
     halfYearLab.font = [UIFont systemFontOfSize:14];
     halfYearLab.text = @"半年会员（180天）";
     halfYearLab.textColor = ColorText;
@@ -442,8 +445,7 @@
         make.size.mas_equalTo(CGSizeMake(KscreenWidth/2.0, [JNSHAutoSize height:20]));
     }];
     
-    
-    UILabel *halfLab = [[UILabel alloc] init];
+    halfLab = [[UILabel alloc] init];
     halfLab.font = [UIFont systemFontOfSize:14];
     halfLab.textAlignment = NSTextAlignmentRight;
     halfLab.textColor = [UIColor redColor];
@@ -467,7 +469,6 @@
     [nityImg addGestureRecognizer:tapSelect];
     [halfYearImg addGestureRecognizer:tap];
     
-    
     UIImageView *bottomBackImg = [[UIImageView alloc] init];
     bottomBackImg.backgroundColor = [UIColor whiteColor];
     bottomBackImg.userInteractionEnabled = YES;
@@ -486,7 +487,6 @@
     [attri addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:NSMakeRange(3, (str.length - 3))];
     totalPriceLab.attributedText = attri;
     
-    
     [bottomBackImg addSubview:totalPriceLab];
     
     [totalPriceLab mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -494,7 +494,6 @@
         make.left.equalTo(bottomBackImg).offset([JNSHAutoSize width:30]);
         make.size.mas_equalTo(CGSizeMake(([JNSHAutoSize width:120]), [JNSHAutoSize height:20]));
     }];
-    
     
     UIButton *confirmBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [confirmBtn setBackgroundColor:ColorTabBarBackColor];
@@ -514,16 +513,77 @@
         make.height.mas_equalTo(KscreenHeight - CGRectGetMaxY(scrollView.frame));
     }];
     
+    //totalPrice = @"55";
+    vipcode = @"Vip1";
+    if (!mealDic) {
+        mealDic = [[NSArray alloc] init];
+    }
+
 }
 
 //跳转订单
 - (void)beVip {
     
-    JNSHVipOrderViewController *vipOrder = [[JNSHVipOrderViewController alloc] init];
-    vipOrder.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:vipOrder animated:YES];
+    //购买会员消费下单
+    
+    NSString *time = [JNSHAutoSize getTimeNow];
+    //NSString *goodsName = @"商户会员购买";
     
     
+    NSString *MinMoney = [NSString stringWithFormat:@"%ld",[totalPrice integerValue]*100];
+    
+    NSDictionary *dic = @{
+                          @"payType":@"1",
+                          @"orderType":@"10",
+                          @"amount":MinMoney ,
+                          @"goodsName":vipcode,
+                          @"linkId":time,
+                          @"product":@"1001"
+                          };
+    NSString *action = @"PayOrderCreate";
+    
+    NSDictionary *requstDic = @{
+                                @"action":action,
+                                @"data":dic,
+                                @"token":[JNSYUserInfo getUserInfo].userToken
+                                };
+    
+    NSString *params = [requstDic JSONFragment];
+    
+    [IBHttpTool postWithURL:JNSHTestUrl params:params success:^(id result) {
+        
+        NSDictionary *resultdic = [result JSONValue];
+        NSString *code = resultdic[@"code"];
+        //NSLog(@"%@",resultdic);
+        NSString *msg = resultdic[@"msg"];
+        if ([code isEqualToString:@"000000"]) {
+        
+            JNSHVipOrderViewController *vipOrder = [[JNSHVipOrderViewController alloc] init];
+            vipOrder.money = totalPrice;
+            vipOrder.orderNo = resultdic[@"orderNo"];
+            vipOrder.orderTime = resultdic[@"orderTime"];
+            NSArray *arrar = [[NSArray alloc] init];
+            //判断绑定卡数组是否有数据
+            if ([resultdic[@"bindCards"] isKindOfClass:[NSArray class]]) {
+                 arrar = resultdic[@"bindCards"];
+                
+                
+                
+            }
+            
+            vipOrder.cardsArray = arrar;
+            vipOrder.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:vipOrder animated:YES];
+            
+        }else {
+            
+            [JNSHAutoSize showMsg:msg];
+            
+        }
+        
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
 }
 
 
@@ -531,21 +591,24 @@
     
     UIView *selectView = sender.view;
     
-    NSString *str = @"总价：￥55";
-   
+    NSString *str = [NSString stringWithFormat:@"总价：￥%ld",[mealDic[0][@"price"] integerValue]/100];;
+    
     if (selectView == nityImg) {
         
         nityImg.backgroundColor = lightOrgeron;
         halfYearImg.backgroundColor = [UIColor whiteColor];
-        
+        totalPrice = [NSString stringWithFormat:@"%ld",[mealDic[0][@"price"] integerValue]/100];
+        vipcode = mealDic[0][@"code"];
+                   
     }else if (selectView == halfYearImg) {
         
         nityImg.backgroundColor = [UIColor whiteColor];
         
         halfYearImg.backgroundColor = lightOrgeron;
         //设置总价
-        str = @"总价：￥105";
-    
+        str = [NSString stringWithFormat:@"总价：￥%ld",[mealDic[1][@"price"] integerValue]/100];
+        totalPrice = [NSString stringWithFormat:@"%ld",[mealDic[1][@"price"] integerValue]/100];
+        vipcode = mealDic[1][@"code"];
     }
     
     NSMutableAttributedString *attri = [[NSMutableAttributedString alloc] initWithString:str];
@@ -586,11 +649,18 @@
                 VipLab.text = [NSString stringWithFormat:@"%@天后会员到期",expireDay];
                 rightLab.text = @"会员专属特权";
             }
-            
+            mealDic = resultdic[@"meal"];
+            if([resultdic[@"meal"] isKindOfClass:[NSArray class]]) {
+                
+                totalPrice = [NSString stringWithFormat:@"%ld",[mealDic[0][@"price"] integerValue]/100];
+                leftLab.text = mealDic[0][@"title"];
+                NityrightLab.text = [NSString stringWithFormat:@"￥%ld",[mealDic[0][@"price"] integerValue]/100];
+                halfYearLab.text = mealDic[1][@"title"];
+                halfLab.text = [NSString stringWithFormat:@"￥%ld",[mealDic[1][@"price"] integerValue]/100];
+            }
             
             ratingSubLab.text = rate;
             birthSubLab.text = [NSString stringWithFormat:@"送%@张抵用券",birthdayCount];
-            
             
         }else {
             
@@ -601,13 +671,13 @@
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
     }];
-
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     
-    self.navigationController.navigationBar.translucent = YES;
-    
+    //self.navigationController.navigationBar.translucent = YES;
+    //隐藏黑线
+    self.navigationController.navigationBar.subviews[0].subviews[0].hidden = NO;
 }
 
 

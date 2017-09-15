@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+typedef void(^ChangeCardBlock)(void);
+
 @interface JNSHTitleCell : UITableViewCell
 
 @property(nonatomic,strong)UILabel *leftLab;
@@ -15,5 +17,9 @@
 @property(nonatomic,strong)UILabel *rightLab;
 
 @property(nonatomic,strong)UIImageView *bottomLine;
+
+@property(nonatomic,strong)UIButton *changeBtn;
+
+@property(nonatomic,copy)ChangeCardBlock changeCardBlock;
 
 @end

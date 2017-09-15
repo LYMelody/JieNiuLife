@@ -29,6 +29,8 @@
     
     self.view.backgroundColor = ColorTabBarBackColor;
     
+    self.navigationController.navigationBar.translucent = NO;
+    
     [table reloadData];
     
     
@@ -43,7 +45,7 @@
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     
     //灰色背景
-    UIImageView *backImg = [[UIImageView alloc] initWithFrame:CGRectMake(0, 64, KscreenWidth, KscreenHeight)];
+    UIImageView *backImg = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight)];
     backImg.userInteractionEnabled = YES;
     backImg.backgroundColor = ColorTableBackColor;
     

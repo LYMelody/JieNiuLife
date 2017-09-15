@@ -8,6 +8,11 @@
 
 #import "JNSHFeedBackViewController.h"
 #import "Masonry.h"
+#import "SBJSON.h"
+#import "IBHttpTool.h"
+#import "JNSYUserInfo.h"
+#import "MBProgressHUD.h"
+
 @interface JNSHFeedBackViewController ()<UITextViewDelegate>
 
 @end
@@ -16,7 +21,8 @@
     
     UILabel *placeholderLab;
     UIButton *CommitBtn;
-    
+    UITextView *textView;
+    UITextField *textFiled;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -58,7 +64,7 @@
         make.height.mas_equalTo(100);
     }];
     
-    UITextView *textView = [[UITextView alloc] init];
+    textView = [[UITextView alloc] init];
     textView.textAlignment = NSTextAlignmentLeft;
     textView.delegate = self;
     [backImg addSubview:textView];
@@ -84,7 +90,7 @@
         make.size.mas_equalTo(CGSizeMake(KscreenWidth - 40, 13));
     }];
     
-    UITextField *textFiled = [[UITextField alloc] init];
+    textFiled = [[UITextField alloc] init];
     textFiled.backgroundColor = [UIColor whiteColor];
     textFiled.placeholder = @"请留下您的联系方式，可不填。";
     textFiled.font = [UIFont systemFontOfSize:13];
@@ -128,6 +134,60 @@
     
     
     NSLog(@"提交");
+    
+    NSString *context;
+    
+    if ([textView.text isEqualToString:@""]) {
+        [JNSHAutoSize showMsg:@"请输入您的宝贵意见!"];
+        return;
+    }else if ([textFiled.text isEqualToString:@""]) {
+        context = @"1";
+    }else {
+        context = textFiled.text;
+    }
+    
+    NSDictionary *dic = @{
+                          @"content":textView.text,
+                          @"contact":context
+                          };
+    
+    NSString *action = @"UserFeedbackState";
+    
+    NSDictionary *requestDic = @{
+                                 @"action":action,
+                                 @"token":[JNSYUserInfo getUserInfo].userToken,
+                                 @"data":dic
+                                 };
+    NSString *params = [requestDic JSONFragment];
+    
+    [IBHttpTool postWithURL:JNSHTestUrl params:params success:^(id result) {
+        NSDictionary *resultDic = [result JSONValue];
+        NSString *code = resultDic[@"code"];
+        NSString *msg = resultDic[@"msg"];
+        if ([code isEqualToString:@"000000"]) {
+            
+            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            hud.mode = MBProgressHUDModeText;
+            hud.labelText = @"提交成功";
+            [hud hide:YES afterDelay:1.5];
+            [self performSelector:@selector(back) withObject:nil afterDelay:1.5];
+            
+        }else {
+            
+            [JNSHAutoSize showMsg:msg];
+        }
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
+    
+}
+
+- (void)back {
+    
+    
+    [self.navigationController popViewControllerAnimated:YES];
+    
+    
 }
 
 - (BOOL)textView:(UITextView *)textView shouldChangeTextInRange:(NSRange)range replacementText:(NSString *)text {

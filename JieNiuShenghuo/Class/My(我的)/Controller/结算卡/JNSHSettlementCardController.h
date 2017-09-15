@@ -10,8 +10,12 @@
 
 @interface JNSHSettlementCardController : UIViewController
 
+@property(nonatomic,copy)NSString *bankName;
+
 @property(nonatomic,copy)NSString *subBank;
 
 @property(nonatomic,copy)NSString *subBankCode;
+
+
 
 @end

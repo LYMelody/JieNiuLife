@@ -20,7 +20,11 @@
 
 @end
 
-@implementation JNSHTicketsController
+@implementation JNSHTicketsController {
+    
+    UITableView *table;
+    
+}
 
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -46,7 +50,13 @@
 //    backimg.alpha = 0;
     self.navBarBgAlpha = @"1.0";
     self.navigationController.navigationBar.translucent = NO;
-    [self requestForTickets];
+    
+    if (self.tag == 2) {
+        [self requestForTickets:YES];
+    }else {
+        [self requestForTickets:NO];
+    }
+    
     
     //[self.navigationController setNavigationBarHidden:NO animated:NO];
 }
@@ -80,7 +90,11 @@
     navImg.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:navImg];
     
-    UITableView *table = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight - 64) style:UITableViewStylePlain];
+    if (!self.listArray) {
+        self.listArray = [[NSArray alloc] init];
+    }
+    
+    table = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight - 64) style:UITableViewStylePlain];
     table.delegate = self;
     table.dataSource = self;
     table.backgroundColor = ColorTableBackColor;
@@ -173,7 +187,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    return 5;
+    return self.listArray.count;
     
 }
 
@@ -185,6 +199,11 @@
     
     if (cell == nil) {
         cell = [[JNSHTicketsCell alloc] init];
+        
+        
+        cell.timeLab.text = [NSString stringWithFormat:@"有效期至 %@",self.listArray[indexPath.row][@"expireTime"]];
+        cell.titleLab = self.listArray[indexPath.row][@"vouchersName"];
+        
         if (self.tag == 2) {
             if (indexPath.row == 3) {
                 cell.isUsed = YES;
@@ -206,10 +225,10 @@
 }
 
 //获取卡券包
-- (void)requestForTickets {
+- (void)requestForTickets:(BOOL)isUse {
     
     NSDictionary *dic = @{
-                          @"isUse":@"0",
+                          @"isUse":isUse?@"1":@"0",
                           @"size":@"10",
                           @"page":@"0"
                           };
@@ -230,6 +249,12 @@
         NSLog(@"%@",resultdic);
         NSString *msg = resultdic[@"msg"];
         if ([code isEqualToString:@"000000"]) {
+            
+            if ([resultdic[@"records"] isKindOfClass:[NSArray class]]) {
+                self.listArray = resultdic[@"records"];
+            }
+            
+            [table reloadData];
             
             
         }else {

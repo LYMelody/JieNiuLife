@@ -19,7 +19,12 @@
 #import "JNSHTicketsController.h"
 #import "JNSHLoginController.h"
 #import "JNSYUserInfo.h"
-@interface JNSHHomeViewController ()
+#import "SDCycleScrollView.h"
+#import "SBJSON.h"
+#import "IBHttpTool.h"
+#import "JNSHTicketFailView.h"
+
+@interface JNSHHomeViewController ()<SDCycleScrollViewDelegate>
 
 @property(nonatomic,strong)UIButton *TestBtn;
 
@@ -34,7 +39,8 @@
     JNSHTimeCountDownView *ConutDownView;
     UILabel *messageCountLab;
     UILabel *timeLab;
-    //UIButton *TestBtn;
+    NSString *ticketExsist;
+    NSString *timetag;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -48,8 +54,9 @@
                                                                       NSForegroundColorAttributeName:[UIColor whiteColor]
                                                                       }];
     
-    
-    
+    self.navigationController.navigationBar.translucent = NO;
+    //获取卡券领取状态
+    [self getTicketsStatus];
 }
 
 - (void)viewDidLoad {
@@ -57,13 +64,11 @@
 
     self.view.backgroundColor = ColorTableBackColor;
     
-    
     UIImageView *navBackImg = [[UIImageView alloc] init];
     navBackImg.userInteractionEnabled = YES;
     navBackImg.frame = CGRectMake(0, 0, KscreenWidth, 64);
     navBackImg.backgroundColor = ColorTabBarBackColor;
     [self.view addSubview:navBackImg];
-    
     
     //返回按钮
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:self action:nil];
@@ -94,11 +99,19 @@
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:MessageBtn];
     
     //广告轮播
-    UIImageView *ADimgView = [[UIImageView alloc] init];
-    ADimgView.backgroundColor = [UIColor grayColor];
-    ADimgView.frame = CGRectMake(0,64, KscreenWidth, KscreenHeight*0.37 - 64);
-    [self.view addSubview:ADimgView];
+//    UIImageView *ADimgView = [[UIImageView alloc] init];
+//    ADimgView.backgroundColor = [UIColor grayColor];
+//    ADimgView.frame = CGRectMake(0,-64, KscreenWidth,KscreenHeight*0.37);
+//    [self.view addSubview:ADimgView];
     
+    NSArray *imgaeArray = [NSArray arrayWithObjects:[UIImage imageNamed:@"banner01"],[UIImage imageNamed:@"AD04.png"],[UIImage imageNamed:@"APP05.png"], nil];
+    
+    SDCycleScrollView *ADScrollView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0, 0, KscreenWidth, [JNSHAutoSize height:188]) shouldInfiniteLoop:YES imageNamesGroup:imgaeArray];
+    ADScrollView.delegate = self;
+    ADScrollView.pageControlStyle = SDCycleScrollViewPageContolStyleAnimated;
+    [self.view addSubview:ADScrollView];
+    ADScrollView.scrollDirection = UICollectionViewScrollDirectionHorizontal;
+    ADScrollView.autoScrollTimeInterval = 5;
     //四个功能按钮
     
      //收银台
@@ -108,7 +121,7 @@
     [self.view addSubview:CashBackImg];
     [CashBackImg mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.view);
-        make.top.equalTo(ADimgView.mas_bottom);
+        make.top.equalTo(ADScrollView.mas_bottom);
         make.size.mas_offset(CGSizeMake((KscreenWidth - 2)/2.0, [JNSHAutoSize height:72]));
     }];
     
@@ -116,7 +129,6 @@
     UITapGestureRecognizer *CashTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(CashTapAction)];
     CashTap.numberOfTapsRequired = 1;
     [CashBackImg addGestureRecognizer:CashTap];
-    
     
     UIImageView *CashLogo = [[UIImageView alloc] init];
     CashLogo.image = [UIImage imageNamed:@"home_grid_1_1"];
@@ -141,7 +153,6 @@
         make.left.equalTo(CashLogo.mas_right).offset([JNSHAutoSize width:10]);
         make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:100], [JNSHAutoSize height:20]));
     }];
-    
     
      //开通会员
     JNSYHighLightImageView *VipBackImg = [[JNSYHighLightImageView alloc] init];
@@ -287,14 +298,9 @@
         make.size.mas_equalTo(CGSizeMake(KscreenWidth/2.0, [JNSHAutoSize height:20]));
     }];
     
-    
-    
     ConutDownView = [[JNSHTimeCountDownView alloc] initWithFrame:CGRectMake(KscreenWidth - [JNSHAutoSize width:80], [JNSHAutoSize height:10], [JNSHAutoSize width:65], [JNSHAutoSize height:20])];
     //ConutDownView.time = 1000;
    
-    
-    
-    
     NSLog(@"%ld",ConutDownView.time);
     
     [titleBackImg addSubview:ConutDownView];
@@ -363,7 +369,7 @@
     _TestBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [_TestBtn setTitle:@"试手气" forState:UIControlStateNormal];
     [_TestBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [_TestBtn setBackgroundColor:[UIColor redColor]];
+    [_TestBtn setBackgroundColor:LightGrayColor];
     _TestBtn.titleLabel.font = [UIFont systemFontOfSize:11];
     _TestBtn.layer.cornerRadius = 3;
     [_TestBtn addTarget:self action:@selector(test) forControlEvents:UIControlEventTouchUpInside];
@@ -378,7 +384,7 @@
     
     //进度
     ProgressView = [[JNSHProgressView alloc] initWithFrame:CGRectMake(KscreenWidth - [JNSHAutoSize width:75], [JNSHAutoSize height:48], [JNSHAutoSize width:60], [JNSHAutoSize height:6])];
-    ProgressView.progress = 0.5;
+    ProgressView.progress = 0.0;
     [ticketBackImg addSubview:ProgressView];
     
     progressLab = [[UILabel alloc] init];
@@ -399,6 +405,32 @@
     
     //注册通知 (当应用从后台到前台重新获取当时时间计时)
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startTimer) name:UIApplicationWillEnterForegroundNotification object:nil];
+    
+}
+
+
+- (NSString *)get:(NSString *)time{
+    
+    //获取当时时间
+    NSDate *date = [NSDate date];
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateStyle:NSDateFormatterMediumStyle];
+    [formatter setTimeStyle:NSDateFormatterShortStyle];
+    [formatter setDateFormat:@"HH:mm:ss"];
+    NSTimeZone *timezone = [NSTimeZone timeZoneWithName:@"Asia/Shanghai"];
+    [formatter setTimeZone:timezone];
+    NSString *timeNow = [formatter stringFromDate:date];
+    NSString *hour = [timeNow substringToIndex:2];
+    NSString *min = [timeNow substringWithRange:NSMakeRange(3, 2)];
+    NSString *second = [timeNow substringWithRange:NSMakeRange(6, 2)];
+    
+    if ([time isEqualToString:@"hour"]) {
+        return hour;
+    }else if ([time isEqualToString:@"min"]){
+        return min;
+    }else {
+        return second;
+    }
 }
 
 - (void)startTimer {
@@ -420,17 +452,17 @@
     
     if ([hour integerValue] < 10) {
         
-        ConutDownView.time = ((10 - [hour integerValue] - 1)*60+(60-[min integerValue]))*60+(60 - [second integerValue]);
+        ConutDownView.time = ((10 - [hour integerValue] - 1)*60+(60-[min integerValue]) - 1)*60+(60 - [second integerValue]);
         timeLab.text = @"距下场开始";
         
     }else if(([hour integerValue] >= 10) &&([hour integerValue] < 14) ){
         
-        ConutDownView.time = ((14 - [hour integerValue] - 1)*60+(60-[min integerValue]))*60+(60 - [second integerValue]);
+        ConutDownView.time = ((14 - [hour integerValue] - 1)*60+(60-[min integerValue]) - 1)*60+(60 - [second integerValue]);
         timeLab.text = @"距本场结束";
         
     }else if(([hour integerValue] >= 14) &&([hour integerValue] < 18)){
         
-        ConutDownView.time = ((18 - [hour integerValue] - 1)*60+(60-[min integerValue]))*60+(60 - [second integerValue]);
+        ConutDownView.time = ((18 - [hour integerValue] - 1)*60+(60-[min integerValue]) - 1)*60+(60 - [second integerValue]);
         timeLab.text = @"距本场结束";
         
     }else {
@@ -450,7 +482,6 @@
     
 }
 
-
 //
 - (void)countDown {
     
@@ -461,17 +492,95 @@
     
     if (time <= 0) {
         [timer invalidate];
+        //延迟一秒刷新卡券状态
+        [self performSelector:@selector(getTicketsStatus) withObject:nil afterDelay:1];
         
         [self startTimer];
         
     }
 }
 
-//试手气
+//获取卡券领取状态
+- (void)getTicketsStatus{
+    
+    if ([JNSYUserInfo getUserInfo].isLoggedIn) {
+        
+        NSString *hour = [self get:@"hour"];
+        
+        if ([hour integerValue] < 10) {  //10点之前不能点击
+            
+            [_TestBtn setTitle:@"试手气" forState:UIControlStateNormal];
+            [_TestBtn setBackgroundColor:LightGrayColor];
+            _TestBtn.enabled = NO;
+            
+        }else if ([hour integerValue] < 14) {  //10-14点获取上午场信息
+            timetag = @"TheirLuckAm";
+            //抢券信息
+            [self requestForTicketStatus:timetag];
+        }else {                        //14-16点获取下午场
+            timetag = @"TheirLuckPm";
+            //抢券信息
+            [self requestForTicketStatus:timetag];
+        }
+    }
+    
+}
+
+- (void)requestForTicketStatus:(NSString *)time{
+    
+    NSDictionary *dic = @{
+                          @"ActivityCode":time
+                          };
+    
+    NSString *action = @"UserActivityInfo";
+    
+    NSDictionary *requestDic = @{
+                                 @"action":action,
+                                 @"token":[JNSYUserInfo getUserInfo].userToken,
+                                 @"data":dic
+                                 };
+    NSString *params = [requestDic JSONFragment];
+    
+    [IBHttpTool postWithURL:JNSHTestUrl params:params success:^(id result) {
+        NSDictionary *dic = [result JSONValue];
+        NSString *code = dic[@"code"];
+        NSString *msg = dic[@"msg"];
+        ticketExsist = [NSString stringWithFormat:@"%@",dic[@"theirluck"]];
+        if (![code isEqualToString:@"000000"]) {
+            [JNSHAutoSize showMsg:msg];
+        }else {
+            //设置卡券余额
+            NSString *activityPrice = dic[@"activityPrice"];
+            NSString *activitySendPrice = dic[@"activitySendPrice"];
+            float progress = ([activitySendPrice integerValue])/[activityPrice floatValue];
+            ProgressView.progress = progress;
+            progressLab.text = [NSString stringWithFormat:@"已抢%.0f%%",ProgressView.progress*100];
+            //设置按钮
+            if ([ticketExsist isEqualToString:@"0"]) {
+                [_TestBtn setTitle:@"试手气" forState:UIControlStateNormal];
+                [_TestBtn setBackgroundColor:[UIColor redColor]];
+                _TestBtn.enabled = YES;
+            }else if ([ticketExsist isEqualToString:@"1"]) {
+                [_TestBtn setTitle:@"已领取" forState:UIControlStateNormal];
+                [_TestBtn setBackgroundColor:LightGrayColor];
+                _TestBtn.enabled = NO;
+            }else {
+                [_TestBtn setTitle:@"谢谢参与" forState:UIControlStateNormal];
+                [_TestBtn setBackgroundColor:LightGrayColor];
+                _TestBtn.enabled = NO;
+            }
+        }
+        NSLog(@"%@",dic);
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
+}
+
+//试手气、 点击领取卡券
 - (void)test{
     
     NSLog(@"试手气");
-    
+
     if (![JNSYUserInfo getUserInfo].isLoggedIn) {
         
         JNSHLoginController *LogInVc = [[JNSHLoginController alloc] init];
@@ -482,9 +591,45 @@
         
         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         hud.labelText = @"加载中...";
-        [hud hide:YES afterDelay:1.5];
+       
+        NSDictionary *dic = @{
+                              @"ActivityCode":timetag
+                              };
         
-        [self performSelector:@selector(showImage) withObject:nil afterDelay:1.5];
+        NSString *action = @"UserTryTheirLuck";
+        
+        NSDictionary *requestDic = @{
+                                     @"action":action,
+                                     @"token":[JNSYUserInfo getUserInfo].userToken,
+                                     @"data":dic
+                                     };
+        NSString *params = [requestDic JSONFragment];
+        
+        [IBHttpTool postWithURL:JNSHTestUrl params:params success:^(id result) {
+            NSDictionary *dic = [result JSONValue];
+            NSString *code = dic[@"code"];
+            NSString *msg = dic[@"msg"];
+            ticketExsist = [NSString stringWithFormat:@"%@", dic[@"theirluckStatus"]];
+            if (![code isEqualToString:@"000000"]) {
+                [JNSHAutoSize showMsg:msg];
+            }else {
+                
+                if ([ticketExsist isEqualToString:@"1"]) {  //抢券成功
+                    [self performSelector:@selector(showImage) withObject:nil afterDelay:1.5];
+                }else {    //抢券失败
+                    [self showFail];
+                }
+                
+            }
+            [hud hide:YES afterDelay:1.5];
+            
+            //更新下卡券状态
+            [self getTicketsStatus];
+            
+        } failure:^(NSError *error) {
+            NSLog(@"%@",error);
+            [hud hide:YES afterDelay:1.5];
+        }];
         
     }
 
@@ -493,12 +638,9 @@
 //抢券成功，弹出视图
 - (void)showImage {
     
-    ProgressView.progress = 0.8;
-    
-    progressLab.text = [NSString stringWithFormat:@"已抢%.0f%%",ProgressView.progress*100];
-    
-    [self.TestBtn setBackgroundColor:LightGrayColor];
-    [self.TestBtn setTitle:@"已领取" forState:UIControlStateNormal];
+   
+    //[self.TestBtn setBackgroundColor:LightGrayColor];
+    //[self.TestBtn setTitle:@"已领取" forState:UIControlStateNormal];
     self.TestBtn.enabled  = NO;
     JNSHTicketsSuccessView *TickView = [[JNSHTicketsSuccessView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight)];
     TickView.watchTicksBlock = ^{
@@ -508,9 +650,19 @@
         [self.navigationController pushViewController:tickvC animated:YES];
         
     };
+    
     [TickView showinView:self.view.window];
     
 }
+//抢券失败
+- (void)showFail {
+    
+    JNSHTicketFailView *FailView = [[JNSHTicketFailView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight)];
+    
+    [FailView showinView:self.view.window];
+    
+}
+
 
 //消息按钮
 - (void)messageTap {

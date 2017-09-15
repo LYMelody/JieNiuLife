@@ -10,4 +10,6 @@
 
 @interface JNSHServiceViewController : UIViewController
 
+@property(nonatomic,strong)NSArray *serviceList;
+
 @end

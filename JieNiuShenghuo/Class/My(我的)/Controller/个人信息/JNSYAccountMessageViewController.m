@@ -108,7 +108,7 @@
             [JNSYUserInfo getUserInfo].shopStates = resultdic[@"shopStates"];
             [JNSYUserInfo getUserInfo].userAccount = resultdic[@"userAccount"];
             [JNSYUserInfo getUserInfo].userCert = resultdic[@"userKey"];
-            [JNSYUserInfo getUserInfo].userSex = resultdic[@"sex"];
+            [JNSYUserInfo getUserInfo].userSex = [NSString stringWithFormat:@"%@",resultdic[@"sex"]] ;
             [JNSYUserInfo getUserInfo].birthday = resultdic[@"birthday"];
             //[JNSYUserInfo getUserInfo].addressInfo = resultdic[@"addressInfo"];
             [JNSYUserInfo getUserInfo].picHeader = resultdic[@"picHeader"];
@@ -145,7 +145,7 @@
         cell = [[UITableViewCell alloc] init];
         if (indexPath.row == 0) {
             JNSYHeaderTableViewCell *Cell = [[JNSYHeaderTableViewCell alloc] init];
-            if ([JNSYUserInfo getUserInfo].picHeader) {
+            if (![[JNSYUserInfo getUserInfo].picHeader isEqualToString:@""]) {
                 [Cell.headImg sd_setImageWithURL:[NSURL URLWithString:[JNSYUserInfo getUserInfo].picHeader]];
             }else {
                 Cell.headImg.image = [UIImage imageNamed:@"my_head_portrait"];
@@ -173,9 +173,16 @@
 //            Cell.leftLab.textColor = [UIColor blackColor];
 //            Cell.leftLab.font = [UIFont systemFontOfSize:15];
 //            Cell.rightLab.text = [[JNSYUserInfo getUserInfo].userSex integerValue]?@"男":@"女";
-            Cell.rightLab.text = @"男";
+            if ([[JNSYUserInfo getUserInfo].userSex isEqualToString:@"0"]) {
+                Cell.rightLab.text = @"女";
+            }else if ([[JNSYUserInfo getUserInfo].userSex isEqualToString:@"1"]){
+                Cell.rightLab.text = @"男";
+            }else {
+                Cell.rightLab.text = @"保密";
+            }
             cell = Cell;
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }else if (indexPath.row == 3) {
             JNSHAccountInfoCell *Cell = [[JNSHAccountInfoCell alloc] init];
             Cell.leftLab.text = @"出生年月";
@@ -185,7 +192,7 @@
             }else {
                 Cell.rightLab.text = @"";
             }
-            Cell.rightLab.text = @"2017-08-07";
+            Cell.rightLab.text = [JNSYUserInfo getUserInfo].birthday;
             Cell.isLast = YES;
             cell = Cell;
             cell.accessoryType = UITableViewCellAccessoryNone;
@@ -234,12 +241,12 @@
         [self.navigationController pushViewController:NickVc animated:YES];
         
     }else if (indexPath.row == 2) {  //性别
-        JNSYSexSelectViewController *SexvC = [[JNSYSexSelectViewController alloc] init];
-//        SexvC.ChangeSexBlock = ^{
-//            [tableView reloadData];
-//        };
-        SexvC.hidesBottomBarWhenPushed = YES;
-        [self.navigationController pushViewController:SexvC animated:YES];
+//        JNSYSexSelectViewController *SexvC = [[JNSYSexSelectViewController alloc] init];
+////        SexvC.ChangeSexBlock = ^{
+////            [tableView reloadData];
+////        };
+//        SexvC.hidesBottomBarWhenPushed = YES;
+//        [self.navigationController pushViewController:SexvC animated:YES];
     }else if (indexPath.row == 3) {
   
             }

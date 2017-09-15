@@ -13,6 +13,11 @@
 #import "JNSHPopBankCardView.h"
 #import "UIViewController+Cloudox.h"
 #import "UINavigationController+Cloudox.h"
+#import "SBJSON.h"
+#import "IBHttpTool.h"
+#import "JNSYUserInfo.h"
+#import "JNSHOrderCodeViewController.h"
+#import "JNSHPayOrderViewController.h"
 
 @interface JNSHVipOrderViewController ()<UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate>
 
@@ -22,6 +27,8 @@
     
     JNSHPopBankCardView *Popview;
     JNSHLabFldCell *CardCell;
+    NSString *BankName;
+    NSString *BankNo;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -92,14 +99,75 @@
             break;
         }
     }
-    
-    
 }
 
 //下一步
 - (void)Next {
     
     NSLog(@"下一步");
+    
+    if ([CardCell.textFiled.text isEqualToString:@""]) {
+        [JNSHAutoSize showMsg:@"请输入卡号"];
+        return;
+    }else if ([BankNo isEqualToString:@""] && ![CardCell.textFiled.text isEqualToString:@""]) {
+        BankNo = CardCell.textFiled.text;
+    }
+
+    //快捷支付绑卡
+    NSDictionary *dic = @{
+                          @"orderNo":self.orderNo,
+                          @"cardNo":BankNo
+                          };
+    NSString *action = @"PayOrderNocardBank";
+    
+    NSDictionary *requestDic = @{
+                                 @"action":action,
+                                 @"data":dic,
+                                 @"token":[JNSYUserInfo getUserInfo].userToken
+                                 };
+    NSString *paras = [requestDic JSONFragment];
+    
+    [IBHttpTool postWithURL:JNSHTestUrl params:paras success:^(id result) {
+        NSDictionary *resultdic = [result JSONValue];
+        NSString *code = resultdic[@"code"];
+        NSString *msg = resultdic[@"msg"];
+        
+        if ([code isEqualToString:@"000000"]) {
+            
+            self.orderNo = resultdic[@"orderNo"];
+            NSString *isBind = [NSString stringWithFormat:@"%@",resultdic[@"isBind"]];
+            BankNo = resultdic[@"cardNo"];
+            BankName = resultdic[@"cardBank"];
+            NSString *cardPhone = resultdic[@"cardPhone"];
+            if ([isBind isEqualToString:@"1"]) {  //已绑信用卡
+                JNSHOrderCodeViewController *CodeVc = [[JNSHOrderCodeViewController alloc] init];
+                CodeVc.hidesBottomBarWhenPushed = YES;
+                CodeVc.payMoney = [NSString stringWithFormat:@"%@",self.money];
+                CodeVc.bankNo = BankNo;
+                CodeVc.bankName = BankName;
+                CodeVc.orderNo = self.orderNo;
+                CodeVc.cardPhone =  cardPhone;
+                [self.navigationController pushViewController:CodeVc animated:YES];
+                
+            }else {   // 新信用卡首次支付
+                
+                JNSHPayOrderViewController *PayOrderVc = [[JNSHPayOrderViewController alloc] init];
+                PayOrderVc.payMoney = [NSString stringWithFormat:@"%@",self.money];
+                PayOrderVc.bankName = BankName;
+                PayOrderVc.bankNo = BankNo;
+                PayOrderVc.orderNo = self.orderNo;
+                PayOrderVc.cardPhone = cardPhone;
+                PayOrderVc.hidesBottomBarWhenPushed = YES;
+                [self.navigationController pushViewController:PayOrderVc animated:YES];
+                
+            }
+            
+        }else {
+            [JNSHAutoSize showMsg:msg];
+        }
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
 
 }
 
@@ -132,7 +200,7 @@
         }else if (indexPath.row == 2) {
             JNSHTitleCell *Cell = [[JNSHTitleCell alloc] init];
             Cell.leftLab.text = @"订单金额";
-            Cell.rightLab.text = @"￥55";
+            Cell.rightLab.text = [NSString stringWithFormat:@"￥%@",self.money];
              Cell.bottomLine.hidden = YES;
             cell = Cell;
             cell.backgroundColor = [UIColor whiteColor];
@@ -144,8 +212,19 @@
             cell.backgroundColor = ColorTableBackColor;
         }else if (indexPath.row == 4) {
             CardCell = [[JNSHLabFldCell alloc] init];
-            CardCell.leftLab.text = @"中信银行";
-            CardCell.textFiled.text = @"40338888888888123";
+            if (self.cardsArray.count > 0) {
+                
+                CardCell.leftLab.text = self.cardsArray[0][@"cardBank"];
+                CardCell.textFiled.text = [self.cardsArray[0][@"cardNo"] stringByReplacingCharactersInRange:NSMakeRange(4, 8) withString:@"********"];
+                BankNo = self.cardsArray[0][@"cardNo"];
+                BankName = self.cardsArray[0][@"cardBank"];
+                CardCell.textFiled.enabled = NO;
+            }else {
+                CardCell.leftLab.text = @"新信用卡";
+                CardCell.textFiled.text = @"";
+                [CardCell.textFiled becomeFirstResponder];
+            }
+
             CardCell.textFiled.delegate = self;
             CardCell.textFiled.keyboardType = UIKeyboardTypeNumberPad;
             cell = CardCell;
@@ -167,15 +246,35 @@
         Popview = [[JNSHPopBankCardView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight)];
         Popview.typetag = 1;
         __block JNSHLabFldCell *Card = CardCell;
-        
+        Popview.bankArray = self.cardsArray;
         Popview.addnewCardBlock = ^{
             Card.leftLab.text = @"新信用卡";
             Card.textFiled.text = @"";
+            Card.textFiled.enabled = YES;
             [Card.textFiled becomeFirstResponder];
+            
+            BankNo = @"";
+            BankName = @"新信用卡";
+            
+        };
+        
+        Popview.bankselectBlock = ^(NSString *bankName, NSString *bankCode) {
+            Card.leftLab.text = bankName;
+            Card.textFiled.text = [bankCode stringByReplacingCharactersInRange:NSMakeRange(bankCode.length -8 - 4, 8) withString:@"********"];
+            BankNo = bankCode;
+            BankName = bankName;
+            Card.textFiled.enabled = NO;
         };
         
         [Popview showInView:self.view];
     }
+}
+
+
+- (void)textFieldDidEndEditing:(UITextField *)textField {
+    
+    BankNo = textField.text;
+    
 }
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
@@ -184,7 +283,7 @@
         
         CardCell.leftLab.text = @"新信用卡";
     }else {
-        CardCell.leftLab.text = @"中信银行";
+        
     }
     
     if(range.location > 19) {  //限20位

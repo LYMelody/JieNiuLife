@@ -55,9 +55,7 @@
     _HeaderImgView.contentMode = UIViewContentModeScaleAspectFit;
     _HeaderImgView.clipsToBounds = YES;
     
-    
-    
-    if ([JNSYUserInfo getUserInfo].picHeader) {
+    if (![[JNSYUserInfo getUserInfo].picHeader isEqualToString:@""]) {
         [_HeaderImgView sd_setImageWithURL:[NSURL URLWithString:[JNSYUserInfo getUserInfo].picHeader]];
     }else {
         _HeaderImgView.image = [UIImage imageNamed:@"my_head_portrait"];
@@ -67,17 +65,15 @@
     
     [_HeaderImgView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(self.view);
-        make.centerY.equalTo(self.view);
+        make.centerY.equalTo(self.view).offset(-[JNSHAutoSize height:40]);
         make.width.equalTo(self.view);
         make.height.mas_equalTo(KscreenWidth);
     }];
     
-    
 }
 
+//编辑头像
 - (void)EditorHeaderImg {
-    
-    
     
     [LSActionSheet showWithTitle:nil destructiveTitle:nil otherTitles:@[@"拍照",@"从手机相册选择",@"保存图片"] block:^(int index) {
         NSLog(@"-----%d",index);

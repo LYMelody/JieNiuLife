@@ -10,4 +10,14 @@
 
 @interface JNSHOrderCodeViewController : UIViewController
 
+@property(nonatomic,copy)NSString *payMoney;
+
+@property(nonatomic,copy)NSString *bankName;
+
+@property(nonatomic,copy)NSString *bankNo;
+
+@property(nonatomic,copy)NSString *orderNo;
+
+@property(nonatomic,copy)NSString *cardPhone;
+
 @end

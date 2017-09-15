@@ -31,6 +31,10 @@
     JNSHLabFldCell *BankCell;
     JNSHLabFldCell *SubBankCell;
     JNSHDetailCardImgCell *ImgCell;
+    NSString *cardNo;
+    NSString *cardBank;
+    NSString *cardCnaps;
+    NSString *cardPic;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -132,16 +136,12 @@
         if ([code isEqualToString:@"000000"]) {
             
             NSString *isBind = [NSString stringWithFormat:@"%@",resultdic[@"isBind"]];
-            NSString *cardBank = [NSString stringWithFormat:@"%@",resultdic[@"cardBank"]];
-            NSString *cardCnaps = [NSString stringWithFormat:@"%@",resultdic[@"cardCnaps"]];
-            NSString *cardNo = [NSString stringWithFormat:@"%@",resultdic[@"cardNo"]];
-            NSString *cardPic = [NSString stringWithFormat:@"%@",resultdic[@"cardPic"]];
+            cardBank = [NSString stringWithFormat:@"%@",resultdic[@"cardBank"]];
+            cardCnaps = [NSString stringWithFormat:@"%@",resultdic[@"cardCnaps"]];
+            cardNo = [NSString stringWithFormat:@"%@",resultdic[@"cardNo"]];
+            cardPic = [NSString stringWithFormat:@"%@",resultdic[@"cardPic"]];
             if ([isBind isEqualToString:@"1"]) {
-                NameCell.textFiled.text = [JNSYUserInfo getUserInfo].userAccount;
-                CardCell.textFiled.text = cardNo;
-                BankCell.textFiled.text = cardBank;
-                SubBankCell.textFiled.text = cardCnaps;
-                [ImgCell.cardImg sd_setImageWithURL:[NSURL URLWithString:cardPic]];
+                [table reloadData];
             }
             
             
@@ -181,35 +181,35 @@
             NameCell = [[JNSHLabFldCell alloc] init];
             NameCell.leftLab.text = @"持 卡 人";
             NameCell.textFiled.placeholder = @"请输入持卡人姓名";
-            // Cell.textFiled.text = @"张三";
+            NameCell.textFiled.text = [JNSYUserInfo getUserInfo].userAccount;
             NameCell.textFiled.enabled = NO;
             cell = NameCell;
         }else if (indexPath.row == 2) {
             CardCell = [[JNSHLabFldCell alloc] init];
             CardCell.leftLab.text = @"卡      号";
             CardCell.textFiled.placeholder = @"请输入卡号";
-            //Cell.textFiled.text = @"1232 **** **** **** 4566";
+            CardCell.textFiled.text = cardNo;
             CardCell.textFiled.enabled = NO;
             cell = CardCell;
         }else if (indexPath.row == 3) {
             BankCell = [[JNSHLabFldCell alloc] init];
-            BankCell.leftLab.text = @"选择银行";
+            BankCell.leftLab.text = @"所属银行";
             BankCell.textFiled.enabled = NO;
-            //Cell.textFiled.text = @"中国银行";
+            BankCell.textFiled.text = cardBank;
             cell = BankCell;
            
         }else if (indexPath.row == 4) {
             SubBankCell = [[JNSHLabFldCell alloc] init];
-            SubBankCell.leftLab.text = @"选择支行";
+            SubBankCell.leftLab.text = @"所属支行";
             SubBankCell.textFiled.enabled = NO;
-            //Cell.textFiled.text = @"城北支行";
+            SubBankCell.textFiled.text = cardCnaps;
             cell = SubBankCell;
         }else if(indexPath.row == 5) {
             cell.backgroundColor = ColorTableBackColor;
         }else if (indexPath.row == 6) {
             
             ImgCell = [[JNSHDetailCardImgCell alloc] init];
-            
+            [ImgCell.cardImg sd_setImageWithURL:[NSURL URLWithString:cardPic]];
             cell = ImgCell;
         }
     }

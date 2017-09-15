@@ -162,15 +162,14 @@
             
             [JNSYUserInfo getUserInfo].userCode = resultdic[@"userCode"];
             [JNSYUserInfo getUserInfo].userPhone = resultdic[@"userPhone"];
-            //[JNSYUserInfo getUserInfo].userName = resultdic[@"userName"];
             [JNSYUserInfo getUserInfo].userAccount = resultdic[@"userAccount"];
             [JNSYUserInfo getUserInfo].userCert = resultdic[@"userCert"];
             [JNSYUserInfo getUserInfo].userPoints = resultdic[@"userPoints"];
-            [JNSYUserInfo getUserInfo].branderCardFlg = resultdic[@"branderCardFlg"];
-            [JNSYUserInfo getUserInfo].branderCardNo = resultdic[@"branderCardNo"];
+            [JNSYUserInfo getUserInfo].userSex = [NSString stringWithFormat:@"%@",resultdic[@"sex"]];
             [JNSYUserInfo getUserInfo].picHeader = resultdic[@"picHeader"];
             [JNSYUserInfo getUserInfo].userVipFlag = [NSString stringWithFormat:@"%@",resultdic[@"vipFlg"]];
-            //[JNSYUserInfo getUserInfo].userVipFlag = @"1";
+            [JNSYUserInfo getUserInfo].userQr = resultdic[@"picQr"];
+            [JNSYUserInfo getUserInfo].birthday = resultdic[@"birthday"];
             [JNSYUserInfo getUserInfo].SettleCard = resultdic[@"userBank"];
             
             //实名认证状态
@@ -243,7 +242,7 @@
             }else {
                 Cell.showVip = NO;
             }
-            if ([JNSYUserInfo getUserInfo].picHeader) {
+            if (![[JNSYUserInfo getUserInfo].picHeader isEqualToString:@""]) {
                 [Cell.headerView sd_setImageWithURL:[NSURL URLWithString:[JNSYUserInfo getUserInfo].picHeader]];
             }else {
                 Cell.headerView.image = [UIImage imageNamed:@"my_head_portrait"];
@@ -290,7 +289,7 @@
             JNSHMyCommonCell *Cell = [[JNSHMyCommonCell alloc] init];
             Cell.titleImage.image = [UIImage imageNamed:@"my_card"];
             Cell.titleLab.text = @"结算卡";
-            if ([JNSYUserInfo getUserInfo].userAccount) {
+            if (![[JNSYUserInfo getUserInfo].SettleCard isEqualToString:@""] && ([JNSYUserInfo getUserInfo].SettleCard != nil)) {
                 Cell.rightLab.text = @"已绑定";
                 Cell.rightLab.textColor = greenColor;
             }else {
@@ -423,14 +422,19 @@
         
         
         if (islogoedIn) {
-            JNSHSettlementCardController *CardVc = [[JNSHSettlementCardController alloc] init];
-            CardVc.hidesBottomBarWhenPushed = YES;
-            //[self.navigationController pushViewController:CardVc animated:YES];
             
-            JNSHSettleDetailController *Detail = [[JNSHSettleDetailController alloc] init];
-            Detail.hidesBottomBarWhenPushed = YES;
-            [self.navigationController pushViewController:Detail animated:YES];
+            if ((![[JNSYUserInfo getUserInfo].SettleCard isEqualToString:@""]) &&([JNSYUserInfo getUserInfo].SettleCard != nil)) {
+                
+                JNSHSettleDetailController *Detail = [[JNSHSettleDetailController alloc] init];
+                Detail.hidesBottomBarWhenPushed = YES;
+                [self.navigationController pushViewController:Detail animated:YES];
 
+            }else {
+                JNSHSettlementCardController *CardVc = [[JNSHSettlementCardController alloc] init];
+                CardVc.hidesBottomBarWhenPushed = YES;
+                [self.navigationController pushViewController:CardVc animated:YES];
+            }
+            
         }else {
             JNSHLoginController *LogInVc = [[JNSHLoginController alloc] init];
             
@@ -438,8 +442,6 @@
             
             [self presentViewController:nav animated:YES completion:nil];
         }
-        
-        
         
     }else if (indexPath.row == 8) {   //订单
         
@@ -493,9 +495,15 @@
             [self presentViewController:nav animated:YES completion:nil];
         }
         
+    }else if (indexPath.row == 12) {  //客服电话
         
+        JNSHMyCommonCell *cell = [table cellForRowAtIndexPath:indexPath];
+        cell.selected = NO;
         
-    }else if (indexPath.row == 15) {
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"telprompt://%@",@"400-600-7909"]]];
+        
+    }
+    else if (indexPath.row == 15) {
         
         if (islogoedIn) {
             JNSHBecomeAgentViewController *BecomeAgentVc = [[JNSHBecomeAgentViewController alloc] init];

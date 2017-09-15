@@ -33,7 +33,7 @@
     [self addGestureRecognizer:tap];
     
     
-    table = [[UITableView alloc] initWithFrame:CGRectMake(0, 64+ [JNSHAutoSize height:46], KscreenWidth, [JNSHAutoSize height:164])];
+    table = [[UITableView alloc] initWithFrame:CGRectMake(0, [JNSHAutoSize height:46], KscreenWidth, [JNSHAutoSize height:164])];
     table.dataSource = self;
     table.delegate = self;
     table.backgroundColor = [UIColor whiteColor];
@@ -95,12 +95,11 @@
         self.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
     }];
     
-    table.frame = CGRectMake(0, 64+ [JNSHAutoSize height:46], KscreenWidth, [JNSHAutoSize height:0]);
+    table.frame = CGRectMake(0, [JNSHAutoSize height:46], KscreenWidth, [JNSHAutoSize height:0]);
     
     [UIView animateWithDuration:0.2 animations:^{
-        table.frame = CGRectMake(0, 64+ [JNSHAutoSize height:46], KscreenWidth, [JNSHAutoSize height:164]);
+        table.frame = CGRectMake(0, [JNSHAutoSize height:46], KscreenWidth, [JNSHAutoSize height:164]);
     }];
-
 }
 
 
@@ -112,7 +111,7 @@
     
     [UIView animateWithDuration:0.2 animations:^{
         self.alpha = 0;
-        table.frame = CGRectMake(0, 64+ [JNSHAutoSize height:46], KscreenWidth, [JNSHAutoSize height:0]);
+        table.frame = CGRectMake(0, [JNSHAutoSize height:46], KscreenWidth, [JNSHAutoSize height:0]);
         
     } completion:^(BOOL finished) {
         [self removeFromSuperview];

@@ -10,4 +10,12 @@
 
 @interface JNSHVipOrderViewController : UIViewController
 
+@property(nonatomic,copy)NSString *money;
+
+@property(nonatomic,copy)NSString *orderNo;
+
+@property(nonatomic,copy)NSString *orderTime;
+
+@property(nonatomic,strong)NSArray *cardsArray;
+
 @end

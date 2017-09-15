@@ -17,6 +17,7 @@
 #import "JNSYUserInfo.h"
 #import "SBJSON.h"
 #import "IBHttpTool.h"
+#import "MBProgressHUD.h"
 
 @interface JNSHPayOrderViewController ()<UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate>
 
@@ -25,11 +26,15 @@
 @implementation JNSHPayOrderViewController {
     
     NSTimer *timer;
+    NSTimer *anthorTimer;
     NSInteger index;
+    NSInteger anthorIndex;
     JNSHGetCodeCell *CodeCell;
     JNSHLabFldCell *YxqCell;
     JNSHLabFldCell *CVVCell;
+    JNSHLabFldCell *PhoneCell;
     JNSHCommonButton *CommitBtn;
+    MBProgressHUD *HUD;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -38,7 +43,7 @@
     
     self.title = @"订单确认";
     self.view.backgroundColor = ColorTabBarBackColor;
-    
+    self.navigationController.navigationBar.translucent = NO;
     
 }
 
@@ -53,18 +58,15 @@
     [self.view addSubview:navBackImg];
 
     
-    
     //返回按钮
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:self action:nil];
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     
-    UITableView *table = [[UITableView alloc] initWithFrame:CGRectMake(0, 64, KscreenWidth, KscreenHeight - 64) style:UITableViewStylePlain];
+    UITableView *table = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight - 64) style:UITableViewStylePlain];
     table.dataSource = self;
     table.delegate = self;
     table.backgroundColor = ColorTableBackColor;
     table.separatorStyle = UITableViewCellSeparatorStyleNone;
-    
-    
     
     [self.view addSubview:table];
     
@@ -112,6 +114,9 @@
         return;
     }
     
+    HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    HUD.labelText = @"支付中...";
+    
     NSDictionary *dic = @{
                           @"orderNo":self.orderNo,
                           @"smsCode":CodeCell.textFiled.text
@@ -131,13 +136,13 @@
         NSLog(@"%@",resultdic);
         if([code isEqualToString:@"000000"]) {
             
-            JNSHPayResultViewController *PayResultVc = [[JNSHPayResultViewController alloc] init];
-            PayResultVc.hidesBottomBarWhenPushed = YES;
-            [self.navigationController pushViewController:PayResultVc animated:YES];
-           
+            //订单查询
+            anthorIndex = anthorIndex + 9;
+            anthorTimer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(quaryOrder) userInfo:nil repeats:YES];
             
         }else {
             [JNSHAutoSize showMsg:msg];
+            [HUD hide:YES];
         }
         
         CommitBtn.enabled = YES;
@@ -145,6 +150,94 @@
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
         CommitBtn.enabled = YES;
+        [HUD hide:YES];
+    }];
+    
+}
+
+//订单查询
+- (void)quaryOrder {
+    
+    anthorIndex = anthorIndex - 3;
+    
+    NSDictionary *dic = @{
+                          @"linkId":[JNSHAutoSize getTimeNow],
+                          @"orderNo":self.orderNo
+                          };
+    NSString *action = @"PayOrderStatus";
+    
+    NSDictionary *requestDic = @{
+                                 @"action":action,
+                                 @"token":[JNSYUserInfo getUserInfo].userToken,
+                                 @"data":dic
+                                 };
+    NSString *params = [requestDic JSONFragment];
+    
+    [IBHttpTool postWithURL:JNSHTestUrl params:params success:^(id result) {
+        NSDictionary *dic = [result JSONValue];
+        NSString *code = dic[@"code"];
+        NSString *msg = dic[@"msg"];
+        NSLog(@"%@",dic);
+        if (![code isEqualToString:@"000000"]) {
+            [JNSHAutoSize showMsg:msg];
+            [HUD hide:YES];
+        }else {
+            
+            NSString *status = [NSString stringWithFormat:@"%@",dic[@"orderStatus"]];
+            NSString *orderMemo = dic[@"orderMemo"];
+            NSString *orderNo = dic[@"orderNo"];
+            NSString *orderTimer = dic[@"orderTime"];
+            NSString *product = [NSString stringWithFormat:@"%@",dic[@"product"]];
+            JNSHPayResultViewController *PayResultVc = [[JNSHPayResultViewController alloc] init];
+            PayResultVc.hidesBottomBarWhenPushed = YES;
+            
+            if ([status isEqualToString:@"12"] || [status isEqualToString:@"20"] || [status isEqualToString:@"30"]) {
+                NSLog(@"%@",orderMemo);
+                [HUD hide:YES];
+                anthorIndex = 0;
+                [anthorTimer invalidate];
+                PayResultVc.orderStatus = @"SUCC";
+                PayResultVc.orderMsg = orderMemo;
+                PayResultVc.orderNo = orderNo;
+                PayResultVc.orderTime = orderTimer;
+                PayResultVc.orderMoney = self.payMoney;
+                PayResultVc.bankName = self.bankName;
+                PayResultVc.bankAccount = self.bankNo;
+                PayResultVc.product = product;
+                [self.navigationController pushViewController:PayResultVc animated:YES];
+            }else if ((anthorIndex == 0) && ([status isEqualToString:@"11"] || [status isEqualToString:@"13"])) {
+                NSLog(@"%@",orderMemo);
+                [HUD hide:YES];
+                anthorIndex = 0;
+                [anthorTimer invalidate];
+                PayResultVc.orderStatus = @"WAIT";
+                PayResultVc.orderMsg = orderMemo;
+                PayResultVc.orderNo = orderNo;
+                PayResultVc.orderTime = orderTimer;
+                PayResultVc.orderMoney = self.payMoney;
+                PayResultVc.bankName = self.bankName;
+                PayResultVc.bankAccount = self.bankNo;
+                PayResultVc.product = product;
+                [self.navigationController pushViewController:PayResultVc animated:YES];
+            }else if ([status isEqualToString:@"21"]) {
+                [HUD hide:YES];
+                NSLog(@"%@",orderMemo);
+                anthorIndex = 0;
+                [anthorTimer invalidate];
+                PayResultVc.orderStatus = @"FAIL";
+                PayResultVc.orderMsg = orderMemo;
+                PayResultVc.orderNo = orderNo;
+                PayResultVc.orderTime = orderTimer;
+                PayResultVc.orderMoney = self.payMoney;
+                PayResultVc.bankName = self.bankName;
+                PayResultVc.bankAccount = self.bankNo;
+                PayResultVc.product = product;
+                [self.navigationController pushViewController:PayResultVc animated:YES];
+            }
+        }
+    
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
     }];
     
 }
@@ -194,7 +287,7 @@
             
             JNSHTitleCell *Cell = [[JNSHTitleCell alloc] init];
             Cell.leftLab.text = self.bankName;
-            Cell.rightLab.text = self.bankNo;
+            Cell.rightLab.text = [self.bankNo stringByReplacingCharactersInRange:NSMakeRange(4, 8) withString:@"********"];
             cell = Cell;
             
         }else if (indexPath.row == 5) {
@@ -217,12 +310,17 @@
             
         }else if (indexPath.row == 7) {
             
-            JNSHLabFldCell *Cell = [[JNSHLabFldCell alloc] init];
-            Cell.leftLab.text = @"预留手机号";
-            Cell.textFiled.text = [[JNSYUserInfo getUserInfo].userPhone stringByReplacingCharactersInRange:NSMakeRange(3, 4) withString:@"****"];
-            Cell.textFiled.placeholder = @"请输入手机号";
-            Cell.textFiled.clearButtonMode = UITextFieldViewModeAlways;
-            cell = Cell;
+            PhoneCell = [[JNSHLabFldCell alloc] init];
+            PhoneCell.leftLab.text = @"预留手机号";
+            if ([self.cardPhone isEqualToString:@""]) {
+                PhoneCell.textFiled.text = self.cardPhone;
+            }else {
+                PhoneCell.textFiled.text = [self.cardPhone stringByReplacingCharactersInRange:NSMakeRange(3, 4) withString:@"****"];
+            }
+            PhoneCell.textFiled.placeholder = @"请输入手机号";
+            PhoneCell.textFiled.clearButtonMode = UITextFieldViewModeAlways;
+            PhoneCell.textFiled.keyboardType = UIKeyboardTypeNumberPad;
+            cell = PhoneCell;
             
         }else if (indexPath.row == 8) {
             
@@ -249,6 +347,11 @@
     
     if (indexPath.row == 5) {
         
+        //隐藏键盘
+        [CVVCell.textFiled resignFirstResponder];
+        [CodeCell.textFiled resignFirstResponder];
+        [PhoneCell.textFiled resignFirstResponder];
+    
         JNSHPopYXQView *YXQView = [[JNSHPopYXQView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight)];
         
         YXQView.selectdateblock = ^(NSString *selectDate) {
@@ -284,6 +387,10 @@
         [JNSHAutoSize showMsg:@"CVV为空!"];
          CodeCell.codeBtn.enabled = YES;
         return;
+    }else if ([PhoneCell.textFiled.text isEqualToString:@""]){
+        [JNSHAutoSize showMsg:@"手机号为空!"];
+        CodeCell.codeBtn.enabled = YES;
+        return;
     }
     
     //发起验证码请求
@@ -291,7 +398,7 @@
                           @"orderNo":self.orderNo,
                           @"cardAccount":[JNSYUserInfo getUserInfo].userAccount,
                           @"cardCert":[JNSYUserInfo getUserInfo].userCert,
-                          @"cardPhone":[JNSYUserInfo getUserInfo].userPhone,
+                          @"cardPhone":[self.cardPhone isEqualToString:@""]?PhoneCell.textFiled.text:self.cardPhone,
                           @"cardCvv":CVVCell.textFiled.text,
                           @"cardYxq":YxqCell.textFiled.text
                           };
@@ -311,15 +418,21 @@
         NSLog(@"%@",resultdic);
         if([code isEqualToString:@"000000"]) {
             
+            index = 59;
+            [CodeCell.codeBtn setTitle:[NSString stringWithFormat:@"重新获取%lds",index] forState:UIControlStateNormal];
+            [CodeCell.codeBtn setBackgroundColor:GrayColor];
+            CodeCell.codeBtn.enabled = NO;
+            
             timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(countDown) userInfo:nil repeats:YES];
-            index = 60;
+            
             
         }else {
             [JNSHAutoSize showMsg:msg];
         }
-    
+        CodeCell.codeBtn.enabled = YES;
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
+        CodeCell.codeBtn.enabled = YES;
     }];
 
 }

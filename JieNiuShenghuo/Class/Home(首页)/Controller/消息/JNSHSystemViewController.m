@@ -20,7 +20,7 @@
     
     self.title = @"系统通知";
     self.view.backgroundColor = ColorTabBarBackColor;
-    
+    self.navigationController.navigationBar.translucent = NO;
 }
 
 
@@ -32,7 +32,7 @@
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     
     //灰色背景
-    UIImageView *backImg = [[UIImageView alloc] initWithFrame:CGRectMake(0, 64, KscreenWidth, KscreenHeight - 64)];
+    UIImageView *backImg = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight - 64)];
     backImg.userInteractionEnabled = YES;
     backImg.backgroundColor = ColorTableBackColor;
     

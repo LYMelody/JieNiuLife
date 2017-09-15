@@ -11,6 +11,8 @@
 #import "JNSHInvateHistoryController.h"
 #import "UIViewController+Cloudox.h"
 #import "UINavigationController+Cloudox.h"
+#import "JNSYUserInfo.h"
+#import "UIImageView+WebCache.h"
 
 #import <ShareSDKUI/ShareSDKUI.h>
 #import <ShareSDKUI/SSUIEditorViewStyle.h>
@@ -92,8 +94,8 @@
     
     //二维码
     UIImageView *erCodeImg = [[UIImageView alloc] init];
-    erCodeImg.image = [UIImage imageNamed:@"invite_QR-code"];
-    
+    //erCodeImg.image = [UIImage imageNamed:@"invite_QR-code"];
+    [erCodeImg sd_setImageWithURL:[NSURL URLWithString:[JNSYUserInfo getUserInfo].userQr]];
     [backImg addSubview:erCodeImg];
     
     [erCodeImg mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -107,7 +109,7 @@
     InvateCodeLab.font = [UIFont systemFontOfSize:18];
     InvateCodeLab.textAlignment = NSTextAlignmentCenter;
     
-    NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithString:@"邀请码 188 8888 8888"];
+    NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"邀请码 %@",[JNSYUserInfo getUserInfo].userPhone]];
     [attr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:20] range:NSMakeRange(0, 3)];
     InvateCodeLab.attributedText = attr;
     
@@ -138,6 +140,7 @@
     UIImageView *ShareImageView = [[UIImageView alloc] init];
     ShareImageView.image = [UIImage imageNamed:@"invite_share"];
     [ShareImageView setBackgroundColor:[UIColor clearColor]];
+    
     [backImg addSubview:ShareImageView];
     
     [ShareImageView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -170,9 +173,10 @@
     [WeChatBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         
         make.centerY.equalTo(whiteBack);
-        make.top.equalTo(whiteBack).offset([JNSHAutoSize height:10]);
+        //make.top.equalTo(whiteBack).offset([JNSHAutoSize height:10]);
         make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:58], [JNSHAutoSize height:60]));
         make.left.equalTo(whiteBack).offset([JNSHAutoSize width:48]);
+        
     }];
     
     //朋友圈

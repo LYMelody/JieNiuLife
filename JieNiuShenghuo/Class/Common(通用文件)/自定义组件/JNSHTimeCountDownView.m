@@ -114,7 +114,7 @@
     
     NSInteger hour = time/60/60;
     
-    NSInteger min = (time - hour*60*60)/60;
+    NSInteger min = (time - hour*60*60)/60 ;
     
     NSInteger second = time - (hour*60 + min)*60;
     

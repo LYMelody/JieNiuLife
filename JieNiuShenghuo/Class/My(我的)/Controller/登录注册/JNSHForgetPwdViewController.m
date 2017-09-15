@@ -44,7 +44,7 @@
     
     [self.view addSubview:backImg];
     
-    table = [[UITableView alloc] initWithFrame:CGRectMake(0, 64, KscreenWidth, KscreenHeight - 64) style:UITableViewStylePlain];
+    table = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight - 64) style:UITableViewStylePlain];
     table.delegate = self;
     table.dataSource = self;
     table.backgroundColor = ColorTableBackColor;
@@ -108,10 +108,6 @@
     }
     
     
-    MBProgressHUD *hud = [[MBProgressHUD alloc] initWithView:self.view];
-    hud.labelText = @"修改中...";
-    [self.view addSubview:hud];
-    [hud show:YES];
     
     NSDictionary *dic = @{
                           @"phone":CodeCell.textFiled.text,
@@ -122,7 +118,7 @@
     NSString *action = @"UserFindPassState";
     NSDictionary *requestDic = @{
                                  @"action":action,
-                                 @"token":TOKEN,
+                                 @"token":[JNSYUserInfo getUserInfo].userToken,
                                  @"data":dic
                                  };
     NSString *params = [requestDic JSONFragment];
@@ -136,8 +132,10 @@
         NSLog(@"%@,%@",resultdic,code);
         if([code isEqualToString:@"000000"]) {
             
-            [JNSHAutoSize showMsg:@"修改成功!"];
-            
+            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            hud.mode = MBProgressHUDModeText;
+            hud.labelText = @"修改成功!";
+            [hud hide:YES afterDelay:1.5];
             [self performSelector:@selector(BackToLogin) withObject:nil afterDelay:1.5];
             
         }else {
@@ -145,12 +143,12 @@
             [JNSHAutoSize showMsg:msg];
         }
         
-        [hud hide:YES];
+        //[hud hide:YES];
         
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
         
-        [hud hide:YES];
+        //[hud hide:YES];
         
     }];
 }
@@ -218,9 +216,7 @@
 - (void)getcode {
     
     CodeCell.codeBtn.enabled = NO;
-    
-    CodeCell.codeBtn.enabled = NO;
-    
+
     if ([CodeCell.textFiled.text isEqualToString:@""]) {
         [JNSHAutoSize showMsg:@"手机号为空！"];
         CodeCell.codeBtn.enabled = YES;
@@ -234,29 +230,34 @@
     NSString *action = @"UserFindPassStateSms";
     NSDictionary *RequestDic = @{
                                  @"action":action,
-                                 @"token":TOKEN,
+                                 @"token":[JNSYUserInfo getUserInfo].userToken,
                                  @"data":dic,
                                  };
     NSString *params = [RequestDic JSONFragment];
     [IBHttpTool postWithURL:JNSHTestUrl params:params success:^(id result) {
         NSLog(@"%@",result);
-        
         NSDictionary *resultDic = [result JSONValue];
         NSString *code = resultDic[@"code"];
         NSString *msg = resultDic[@"respMsg"];
         if ([code isEqualToString:@"000000"]) {
             
+            index = 59;
+            [CodeCell.codeBtn setTitle:[NSString stringWithFormat:@"重新获取%lds",index] forState:UIControlStateNormal];
+            [CodeCell.codeBtn setBackgroundColor:GrayColor];
+            CodeCell.codeBtn.enabled = NO;
+            
             timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(countDown) userInfo:nil repeats:YES];
-            index = 60;
+            
             
         }else {
             
             [JNSHAutoSize showMsg:msg];
             
         }
-        
+        CodeCell.codeBtn.enabled = YES;
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
+        CodeCell.codeBtn.enabled = YES;
     }];
     
     
@@ -296,7 +297,6 @@
     }else {
         cell.rightImg.image = [UIImage imageNamed:@"password_checkmark_grey"];
     }
-    
     
     if (range.location > 19) {
         return NO;

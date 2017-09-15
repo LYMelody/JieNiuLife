@@ -380,6 +380,10 @@
     NSDictionary *dic = @{
                           @"phone":accountFiled.text,
                           @"pass":pwdTextFiled.text,
+                          @"os":@"IOS",
+                          @"soft":@"JNSH",
+                          @"version":AppVersion,
+                          @"imei":[JNSHAutoSize getDiviceIMEI]
                           };
     NSString *action = @"UserLoginState";
     NSDictionary *requestDic = @{

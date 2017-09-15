@@ -10,6 +10,7 @@
 #import "JNSHCommonButton.h"
 #import "Masonry.h"
 #import "JNSHTitleCell.h"
+
 @interface JNSHPayResultViewController ()<UITableViewDelegate,UITableViewDataSource>
 
 @end
@@ -23,9 +24,22 @@
     self.title = @"支付结果";
     
     self.view.backgroundColor = ColorTabBarBackColor;
+    
+    self.navigationController.navigationBar.translucent = NO;
+    
+    //隐藏返回按钮
+    [self.navigationItem setHidesBackButton:YES];
+   
 }
 
+- (void)viewWillDisappear:(BOOL)animated {
+    
+     [self.navigationItem setHidesBackButton:NO];
+}
+
+
 - (void)viewDidLoad {
+    
     [super viewDidLoad];
     
     UIImageView *navBackImg = [[UIImageView alloc] init];
@@ -34,11 +48,7 @@
     navBackImg.backgroundColor = ColorTabBarBackColor;
     [self.view addSubview:navBackImg];
     
-    //返回按钮
-    self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:self action:nil];
-    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
-    
-    UITableView *table = [[UITableView alloc] initWithFrame:CGRectMake(0, 64, KscreenWidth, KscreenHeight - 64) style:UITableViewStylePlain];
+    UITableView *table = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight - 64) style:UITableViewStylePlain];
     table.delegate = self;
     table.dataSource = self;
     table.backgroundColor = ColorTableBackColor;
@@ -52,6 +62,8 @@
     UIImageView *logoImg = [[UIImageView alloc] init];
     logoImg.image = [UIImage imageNamed:@"pay-success"];
     
+    
+    
     [headerView addSubview:logoImg];
     
     [logoImg mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -60,6 +72,7 @@
         make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:53], [JNSHAutoSize height:53]));
     }];
     
+    //交易状态Lab
     UILabel *messageLab = [[UILabel alloc] init];
     messageLab.font = [UIFont systemFontOfSize:14];
     messageLab.textColor = ColorText;
@@ -67,10 +80,34 @@
     messageLab.text = @"交易成功!";
     [headerView addSubview:messageLab];
     
+    if([self.orderStatus isEqualToString:@"SUCC"]) {
+        
+    }else if ([self.orderStatus isEqualToString:@"WAIT"]) {
+        
+    }else if ([self.orderStatus isEqualToString:@"FAIL"]){
+        logoImg.image = [UIImage imageNamed:@"payment-failed"];
+        messageLab.text = @"交易失败";
+    }
+
     [messageLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(headerView);
         make.top.equalTo(logoImg.mas_bottom).offset([JNSHAutoSize height:13]);
         make.size.mas_equalTo(CGSizeMake(KscreenWidth, [JNSHAutoSize height:20]));
+    }];
+    
+    //交易状态原因
+    UILabel *causeLab = [[UILabel alloc] init];
+    causeLab.font = [UIFont systemFontOfSize:12];
+    causeLab.textColor = blueColor;
+    causeLab.textAlignment = NSTextAlignmentCenter;
+    [headerView addSubview:causeLab];
+    if ([self.orderStatus isEqualToString:@"FAIL"]) {
+        causeLab.text = self.orderMsg;
+    }
+    [causeLab mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(messageLab.mas_bottom).offset([JNSHAutoSize height:12]);
+        make.centerX.equalTo(messageLab);
+        make.size.mas_equalTo(CGSizeMake(KscreenWidth, [JNSHAutoSize height:15]));
     }];
     
     table.tableHeaderView = headerView;
@@ -107,6 +144,8 @@
     
     NSLog(@"确定");
     
+    [self.navigationController popToRootViewControllerAnimated:YES];
+    
     
 }
 
@@ -126,28 +165,33 @@
         cell = [[JNSHTitleCell alloc] init];
         if (indexPath.row == 0) {
             cell.leftLab.text = @"交易金额";
-            cell.rightLab.text = @"￥10000.00";
+            cell.rightLab.text = [NSString stringWithFormat:@"￥%@",self.orderMoney];
             cell.rightLab.textColor = [UIColor redColor];
         }else if (indexPath.row == 1) {
             cell.leftLab.text = @"交易名称";
-            cell.rightLab.text = @"收款";
+            if ([self.product isEqualToString:@"1000"]) {
+                cell.rightLab.text = @"商户收款";
+            }else if([self.product isEqualToString:@"1001"]) {
+                cell.rightLab.text = @"会员购买";
+            }else {
+                cell.rightLab.text = @"升级代理商";
+            }
         }else if (indexPath.row == 2) {
             cell.leftLab.text = @"交易银行";
-            cell.rightLab.text = @"中信银行";
+            cell.rightLab.text = self.bankName;
         }else if (indexPath.row == 3) {
             cell.leftLab.text = @"交易账户";
-            cell.rightLab.text = @"4033475112451245";
+            cell.rightLab.text = [self.bankAccount stringByReplacingCharactersInRange:NSMakeRange(4, 8) withString:@"********"];
         }else if (indexPath.row == 4) {
             cell.leftLab.text = @"订单编号";
-            cell.rightLab.text = @"10120270707121210001";
+            cell.rightLab.text = self.orderNo;
         }else if (indexPath.row == 5) {
             cell.leftLab.text = @"交易时间";
-            cell.rightLab.text = @"2017-05-20 12:20:12";
+            cell.rightLab.text = self.orderTime;
         }
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
-    
 }
 
 - (void)didReceiveMemoryWarning {

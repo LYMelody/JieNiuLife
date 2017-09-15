@@ -128,18 +128,22 @@
         }
     }
 
-    
     //客服电话
     
     UILabel *lab = [[UILabel alloc] init];
     lab.font = [UIFont systemFontOfSize:14];
     lab.textAlignment = NSTextAlignmentCenter;
     lab.textColor = ColorTabBarBackColor;
-    NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithString:@"客服电话：400-1200-1200"];
+    lab.userInteractionEnabled = YES;
+    NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithString:@"客服电话：400-600-7909"];
     [attr addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:NSMakeRange(0, 5)];
     
     lab.attributedText = attr;
     
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(call)];
+    tap.numberOfTouchesRequired = 1;
+    [lab addGestureRecognizer:tap];
+
     [table addSubview:lab];
     
     [lab mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -149,6 +153,13 @@
     }];
 
 }
+
+- (void)call {
+    
+     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"telprompt://%@",@"400-600-7909"]]];
+    
+}
+
 //注册
 - (void)resign {
     
@@ -176,10 +187,7 @@
         return;
     }
     
-    MBProgressHUD *hud = [[MBProgressHUD alloc] initWithView:self.view];
-    hud.labelText = @"注册中...";
-    [self.view addSubview:hud];
-    [hud show:YES];
+    
     
     NSDictionary *dic = @{
                           @"phone":CodeCell.textFiled.text,
@@ -196,29 +204,28 @@
     NSString *params = [requestDic JSONFragment];
     [IBHttpTool postWithURL:JNSHTestUrl params:params success:^(id result) {
         
-        NSLog(@"%@",result);
-        
         NSDictionary *resultdic = [result JSONValue];
         NSString *code = resultdic[@"code"];
         
         NSLog(@"%@,%@",resultdic,code);
         if([code isEqualToString:@"000000"]) {
             
-            [JNSHAutoSize showMsg:@"注册成功!"];
+            //[JNSHAutoSize showMsg:@"注册成功!"];
             
-            [self performSelector:@selector(BackToLogin) withObject:nil afterDelay:2];
+            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            hud.mode = MBProgressHUDModeText;
+            hud.labelText = @"注册成功";
+            [hud hide:YES afterDelay:1.5];
+            
+            [self performSelector:@selector(BackToLogin) withObject:nil afterDelay:1.5];
             
         }else {
             NSString *msg = resultdic[@"msg"];
             [JNSHAutoSize showMsg:msg];
         }
         
-        [hud hide:YES];
-        
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
-        
-        [hud hide:YES];
         
     }];
     
@@ -338,18 +345,22 @@
         
         NSDictionary *resultDic = [result JSONValue];
         NSString *code = resultDic[@"code"];
-        NSString *msg = resultDic[@"respMsg"];
+        NSString *msg = resultDic[@"msg"];
         if ([code isEqualToString:@"000000"]) {
             
+            index = 59;
+            [CodeCell.codeBtn setTitle:[NSString stringWithFormat:@"重新获取%lds",(long)index] forState:UIControlStateNormal];
+            [CodeCell.codeBtn setBackgroundColor:GrayColor];
+            CodeCell.codeBtn.enabled = NO;
+            
             timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(countDown) userInfo:nil repeats:YES];
-            index = 60;
             
         }else {
             
             [JNSHAutoSize showMsg:msg];
             
         }
-        
+        CodeCell.codeBtn.enabled = YES;
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
     }];

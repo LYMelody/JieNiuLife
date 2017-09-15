@@ -18,4 +18,6 @@
 
 @property(nonatomic,copy)NSString *orderNo;
 
+@property(nonatomic,copy)NSString *cardPhone;
+
 @end

@@ -12,4 +12,7 @@
 
 @property(nonatomic,assign)NSInteger tag;
 
+@property(nonatomic,strong)NSArray *listArray;
+
+
 @end

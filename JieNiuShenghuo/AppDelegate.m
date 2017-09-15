@@ -9,7 +9,7 @@
 #import "AppDelegate.h"
 #import "JNSHMainBarController.h"
 #import "JNSYUserInfo.h"
-
+#import "JNSHGuidViewController.h"
 //ShareSDK
 #import <ShareSDK/ShareSDK.h>
 #import <ShareSDKConnector/ShareSDKConnector.h>
@@ -44,9 +44,24 @@
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.window.backgroundColor = ColorTabBarBackColor;
     
-    JNSHMainBarController *barVc = [[JNSHMainBarController alloc] init];
+    NSUserDefaults *user = [NSUserDefaults standardUserDefaults];
     
-    self.window.rootViewController = barVc;
+    if (![user boolForKey:@"FirstLaunch"]) {
+        
+        JNSHGuidViewController *guidVc = [[JNSHGuidViewController alloc] init];
+        
+        self.window.rootViewController = guidVc;
+        
+        [user setBool:YES forKey:@"FirstLaunch"];
+        
+    }else {
+        
+        JNSHMainBarController *barVc = [[JNSHMainBarController alloc] init];
+        self.window.rootViewController = barVc;
+    }
+    
+    
+    
     
     [self.window makeKeyAndVisible];
     
@@ -91,12 +106,10 @@
             [logoImg removeFromSuperview];
             [frontImg removeFromSuperview];
         }];
-        
-        
+    
     }];
     
     //初始化ShareSDK
-    
     [ShareSDK registerActivePlatforms:@[
                                        @(SSDKPlatformTypeWechat),
                                        @(SSDKPlatformTypeSinaWeibo)] onImport:^(SSDKPlatformType platformType) {
@@ -137,6 +150,8 @@
     //初始化JPush
     [JPUSHService setupWithOption:launchOptions appKey:JPushAPPKey channel:@"APP Store" apsForProduction:NO];
 
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
+    
     return YES;
 }
 

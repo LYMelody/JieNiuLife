@@ -35,6 +35,7 @@
     UITableView *table;
     NSString *name;
     NSString *IDCard;
+    NSString *historyCard;
     
     NSString *CertFaceHttp;
     NSString *CertBackHttp;
@@ -46,6 +47,7 @@
     UILabel *leftLab;
     UIButton *editBtn;
     BOOL CanEdit;
+    UIImageView *headerView;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -62,7 +64,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    table = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight)];
+    table = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight-64)];
     table.dataSource = self;
     table.delegate = self;
     table.backgroundColor = ColorTableBackColor;
@@ -84,7 +86,7 @@
     
     //tableheaderView
     
-    UIImageView *headerView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, [JNSHAutoSize height:44])];
+    headerView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, [JNSHAutoSize height:44])];
     headerView.backgroundColor = ColorTableBackColor;
     headerView.userInteractionEnabled = YES;
     
@@ -92,12 +94,13 @@
     leftLab.font = [UIFont systemFontOfSize:13];
     leftLab.textAlignment = NSTextAlignmentLeft;
     leftLab.textColor = blueColor;
+    //leftLab.backgroundColor = [UIColor redColor];
     [headerView addSubview:leftLab];
     
     [leftLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(headerView);
         make.left.equalTo(headerView).offset([JNSHAutoSize width:15]);
-        make.size.mas_equalTo(CGSizeMake(KscreenWidth, [JNSHAutoSize height:20]));
+        make.size.mas_equalTo(CGSizeMake(KscreenWidth-[JNSHAutoSize width:15], [JNSHAutoSize height:20]));
     }];
     
     editBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -121,6 +124,7 @@
     
     CanEdit = YES;
     
+    //获取实名认证信息
     [self getRealNameInfo];
     
 }
@@ -153,36 +157,13 @@
             NSString *isEdit = [NSString stringWithFormat:@"%@",resultdic[@"isEdit"]];
             NSString *userAccount = resultdic[@"userAccount"];
             NSString *userCert = resultdic[@"userCert"];
-            
-            //设置实名认证状态
-            if (msg) {
-                table.tableHeaderView.hidden = NO;
-                leftLab.text = showMsg;
-                if ([msg isEqualToString:@"未通过"]) {
-                    editBtn.hidden = NO;
-                }else {
-                    editBtn.hidden = YES;
-                }
-            }
-            //设置是否可以编辑
-            if ([isEdit isEqualToString:@"0"]) { //不能编辑
-                
-                CanEdit = NO;
-                
-                table.tableFooterView.hidden = YES;
-                table.tableHeaderView.hidden = YES;
-                
-            }else {
-                CanEdit = YES;
-                table.tableFooterView.hidden = NO;
-                
-            }
             //设置用户姓名
-            if (userAccount) {
+            if (![userAccount isEqualToString:@""]) {
                 name = userAccount;
             }
             //设置用户身份证
-            if (userCert) {
+            if (![userCert isEqualToString:@""]) {
+                historyCard = userCert;
                 IDCard = [userCert stringByReplacingCharactersInRange:NSMakeRange(6, 8) withString:@"********"];
             }
             
@@ -192,6 +173,40 @@
             HoldCertHttp = resultdic[@"pic3"];
             [table reloadData];
             
+            //设置实名认证状态
+            if (![showMsg isEqualToString:@""]) {
+                table.tableHeaderView.hidden = NO;
+                leftLab.text = showMsg;
+                if ([showMsg isEqualToString:@"未通过"]) {
+                    editBtn.hidden = NO;
+                }else {
+                    editBtn.hidden = YES;
+                }
+                if ([showMsg isEqualToString:@"您的实名认证信息已通过"]) {
+                    leftLab.textColor = greenColor;
+                }else if ([showMsg isEqualToString:@""]) {
+                    
+                }
+            }else {
+                
+                table.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, CGFLOAT_MIN)];
+                
+            }
+            
+            //设置是否可以编辑
+            if ([isEdit isEqualToString:@"0"]) { //不能编辑
+                
+                CanEdit = NO;
+                
+                table.tableFooterView.hidden = YES;
+               
+                
+            }else {
+                CanEdit = YES;
+                table.tableFooterView.hidden = NO;
+                
+            }
+           
         }else {
             
             [JNSHAutoSize showMsg:msg];
@@ -242,7 +257,7 @@
     
     NSDictionary *dic = @{
                           @"userAccount":NameCell.textFiled.text,
-                          @"userCert":CertCell.textFiled.text,
+                          @"userCert":historyCard?historyCard:CertCell.textFiled.text,
                           @"pic1":CertFaceHttp,
                           @"pic2":CertBackHttp,
                           @"pic3":HoldCertHttp
@@ -264,10 +279,11 @@
         
         if ([code isEqualToString:@"000000"]) {
             
-            
-            [JNSHAutoSize showMsg:@"成功提交!"];
-        
-            
+            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            hud.mode = MBProgressHUDModeText;
+            hud.labelText = @"提交成功!";
+            [hud hide:YES afterDelay:1.5];
+            [self performSelector:@selector(back) withObject:nil afterDelay:1.5];
             //[self UpdateUserPicHeader:httpPath];
             
         }else {
@@ -275,14 +291,15 @@
             [JNSHAutoSize showMsg:msg];
         }
         
-        
-        
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
       
     }];
+}
+
+- (void)back {
     
-    
+    [self.navigationController popViewControllerAnimated:YES];
     
 }
 
@@ -295,6 +312,12 @@
     }else if (textField.tag == 101) {
         IDCard = textField.text;
     }
+}
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField {
+    
+    historyCard = nil;
+    
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -380,7 +403,6 @@
         cell.userInteractionEnabled = NO;
     }
     
-    
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
 }
@@ -388,7 +410,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if ((indexPath.row > 2) && (indexPath.row < 6)) {
-        return 131;
+        return [JNSHAutoSize height:131];
     }else if (indexPath.row == 6) {
         return 15;
     }
@@ -415,12 +437,13 @@
                 return;
             }
         }else if (index == 1) {
-            NSLog(@"从相册中选择");
-            if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
-                sourcetype = UIImagePickerControllerSourceTypePhotoLibrary;
-            }else {
-                [self alert:@"对不起，您的相册不可用"];
-            }
+//            NSLog(@"从相册中选择");
+//            if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
+//                sourcetype = UIImagePickerControllerSourceTypePhotoLibrary;
+//            }else {
+//                [self alert:@"对不起，您的相册不可用"];
+//            }
+            return;
         }else {
             return;
         }
@@ -440,9 +463,9 @@
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info
 {
     
-    UIImage *image = info[UIImagePickerControllerEditedImage];
+    UIImage *image = info[UIImagePickerControllerOriginalImage];
     
-    NSData *imgdata = UIImagePNGRepresentation(image);
+    NSData *imgdata = UIImageJPEGRepresentation(image, 0.5);
     
     NSString *encodedImagStr = [GTMBase64 stringByEncodingData:imgdata];
     
@@ -504,22 +527,26 @@
             }else if([type isEqualToString:@"CardFace"]) {
                 HoldCertHttp = httpPath;
             }
+            //去掉hud
+            [HUD hide:YES];
+            //换成text的提示
+            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            hud.mode = MBProgressHUDModeText;
+            hud.labelText = @"上传成功";
+            [hud hide:YES afterDelay:1];
             
             //[self UpdateUserPicHeader:httpPath];
             
         }else {
+            [HUD hide:YES];
             NSString *msg = dic[@"msg"];
             [JNSHAutoSize showMsg:msg];
         }
-        
-        [HUD hide:YES];
         
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
         [HUD hide:YES];
     }];
-    
-    
 }
 
 
@@ -534,14 +561,5 @@
     // Dispose of any resources that can be recreated.
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

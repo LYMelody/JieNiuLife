@@ -62,6 +62,7 @@
 
 @property(nonatomic,copy)NSString *userStatus;        //实名认证状态
 
+@property(nonatomic,copy)NSString *userQr;            //注册二维码
 
 + (JNSYUserInfo *)getUserInfo;
 

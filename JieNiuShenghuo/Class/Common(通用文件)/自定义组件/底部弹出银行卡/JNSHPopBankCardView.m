@@ -12,7 +12,7 @@
 #import "JNSYUserInfo.h"
 #import "SBJSON.h"
 #import "IBHttpTool.h"
-
+#import "UIImageView+WebCache.h"
 
 
 #define popHeight 247
@@ -101,7 +101,7 @@
     self.tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, [JNSHAutoSize height:46], KscreenWidth, [JNSHAutoSize height:(popHeight - 46 - ((self.typetag ==  1)?46:0))]) style:UITableViewStylePlain];
     _tableView.delegate = self;
     _tableView.dataSource = self;
-    
+    _tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, CGFLOAT_MIN)];
     [self.contentView addSubview:self.tableView];
     
     if (self.typetag == 1) {
@@ -260,7 +260,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    if ((self.typetag == 1) && (self.bankArray.count > 0)) {
+    if ((self.typetag == 1)) {
         return self.bankArray.count;
     }
     
@@ -281,9 +281,10 @@
         if (self.typetag == 1) {
             if (self.bankArray.count > 0) {
                 
-                cell.bankNameLab.text = self.bankArray[indexPath.row][@"bankName"];
-                NSString *str = self.bankArray[indexPath.row][@"bankNum"];
-                cell.bankCardLab.text = [NSString stringWithFormat:@"信用卡    %@",[self.bankArray[indexPath.row][@"bankNum"] stringByReplacingCharactersInRange:NSMakeRange(str.length - 8 - 4, 8) withString:@"********"]];
+                cell.bankNameLab.text = self.bankArray[indexPath.row][@"cardBank"];
+                NSString *str = self.bankArray[indexPath.row][@"cardNo"];
+                cell.bankCardLab.text = [NSString stringWithFormat:@"信用卡    %@",[self.bankArray[indexPath.row][@"cardNo"] stringByReplacingCharactersInRange:NSMakeRange(str.length - 8 - 4, 8) withString:@"********"]];
+                [cell.bankLogoImg sd_setImageWithURL:[NSURL URLWithString:self.bankArray[indexPath.row][@"cardIcon"]]];
             }
         }else {
             if (bankArrayCode.count > 0) {
@@ -309,7 +310,6 @@
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
-
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -318,12 +318,12 @@
     
 }
 
-
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     
     self.currentIndex = indexPath.row;
     
+    [self dismiss];
     
 }
 
@@ -335,7 +335,7 @@
     if (self.typetag == 1) {
         
         if (self.bankselectBlock) {
-            self.bankselectBlock(self.bankArray[currentIndex][@"bankName"], self.bankArray[currentIndex][@"bankNum"]);
+            self.bankselectBlock(self.bankArray[currentIndex][@"cardBank"], self.bankArray[currentIndex][@"cardNo"]);
         }
         
     }else {

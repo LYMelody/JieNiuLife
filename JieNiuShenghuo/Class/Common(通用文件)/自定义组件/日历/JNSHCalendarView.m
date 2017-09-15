@@ -216,8 +216,6 @@
     }else {                    //终止时间
         [self.rightBtn setTitle:time forState:UIControlStateNormal];
     }
-    
-   
 }
 
 - (void)showInView:(UIView *)view {
@@ -243,7 +241,6 @@
         self.calendarView.frame = CGRectMake([JNSHAutoSize width:15], [JNSHAutoSize height:90], KscreenWidth - [JNSHAutoSize width:15]*2, [JNSHAutoSize height:250]);
     }];
     
-    
 }
 
 
@@ -260,7 +257,7 @@
     
     [UIView animateWithDuration:0.2 animations:^{
         self.alpha = 0;
-        self.contentView.frame = CGRectMake(0, 64+ [JNSHAutoSize height:46], KscreenWidth, [JNSHAutoSize height:0]);
+        self.contentView.frame = CGRectMake(0,  [JNSHAutoSize height:46], KscreenWidth, [JNSHAutoSize height:0]);
     } completion:^(BOOL finished) {
         [self.contentView removeFromSuperview];
         [self removeFromSuperview];

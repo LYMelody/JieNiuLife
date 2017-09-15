@@ -16,8 +16,9 @@
 #import "JNSHOrderDetailController.h"
 #import "UIViewController+Cloudox.h"
 #import "UINavigationController+Cloudox.h"
-
-
+#import "SBJSON.h"
+#import "IBHttpTool.h"
+#import "JNSYUserInfo.h"
 
 @interface JNSHOrderViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -40,7 +41,20 @@
     JNSYHighLightImageView *dateImg;
     JNSHCalendarView *calendar;
     //UIImageView *rightArrow;
-   
+    NSString *startTime;
+    NSString *endtime;
+    
+}
+
+//获取当时日期
+- (NSString*)getToday
+{
+    NSDate *today = [NSDate date];
+    NSDateFormatter *df = [[NSDateFormatter alloc] init];
+    [df setDateFormat:@"yyyy-MM-dd"];
+    NSString* dateString = [df stringFromDate:today];
+    NSString *dateStr = [dateString stringByReplacingOccurrencesOfString:@"-" withString:@""];
+    return dateStr;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -49,6 +63,12 @@
     self.title = @"订单中心";
     self.view.backgroundColor = ColorTableBackColor;
     self.navBarBgAlpha = @"1.0";
+    startTime = [NSString stringWithFormat:@"%@%@",[self getToday],@"000000"];
+    endtime = [NSString stringWithFormat:@"%@%@",[self getToday],@"235959"];
+    //获取今天的订单
+    [self requestForOrderList:startTime endtime:endtime product:@"1000"];
+    
+    
     [table reloadData];
 }
 
@@ -162,6 +182,35 @@
     
 }
 
+- (void)requestForOrderList:(NSString *)startTime endtime:(NSString *)endtime product:(NSString *)pro{
+    
+    NSDictionary *dic = @{
+                          @"ts":startTime,
+                          @"te":endtime,
+                          @"page":@"0",
+                          @"product":pro
+                          };
+    NSString *action = @"PayOrderList";
+    
+    NSDictionary *requestDic = @{
+                                 @"action":action,
+                                 @"token":[JNSYUserInfo getUserInfo].userToken,
+                                 @"data":dic
+                                 };
+    NSString *params = [requestDic JSONFragment];
+    
+    [IBHttpTool postWithURL:JNSHTestUrl params:params success:^(id result) {
+        NSDictionary *resultDic = [result JSONValue];
+        NSString *code = resultDic[@"code"];
+        NSLog(@"%@",resultDic);
+        if ([code isEqualToString:@"000000"]) {
+            [table reloadData];
+        }
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
+}
+
 //选择日期
 - (void)dateTap {
     
@@ -184,15 +233,13 @@
         calendar.dismissblock = ^{
             __strong typeof(self) stongSelf = weakSelf;
             stongSelf.arrawImg.image = [UIImage imageNamed:@"order_arror_down"];
-            
         };
         
         //确定日期
         calendar.datechoseblock = ^{
-            __strong typeof(self) strongSelf = weakSelf;
+            //__strong typeof(self) strongSelf = weakSelf;
            
         };
-        
         
         self.arrawImg.image = [UIImage imageNamed:@"order_arror_up"];
         
@@ -201,23 +248,21 @@
     
 }
 
-
+//选择收款类型
 - (void)tapType {
     
     NSArray *array = @[@"全部",@"收款",@"会员购买",@"后台管理费"];
-    
     
     if (calendar.alpha > 0) {
         self.arrawImg.image = [UIImage imageNamed:@"order_arror_down"];
         [calendar dismiss];
     }
     
-    
     if (orderView.alpha > 0) {
         _rightArrow.image = [UIImage imageNamed:@"order_arror_down"];
         [orderView dismiss];
     } else {
-        orderView = [[JNSHOrderStatusView alloc] initWithFrame:CGRectMake(0, 64+[JNSHAutoSize height:46], KscreenWidth, KscreenHeight)];
+        orderView = [[JNSHOrderStatusView alloc] initWithFrame:CGRectMake(0, [JNSHAutoSize height:46], KscreenWidth, KscreenHeight)];
         orderView.selectIndex = self.selectIndex;
         __weak typeof(self) weakSelf = self;
         
@@ -246,9 +291,7 @@
     
     
     
-    
 }
-
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     
@@ -274,8 +317,6 @@
     }
     
     return cell;
-
-
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -288,9 +329,7 @@
     
 }
 
-
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    
     
     UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, [JNSHAutoSize height:41])];
     view.backgroundColor = [UIColor whiteColor];
@@ -328,7 +367,6 @@
     return view;
     
 }
-
 
 - ( CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     

@@ -53,11 +53,7 @@
     self.customView.userInteractionEnabled = YES;
     self.customView.hidden = YES;
     [self addSubview:self.customView];
-//    [self.customView mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.centerX.equalTo(self);
-//        make.centerY.equalTo(self);
-//        make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:211], [JNSHAutoSize height:226]));
-//    }];
+
     self.customView.frame = CGRectMake(0, 0, [JNSHAutoSize width:221], [JNSHAutoSize height:226]);
     self.customView.center = self.center;
     
@@ -66,7 +62,6 @@
     [self.customView addSubview:self.midImg];
     
     [self.midImg mas_makeConstraints:^(MASConstraintMaker *make) {
-        //make.centerX.equalTo(self.customView);
         make.top.equalTo(self.customView).offset([JNSHAutoSize height:23]);
         make.left.equalTo(self.customView).offset([JNSHAutoSize width:30]);
         make.right.equalTo(self.customView).offset(-[JNSHAutoSize width:40]);

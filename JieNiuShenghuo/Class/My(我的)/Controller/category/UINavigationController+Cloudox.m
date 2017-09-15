@@ -59,7 +59,7 @@
             CGFloat fromAlpha = [[coor viewControllerForKey:UITransitionContextFromViewControllerKey].navBarBgAlpha floatValue];
             CGFloat toAlpha = [[coor viewControllerForKey:UITransitionContextToViewControllerKey].navBarBgAlpha floatValue];
             CGFloat nowAlpha = fromAlpha + (toAlpha - fromAlpha) * percentComplete;
-            NSLog(@"from:%f, to:%f, now:%f",fromAlpha, toAlpha, nowAlpha);
+            //NSLog(@"from:%f, to:%f, now:%f",fromAlpha, toAlpha, nowAlpha);
             [self setNeedsNavigationBackground:nowAlpha];
         }
     }
@@ -105,7 +105,6 @@
     }
 }
 
-
 #pragma mark - UINavigationBar Delegate
 - (void)navigationBar:(UINavigationBar *)navigationBar didPopItem:(UINavigationItem *)item {
     if (self.viewControllers.count >= navigationBar.items.count) {// 点击返回按钮
@@ -119,7 +118,6 @@
     // push到一个新界面
     [self setNeedsNavigationBackground:[self.topViewController.navBarBgAlpha floatValue]];
 }
-
 
 //定义常量 必须是C语言字符串
 static char *CloudoxKey = "CloudoxKey";

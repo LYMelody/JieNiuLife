@@ -24,7 +24,7 @@ typedef void(^bankSelectBlock)(NSString *bankName, NSString *bankCode);
 
 @property(nonatomic,copy)bankSelectBlock bankselectBlock;
 
-@property(nonatomic,assign)NSInteger typetag;
+@property(nonatomic,assign)NSInteger typetag;     //1：付款方式银行卡  2：选择银行
 
 @property(nonatomic,strong)NSArray *bankArray;
 

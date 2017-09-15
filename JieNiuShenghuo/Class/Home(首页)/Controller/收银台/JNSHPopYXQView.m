@@ -117,7 +117,6 @@
     
     [self.contentView addSubview:_pickerView];
     
-    
     [_pickerView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(headImgView.mas_bottom);
         make.left.right.bottom.equalTo(self.contentView);
@@ -128,8 +127,8 @@
     
     NSInteger year = self.curYear - _yearRange + [_pickerView selectedRowInComponent:0];
     NSInteger month = [_pickerView selectedRowInComponent:1] + 1;
-    
-    return [NSString stringWithFormat:@"%.2ld/%ld",(long)month,(long)year];
+    NSString *yearStr = [NSString stringWithFormat:@"%ld",year];
+    return [NSString stringWithFormat:@"%.2ld%@",(long)month,[yearStr substringFromIndex:yearStr.length - 2]];
 }
 
 #pragma mark pickerViewDataSource
@@ -156,7 +155,6 @@
     }else {
         return pickerView.frame.size.width/3.0;
     }
-    
 }
 
 - (NSString *)pickerView:(UIPickerView *)pickerView titleForRow:(NSInteger)row forComponent:(NSInteger)component {
@@ -191,12 +189,11 @@
     
     self.contentView.frame = CGRectMake(0, KscreenHeight, KscreenWidth, [JNSHAutoSize height:popHeight]);
     [UIView animateWithDuration:0.3 animations:^{
-        self.contentView.frame = CGRectMake(0, KscreenHeight - [JNSHAutoSize height:popHeight], KscreenWidth, [JNSHAutoSize height:popHeight]);
+        self.contentView.frame = CGRectMake(0, KscreenHeight - [JNSHAutoSize height:popHeight] - 64, KscreenWidth, [JNSHAutoSize height:popHeight]);
     }];
 }
 
 - (void)dismiss {
-    
     
     [UIView animateWithDuration:0.3 animations:^{
         self.alpha = 0;

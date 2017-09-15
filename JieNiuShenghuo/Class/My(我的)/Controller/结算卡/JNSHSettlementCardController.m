@@ -112,6 +112,7 @@
     
     //初始化银行
    self.currentBank = @"102";
+   self.bankName = @"中国工商银行";
 }
 
 //绑定
@@ -129,7 +130,7 @@
     //NSLog(@"subbankcode:%@",self.subBankCode);
     
     if ([NameCell.textFiled.text isEqualToString:@""]) {
-        msg = @"持卡人为空!";
+        msg = @"手机号为空!";
         [alertView show:msg inView:self.view];
         return;
     }else if ([CardCell.textFiled.text isEqualToString:@""]){
@@ -145,7 +146,6 @@
         [alertView show:msg inView:self.view];
         return;
     }
-    
     
     NSDictionary *dic = @{
                           @"cardNo":CardCell.textFiled.text,
@@ -171,7 +171,11 @@
         NSString *msg = resultdic[@"msg"];
         if ([code isEqualToString:@"000000"]) {
             
-            [JNSHAutoSize showMsg:@"信息已提交!"];
+            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            hud.mode = MBProgressHUDModeText;
+            hud.labelText = @"信息已提交!";
+            [hud hide:YES afterDelay:1.5];
+            [self performSelector:@selector(back) withObject:nil afterDelay:1.5];
             
         }else {
             
@@ -182,6 +186,12 @@
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
     }];
+}
+
+- (void)back {
+    
+    [self.navigationController popViewControllerAnimated:YES];
+    
 }
 
 
@@ -223,7 +233,7 @@
             JNSHLabFldCell *Cell = [[JNSHLabFldCell alloc] init];
             Cell.leftLab.text = @"选择银行";
             Cell.textFiled.enabled = NO;
-            Cell.textFiled.text = @"中国工商银行";
+            Cell.textFiled.text = self.bankName;
             cell = Cell;
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }else if (indexPath.row == 3) {
@@ -269,12 +279,13 @@
                 return;
             }
         }else if (index == 1) {
-            NSLog(@"从相册中选择");
-            if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
-                sourcetype = UIImagePickerControllerSourceTypePhotoLibrary;
-            }else {
-                [self alert:@"对不起，您的相册不可用"];
-            }
+//            NSLog(@"从相册中选择");
+//            if ([UIImagePickerController isSourceTypeAvailable:UIImagePickerControllerSourceTypePhotoLibrary]) {
+//                sourcetype = UIImagePickerControllerSourceTypePhotoLibrary;
+//            }else {
+//                [self alert:@"对不起，您的相册不可用"];
+//            }
+            return;
         }else {
             return;
         }
@@ -348,31 +359,35 @@
             
             [Cell.leftImg sd_setImageWithURL:[NSURL URLWithString:cardHttp]];
             
+            [HUD hide:YES];
+            
+            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            hud.mode = MBProgressHUDModeText;
+            hud.labelText = @"上传成功!";
+            [hud hide:YES afterDelay:1];
             
             
         }else {
+            [HUD hide:YES];
             NSString *msg = dic[@"msg"];
             [JNSHAutoSize showMsg:msg];
         }
         
-        [HUD hide:YES];
+        
         
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
         [HUD hide:YES];
     }];
     
-    
 }
-
-
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (indexPath.row == 4) {
         return 15;
     }else if (indexPath.row == 5) {
-        return 131;
+        return [JNSHAutoSize height:131];
     }else if (indexPath.row == 6) {
         return 10;
     }
@@ -384,6 +399,10 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (indexPath.row == 2) { //选择银行
+        
+        [NameCell.textFiled resignFirstResponder];
+        [CardCell.textFiled resignFirstResponder];
+        
         NSLog(@"选择银行");
         JNSHPopBankCardView *CardView = [[JNSHPopBankCardView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight)];
         CardView.typetag = 2;
@@ -394,7 +413,7 @@
             JNSHLabFldCell *Cell = [tableView cellForRowAtIndexPath:indexPath];
             Cell.textFiled.text = bankName;
             strongSelf.currentBank = bankCode;
-            strongSelf.subBank = bankName;
+            strongSelf.bankName = bankName;
         };
         [CardView showInView:self.view];
     }else if (indexPath.row == 3) { //选择支行

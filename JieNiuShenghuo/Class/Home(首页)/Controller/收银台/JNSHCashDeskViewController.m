@@ -32,9 +32,8 @@
     
     self.navigationController.navigationBar.barTintColor = ColorTabBarBackColor;
     
+    self.navigationController.navigationBar.translucent = NO;
 }
-
-
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -49,7 +48,7 @@
     
     
     //灰色背景
-    UIImageView *backImg = [[UIImageView alloc] initWithFrame:CGRectMake(0, 64, KscreenWidth, KscreenHeight)];
+    UIImageView *backImg = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight)];
     backImg.userInteractionEnabled = YES;
     backImg.backgroundColor = ColorTableBackColor;
     
@@ -306,12 +305,18 @@
     
     NSString *time = [JNSHAutoSize getTimeNow];
     
+    NSString *goodsName = @"商户收款";
+    
+    //元转分
+    NSString *Minmoney = [NSString stringWithFormat:@"%ld",[moneyLab.text integerValue]*100];
+    
     NSDictionary *dic = @{
                           @"payType":@"1",
                           @"orderType":@"10",
-                          @"amount":moneyLab.text,
-                          @"goodsName":[JNSYUserInfo getUserInfo].userName,
-                          @"linkId":time
+                          @"amount":Minmoney,
+                          @"goodsName":[goodsName stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding],
+                          @"linkId":time,
+                          @"product":@"1000"
                           };
     NSString *action = @"PayOrderCreate";
     
@@ -336,6 +341,26 @@
             OrderSureVc.amount = moneyLab.text;
             OrderSureVc.orderNo = resultdic[@"orderNo"];
             OrderSureVc.orderTime = resultdic[@"orderTime"];
+            OrderSureVc.rateFee = [NSString stringWithFormat:@"%@",resultdic[@"rateFee"]];
+            OrderSureVc.rateNormalFee = [NSString stringWithFormat:@"%@",resultdic[@"rateNormalFee"]];
+            OrderSureVc.rateNormalFeeValue = [NSString stringWithFormat:@"%@",resultdic[@"rateNormalFeeValue"]];
+            OrderSureVc.rateVipFee = [NSString stringWithFormat:@"%@",resultdic[@"rateVipFee"]];
+            OrderSureVc.rateVipFeeVale = [NSString stringWithFormat:@"%@",resultdic[@"rateVipFeeValue"]];
+            OrderSureVc.vipDiscount = [NSString stringWithFormat:@"%@",resultdic[@"vipDiscount"]];
+            OrderSureVc.rateVipFee = [NSString stringWithFormat:@"%@",resultdic[@"rateVipFee"]];
+            OrderSureVc.rateVipFeeVale = [NSString stringWithFormat:@"%@",resultdic[@"rateVipFeeValue"]];
+            OrderSureVc.vipFlag = [NSString stringWithFormat:@"%@",resultdic[@"vipFig"]];
+            OrderSureVc.voucheersFlag = [NSString stringWithFormat:@"%@",resultdic[@"vouchersFlg"]];
+            OrderSureVc.vouchersPrice = [NSString stringWithFormat:@"%@",resultdic[@"vouchersPrice"]];
+            OrderSureVc.settleReal = [NSString stringWithFormat:@"%@",resultdic[@"settleReal"]];
+            NSArray *arrar = [[NSArray alloc] init];
+            if ([resultdic[@"bindCards"] isKindOfClass:[NSArray class]]) {
+                arrar = resultdic[@"bindCards"];
+            }else {
+                
+            }
+            
+            OrderSureVc.bindCards = arrar;
             [self.navigationController pushViewController:OrderSureVc animated:YES];
             
         }else {
@@ -350,8 +375,6 @@
     
 }
 
-
-
 - (void) show:(NSString *)msg cancle:(NSString *)cancleStr sureStr:(NSString *)sureStr {
     
     JNSHAlertView *alert = [[JNSHAlertView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight) cancle:cancleStr sure:sureStr];
@@ -362,8 +385,6 @@
     [alert show:msg inView:self.view];
     
 }
-
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

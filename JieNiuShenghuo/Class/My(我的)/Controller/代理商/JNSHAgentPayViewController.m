@@ -12,6 +12,10 @@
 #import "JNSHAgentDetailViewController.h"
 #import "UIViewController+Cloudox.h"
 #import "UINavigationController+Cloudox.h"
+#import "JNSHVipOrderViewController.h"
+#import "JNSYUserInfo.h"
+#import "SBJSON.h"
+#import "IBHttpTool.h"
 
 @interface JNSHAgentPayViewController ()
 
@@ -83,9 +87,11 @@
         make.height.mas_equalTo([JNSHAutoSize height:20]);
     }];
     
-    type = @"1";
+    //type = @"1";
     
-    if ([type isEqualToString:@"1"]) { //特约代理
+    
+    
+    if ([self.orgType isEqualToString:@"L32"]) { //特约代理
         [modelBackImg addSubview:ModelOneImg];
         [ModelOneImg mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerX.equalTo(modelBackImg);
@@ -93,7 +99,7 @@
             make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:41], [JNSHAutoSize height:54]));
         }];
         bottomLab.text = @"恭喜您成为特约代理商!";
-    }else if ([type isEqualToString:@"2"]) { //一级代理
+    }else if ([self.orgType isEqualToString:@"L31"]) { //一级代理
         [modelBackImg addSubview:ModelOneImg];
         [modelBackImg addSubview:ModelTwoImg];
         
@@ -109,7 +115,7 @@
             make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:41], [JNSHAutoSize height:54]));
         }];
         bottomLab.text = @"恭喜您成为一级代理商!";
-    }else if ([type isEqualToString:@"3"]) { //办事处
+    }else if ([self.orgType isEqualToString:@"L30"]) { //办事处
         [modelBackImg addSubview:ModelOneImg];
         [modelBackImg addSubview:ModelTwoImg];
         [modelBackImg addSubview:ModelThreeImg];
@@ -131,7 +137,6 @@
             make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:41], [JNSHAutoSize height:54]));
         }];
         bottomLab.text = @"恭喜您成为办事处级别代理商!";
-        
     }
     
     UIImageView *whiteBack = [[UIImageView alloc] init];
@@ -175,7 +180,7 @@
     moneyLab.textColor = ColorTabBarBackColor;
     moneyLab.textAlignment = NSTextAlignmentLeft;
     moneyLab.font  = [UIFont fontWithName:@"Arial-BoldMT" size:30];
-    moneyLab.text = @"3000.00";
+    moneyLab.text = [NSString stringWithFormat:@"%.2f",[self.payPrice  integerValue]/100.0];
     [whiteBack addSubview:moneyLab];
     
     [moneyLab mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -204,13 +209,80 @@
 - (void)pay {
     
     NSLog(@"支付");
+
+    [self beAgent];
     
-    JNSHAgentDetailViewController *payVc = [[JNSHAgentDetailViewController alloc] init];
-    payVc.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:payVc animated:YES];
+
     
     
 }
+
+
+//跳转订单
+- (void)beAgent {
+    
+    //代理商消费下单
+    
+    NSString *time = [JNSHAutoSize getTimeNow];
+    //NSString *goodsName = @"商户会员购买";
+
+    NSString *MinMoney = [NSString stringWithFormat:@"%@",self.payPrice];
+    
+    NSDictionary *dic = @{
+                          @"payType":@"1",
+                          @"orderType":@"10",
+                          @"amount":MinMoney ,
+                          @"goodsName":self.taskId,
+                          @"linkId":time,
+                          @"product":@"1002"
+                          };
+    NSString *action = @"PayOrderCreate";
+    
+    NSDictionary *requstDic = @{
+                                @"action":action,
+                                @"data":dic,
+                                @"token":[JNSYUserInfo getUserInfo].userToken
+                                };
+    
+    NSString *params = [requstDic JSONFragment];
+    
+    [IBHttpTool postWithURL:JNSHTestUrl params:params success:^(id result) {
+        
+        NSDictionary *resultdic = [result JSONValue];
+        NSString *code = resultdic[@"code"];
+        //NSLog(@"%@",resultdic);
+        NSString *msg = resultdic[@"msg"];
+        if ([code isEqualToString:@"000000"]) {
+            
+            JNSHVipOrderViewController *vipOrder = [[JNSHVipOrderViewController alloc] init];
+            vipOrder.money = [NSString stringWithFormat:@"%ld",[self.payPrice integerValue]/100];
+            vipOrder.orderNo = resultdic[@"orderNo"];
+            vipOrder.orderTime = resultdic[@"orderTime"];
+            vipOrder.productName = @"后台管理费";
+            NSArray *arrar = [[NSArray alloc] init];
+            //判断绑定卡数组是否有数据
+            if ([resultdic[@"bindCards"] isKindOfClass:[NSArray class]]) {
+                arrar = resultdic[@"bindCards"];
+                
+                
+                
+            }
+            
+            vipOrder.cardsArray = arrar;
+            vipOrder.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:vipOrder animated:YES];
+            
+        }else {
+            
+            [JNSHAutoSize showMsg:msg];
+            
+        }
+        
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
+}
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

@@ -11,7 +11,7 @@
 
 typedef void(^dismissBlock)(void);
 
-typedef void(^dateChoseBlock)(void);
+typedef void(^dateChoseBlock)(NSString *startime,NSString *Endtime);
 
 @interface JNSHCalendarView : UIView
 

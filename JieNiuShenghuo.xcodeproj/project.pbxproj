@@ -35,6 +35,14 @@
 		CC2C445E1F44148800B4982B /* DAYNavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = CC2C44581F44148800B4982B /* DAYNavigationBar.m */; };
 		CC2C445F1F44148800B4982B /* DAYUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = CC2C445A1F44148800B4982B /* DAYUtils.m */; };
 		CC2C44621F4415CB00B4982B /* JNSHCalendarView.m in Sources */ = {isa = PBXBuildFile; fileRef = CC2C44611F4415CB00B4982B /* JNSHCalendarView.m */; };
+		CC42C0791F6F5AD400600CD6 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC42C0781F6F5AD400600CD6 /* CoreTelephony.framework */; };
+		CC42C07B1F6F5AE000600CD6 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC42C07A1F6F5AE000600CD6 /* SystemConfiguration.framework */; };
+		CC42C07D1F6F5AE900600CD6 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC42C07C1F6F5AE900600CD6 /* AudioToolbox.framework */; };
+		CC42C07F1F6F5AF300600CD6 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC42C07E1F6F5AF300600CD6 /* AVFoundation.framework */; };
+		CC42C0811F6F5AFB00600CD6 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC42C0801F6F5AFB00600CD6 /* OpenGLES.framework */; };
+		CC42C0831F6F5B0600600CD6 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC42C0821F6F5B0600600CD6 /* CoreMotion.framework */; };
+		CC42C0851F6F5B0F00600CD6 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC42C0841F6F5B0F00600CD6 /* QuartzCore.framework */; };
+		CC42C0881F70ED5A00600CD6 /* JNSHOrderModel.m in Sources */ = {isa = PBXBuildFile; fileRef = CC42C0871F70ED5A00600CD6 /* JNSHOrderModel.m */; };
 		CC5D852D1F42824700C13022 /* JNSHSelectSubController.m in Sources */ = {isa = PBXBuildFile; fileRef = CC5D852C1F42824700C13022 /* JNSHSelectSubController.m */; };
 		CC5D85301F42A51400C13022 /* JNSHSettleDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = CC5D852F1F42A51400C13022 /* JNSHSettleDetailController.m */; };
 		CC5D85331F42AB3200C13022 /* JNSHDetailCardImgCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CC5D85321F42AB3200C13022 /* JNSHDetailCardImgCell.m */; };
@@ -118,6 +126,9 @@
 		CCCD7E731F39B317009E15F5 /* JNSHUserProtocolViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CCCD7E721F39B317009E15F5 /* JNSHUserProtocolViewController.m */; };
 		CCCD7E761F39B32C009E15F5 /* JNSHAboutUsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CCCD7E751F39B32C009E15F5 /* JNSHAboutUsViewController.m */; };
 		CCCD7E791F39B33B009E15F5 /* JNSHFeedBackViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CCCD7E781F39B33B009E15F5 /* JNSHFeedBackViewController.m */; };
+		CCD1E81F1F723AC5000DB60B /* JNSHSystemMessageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = CCD1E81E1F723AC5000DB60B /* JNSHSystemMessageModel.m */; };
+		CCD1E8221F72515F000DB60B /* JNSHActiveMessageController.m in Sources */ = {isa = PBXBuildFile; fileRef = CCD1E8211F72515F000DB60B /* JNSHActiveMessageController.m */; };
+		CCD1E8251F725C0E000DB60B /* JNSHActiveMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CCD1E8241F725C0E000DB60B /* JNSHActiveMessageCell.m */; };
 		CCE4E0081F4D2D95000572E6 /* JNSHPayResultViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CCE4E0071F4D2D95000572E6 /* JNSHPayResultViewController.m */; };
 		CCEE84281F4563AB00161397 /* JNSHOrderDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = CCEE84271F4563AB00161397 /* JNSHOrderDetailController.m */; };
 		CCEE842C1F4573D700161397 /* JNSHTicketsController.m in Sources */ = {isa = PBXBuildFile; fileRef = CCEE842B1F4573D700161397 /* JNSHTicketsController.m */; };
@@ -200,6 +211,15 @@
 		CC2C445A1F44148800B4982B /* DAYUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DAYUtils.m; sourceTree = "<group>"; };
 		CC2C44601F4415CB00B4982B /* JNSHCalendarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNSHCalendarView.h; sourceTree = "<group>"; };
 		CC2C44611F4415CB00B4982B /* JNSHCalendarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNSHCalendarView.m; sourceTree = "<group>"; };
+		CC42C0781F6F5AD400600CD6 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		CC42C07A1F6F5AE000600CD6 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		CC42C07C1F6F5AE900600CD6 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		CC42C07E1F6F5AF300600CD6 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		CC42C0801F6F5AFB00600CD6 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		CC42C0821F6F5B0600600CD6 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
+		CC42C0841F6F5B0F00600CD6 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		CC42C0861F70ED5A00600CD6 /* JNSHOrderModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNSHOrderModel.h; sourceTree = "<group>"; };
+		CC42C0871F70ED5A00600CD6 /* JNSHOrderModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNSHOrderModel.m; sourceTree = "<group>"; };
 		CC5D852B1F42824700C13022 /* JNSHSelectSubController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNSHSelectSubController.h; sourceTree = "<group>"; };
 		CC5D852C1F42824700C13022 /* JNSHSelectSubController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNSHSelectSubController.m; sourceTree = "<group>"; };
 		CC5D852E1F42A51400C13022 /* JNSHSettleDetailController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNSHSettleDetailController.h; sourceTree = "<group>"; };
@@ -361,6 +381,12 @@
 		CCCD7E751F39B32C009E15F5 /* JNSHAboutUsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNSHAboutUsViewController.m; sourceTree = "<group>"; };
 		CCCD7E771F39B33B009E15F5 /* JNSHFeedBackViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNSHFeedBackViewController.h; sourceTree = "<group>"; };
 		CCCD7E781F39B33B009E15F5 /* JNSHFeedBackViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNSHFeedBackViewController.m; sourceTree = "<group>"; };
+		CCD1E81D1F723AC5000DB60B /* JNSHSystemMessageModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNSHSystemMessageModel.h; sourceTree = "<group>"; };
+		CCD1E81E1F723AC5000DB60B /* JNSHSystemMessageModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNSHSystemMessageModel.m; sourceTree = "<group>"; };
+		CCD1E8201F72515F000DB60B /* JNSHActiveMessageController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNSHActiveMessageController.h; sourceTree = "<group>"; };
+		CCD1E8211F72515F000DB60B /* JNSHActiveMessageController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNSHActiveMessageController.m; sourceTree = "<group>"; };
+		CCD1E8231F725C0E000DB60B /* JNSHActiveMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNSHActiveMessageCell.h; sourceTree = "<group>"; };
+		CCD1E8241F725C0E000DB60B /* JNSHActiveMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNSHActiveMessageCell.m; sourceTree = "<group>"; };
 		CCE4E0061F4D2D95000572E6 /* JNSHPayResultViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNSHPayResultViewController.h; sourceTree = "<group>"; };
 		CCE4E0071F4D2D95000572E6 /* JNSHPayResultViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNSHPayResultViewController.m; sourceTree = "<group>"; };
 		CCEE84261F4563AB00161397 /* JNSHOrderDetailController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNSHOrderDetailController.h; sourceTree = "<group>"; };
@@ -424,6 +450,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CC42C0851F6F5B0F00600CD6 /* QuartzCore.framework in Frameworks */,
+				CC42C0831F6F5B0600600CD6 /* CoreMotion.framework in Frameworks */,
+				CC42C0811F6F5AFB00600CD6 /* OpenGLES.framework in Frameworks */,
+				CC42C07F1F6F5AF300600CD6 /* AVFoundation.framework in Frameworks */,
+				CC42C07D1F6F5AE900600CD6 /* AudioToolbox.framework in Frameworks */,
+				CC42C07B1F6F5AE000600CD6 /* SystemConfiguration.framework in Frameworks */,
+				CC42C0791F6F5AD400600CD6 /* CoreTelephony.framework in Frameworks */,
 				CC12E9091F32B575008C8FDB /* CoreGraphics.framework in Frameworks */,
 				CC12E9071F32B56C008C8FDB /* CoreVideo.framework in Frameworks */,
 				CC12E9051F32B558008C8FDB /* Foundation.framework in Frameworks */,
@@ -448,6 +481,13 @@
 		C193BD1159EF2ED3A8AFDE55 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CC42C0841F6F5B0F00600CD6 /* QuartzCore.framework */,
+				CC42C0821F6F5B0600600CD6 /* CoreMotion.framework */,
+				CC42C0801F6F5AFB00600CD6 /* OpenGLES.framework */,
+				CC42C07E1F6F5AF300600CD6 /* AVFoundation.framework */,
+				CC42C07C1F6F5AE900600CD6 /* AudioToolbox.framework */,
+				CC42C07A1F6F5AE000600CD6 /* SystemConfiguration.framework */,
+				CC42C0781F6F5AD400600CD6 /* CoreTelephony.framework */,
 				CC12E9081F32B575008C8FDB /* CoreGraphics.framework */,
 				CC12E9061F32B56C008C8FDB /* CoreVideo.framework */,
 				CC12E9041F32B558008C8FDB /* Foundation.framework */,
@@ -818,6 +858,8 @@
 		CC95DD021F31620400539A03 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				CCD1E81D1F723AC5000DB60B /* JNSHSystemMessageModel.h */,
+				CCD1E81E1F723AC5000DB60B /* JNSHSystemMessageModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -865,6 +907,8 @@
 		CC95DD061F31620400539A03 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				CC42C0861F70ED5A00600CD6 /* JNSHOrderModel.h */,
+				CC42C0871F70ED5A00600CD6 /* JNSHOrderModel.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1060,6 +1104,8 @@
 				CCA7843E1F5F9E8C00AC5288 /* JNSHMessageListCell.m */,
 				CCA784431F5FC6A600AC5288 /* JNSHSystemMessageCell.h */,
 				CCA784441F5FC6A600AC5288 /* JNSHSystemMessageCell.m */,
+				CCD1E8231F725C0E000DB60B /* JNSHActiveMessageCell.h */,
+				CCD1E8241F725C0E000DB60B /* JNSHActiveMessageCell.m */,
 			);
 			path = "消息(cell)";
 			sourceTree = "<group>";
@@ -1292,6 +1338,8 @@
 				CCFA50C51F5E79FA00492CB2 /* JNSHNoticeViewController.m */,
 				CCA784401F5FC1F600AC5288 /* JNSHSystemViewController.h */,
 				CCA784411F5FC1F600AC5288 /* JNSHSystemViewController.m */,
+				CCD1E8201F72515F000DB60B /* JNSHActiveMessageController.h */,
+				CCD1E8211F72515F000DB60B /* JNSHActiveMessageController.m */,
 			);
 			path = "消息";
 			sourceTree = "<group>";
@@ -1330,7 +1378,7 @@
 				TargetAttributes = {
 					CC95DCDC1F315F4500539A03 = {
 						CreatedOnToolsVersion = 8.3.3;
-						DevelopmentTeam = ZP26G972X9;
+						DevelopmentTeam = X8CH365KCN;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.Push = {
@@ -1436,9 +1484,11 @@
 				CC2C445C1F44148800B4982B /* DAYComponentView.m in Sources */,
 				CCF83D561F6A7B6500121B89 /* JNSHWebViewController.m in Sources */,
 				CCA784421F5FC1F600AC5288 /* JNSHSystemViewController.m in Sources */,
+				CCD1E8221F72515F000DB60B /* JNSHActiveMessageController.m in Sources */,
 				CCCD7E761F39B32C009E15F5 /* JNSHAboutUsViewController.m in Sources */,
 				CCF890CB1F383DF60045FD4D /* JNSYNickNameViewController.m in Sources */,
 				CCF890F21F3865B90045FD4D /* JNSHSexCell.m in Sources */,
+				CC42C0881F70ED5A00600CD6 /* JNSHOrderModel.m in Sources */,
 				CCB6FAC61F41BDB3005C29FA /* JNSHSelectCityController.m in Sources */,
 				CCF7E3541F627C8E00B29DC9 /* UIViewController+Cloudox.m in Sources */,
 				CC10BE2D1F663079006B9640 /* TAAnimatedDotView.m in Sources */,
@@ -1488,8 +1538,10 @@
 				CC95DD271F31643100539A03 /* JNSHMainBarController.m in Sources */,
 				CC64BB281F4FD49700A1B692 /* SBJsonParser.m in Sources */,
 				CC2C445D1F44148800B4982B /* DAYIndicatorView.m in Sources */,
+				CCD1E8251F725C0E000DB60B /* JNSHActiveMessageCell.m in Sources */,
 				CCCD7E701F3997D1009E15F5 /* JNSHReSetPwdViewController.m in Sources */,
 				CC64BB241F4FD49700A1B692 /* NSObject+SBJSON.m in Sources */,
+				CCD1E81F1F723AC5000DB60B /* JNSHSystemMessageModel.m in Sources */,
 				CCF890C81F383DF60045FD4D /* JNSYAccountMessageViewController.m in Sources */,
 				CC5D85301F42A51400C13022 /* JNSHSettleDetailController.m in Sources */,
 				CCFA50C61F5E79FA00492CB2 /* JNSHNoticeViewController.m in Sources */,
@@ -1677,14 +1729,14 @@
 				CODE_SIGN_ENTITLEMENTS = JieNiuShenghuo/JieNiuShenghuo.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = ZP26G972X9;
+				DEVELOPMENT_TEAM = X8CH365KCN;
 				ENABLE_BITCODE = NO;
 				GCC_PREFIX_HEADER = /Users/rongfeng/Desktop/JieNiuShenghuo/JieNiuShenghuo/JNSHPreFixHeader.h;
 				INFOPLIST_FILE = JieNiuShenghuo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.jieniu.jieniushenghuo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jieniujnsh;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/**";
@@ -1700,14 +1752,14 @@
 				CODE_SIGN_ENTITLEMENTS = JieNiuShenghuo/JieNiuShenghuo.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Huiping Zhou (LDRA57SQ58)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = ZP26G972X9;
+				DEVELOPMENT_TEAM = X8CH365KCN;
 				ENABLE_BITCODE = NO;
 				GCC_PREFIX_HEADER = /Users/rongfeng/Desktop/JieNiuShenghuo/JieNiuShenghuo/JNSHPreFixHeader.h;
 				INFOPLIST_FILE = JieNiuShenghuo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				ONLY_ACTIVE_ARCH = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = com.jieniu.jieniushenghuo;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jieniujnsh;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/**";

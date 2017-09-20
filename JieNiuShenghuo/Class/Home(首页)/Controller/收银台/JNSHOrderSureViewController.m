@@ -110,7 +110,7 @@
     if ([CardCell.textFiled.text isEqualToString:@""]) {
         [JNSHAutoSize showMsg:@"请输入卡号"];
         return;
-    }else if ([BankNo isEqualToString:@""] && ![CardCell.textFiled.text isEqualToString:@""]) {
+    }else if (([BankNo isEqualToString:@""] || BankNo == nil) && ![CardCell.textFiled.text isEqualToString:@""]) {
         BankNo = CardCell.textFiled.text;
     }
     

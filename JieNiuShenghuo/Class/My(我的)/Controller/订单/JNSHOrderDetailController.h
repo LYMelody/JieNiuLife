@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "JNSHOrderModel.h"
 
 @interface JNSHOrderDetailController : UIViewController
+
+@property(nonatomic,strong)JNSHOrderModel *model;
 
 @end

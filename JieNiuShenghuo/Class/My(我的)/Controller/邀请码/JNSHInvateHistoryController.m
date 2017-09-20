@@ -16,12 +16,17 @@
 #import "IBHttpTool.h"
 #import "UIViewController+Cloudox.h"
 #import "UINavigationController+Cloudox.h"
+#import "MBProgressHUD.h"
 
 @interface JNSHInvateHistoryController ()<UITableViewDelegate,UITableViewDataSource>
 
 @end
 
-@implementation JNSHInvateHistoryController
+@implementation JNSHInvateHistoryController {
+    
+    UITableView *table;
+    UIButton *changeBtn;
+}
 
 - (void)viewWillAppear:(BOOL)animated {
     
@@ -46,7 +51,7 @@
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     
     
-    UITableView *table = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight - 64)];
+    table = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight - 64)];
     table.delegate = self;
     table.dataSource = self;
     table.backgroundColor = ColorTableBackColor;
@@ -75,7 +80,7 @@
         make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:260], [JNSHAutoSize height:15]));
     }];
     
-    UIButton *changeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    changeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [changeBtn setTitle:@"立即兑换" forState:UIControlStateNormal];
     changeBtn.layer.cornerRadius = 2;
     changeBtn.layer.masksToBounds = YES;
@@ -92,16 +97,19 @@
         make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:70], [JNSHAutoSize height:25]));
     }];
     
-    if (self.tag == 2) {
-        [changeBtn setBackgroundColor:[UIColor grayColor]];
-        changeBtn.alpha = 0.5;
-        changeBtn.enabled = NO;
-    }else {
-        [changeBtn setBackgroundColor:ColorTabBarBackColor];
-        changeBtn.alpha = 1;
-        changeBtn.enabled = YES;
-    }
+    [changeBtn setBackgroundColor:[UIColor grayColor]];
+    changeBtn.alpha = 0.5;
+    changeBtn.enabled = NO;
     
+//    if (self.tag == 2) {
+//        [changeBtn setBackgroundColor:[UIColor grayColor]];
+//        changeBtn.alpha = 0.5;
+//        changeBtn.enabled = NO;
+//    }else {
+//        [changeBtn setBackgroundColor:ColorTabBarBackColor];
+//        changeBtn.alpha = 1;
+//        changeBtn.enabled = YES;
+//    }
     
     table.tableHeaderView = headerView;
     
@@ -135,7 +143,6 @@
         table.tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, CGFLOAT_MIN)];
     }
     
-    
     [self getFriendsList:@"0"];
     
 }
@@ -153,16 +160,55 @@
 //兑换按钮
 - (void)change {
     
-   
-    
-    
     JNSHAlertView *alertView = [[JNSHAlertView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight) cancle:@"取消" sure:@"确定"];
     __block typeof(JNSHAlertView) *alert = alertView;
     alertView.sureAlertBlock = ^{
          NSLog(@"兑换");
+        [self requestForVip];
+    
         [alert dismiss];
     };
     [alertView show:@"确定用3个邀请名额兑换\n30天会员权益?" inView:self.view];
+    
+}
+
+
+- (void)requestForVip {
+    
+    NSDictionary *dic = @{
+                          @"chargeUser":[NSString stringWithFormat:@"%ld",self.listArray.count],
+                          @"chargeDay":[NSString stringWithFormat:@"%ld",self.listArray.count*10]
+                          };
+    NSString *action = @"UserInviteExchange";
+    NSDictionary *requestDic = @{
+                                 @"action":action,
+                                 @"token":[JNSYUserInfo getUserInfo].userToken,
+                                 @"data":dic
+                                 };
+    NSString *params = [requestDic JSONFragment];
+    [IBHttpTool postWithURL:JNSHTestUrl params:params success:^(id result) {
+        NSDictionary *resultDic = [result JSONValue];
+        NSString *code = resultDic[@"code"];
+        if ([code isEqualToString:@"000000"]) {
+            MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+            hud.mode = MBProgressHUDModeText;
+            hud.labelText = @"兑换成功!";
+            [hud hide:YES afterDelay:1.5];
+            [self performSelector:@selector(back) withObject:nil afterDelay:1.5];
+        }else {
+            NSString *msg = resultDic[@"msg"];
+            [JNSHAutoSize showMsg:msg];
+        }
+
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
+    
+}
+
+- (void)back {
+    
+    [self.navigationController popToRootViewControllerAnimated:YES];
     
 }
 
@@ -190,6 +236,23 @@
         NSString *msg = resultdic[@"msg"];
         if ([code isEqualToString:@"000000"]) {
             
+            NSString *allCount = resultdic[@"allCount"];
+            
+            if([allCount integerValue] >= 5) {  //数量大于5
+                
+                [changeBtn setBackgroundColor:ColorTabBarBackColor];
+                changeBtn.alpha = 1;
+                changeBtn.enabled = YES;
+                
+            }
+            
+            if ([resultdic[@"records"] isKindOfClass:[NSArray class]]) {
+                self.listArray = resultdic[@"records"];
+                [table reloadData];
+            }
+            
+            
+            
             
         }else {
             
@@ -200,8 +263,7 @@
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
     }];
-    
-    
+
 }
 
 
@@ -212,7 +274,7 @@
         return 9;
     }
     
-    return 6;
+    return self.listArray.count;
     
 }
 

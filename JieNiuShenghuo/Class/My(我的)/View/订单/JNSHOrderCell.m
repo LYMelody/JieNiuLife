@@ -47,7 +47,7 @@
     _statusLab = [[UILabel alloc] init];
     _statusLab.font = [UIFont systemFontOfSize:12];
     _statusLab.textAlignment = NSTextAlignmentRight;
-    _statusLab.textColor = [UIColor redColor];
+    _statusLab.textColor = blueColor;
     
     [self.contentView addSubview:_statusLab];
     
@@ -61,6 +61,15 @@
     _timeLab.text = time;
     _moneyLab.text = money;
     _statusLab.text = status;
+    
+    if ([status isEqualToString:@"初始化"]) {
+        _statusLab.textColor = [UIColor orangeColor];
+    }else if ([status isEqualToString:@"支付成功"]) {
+       _statusLab.textColor = greenColor;
+    }else if ([status isEqualToString:@"支付失败"]) {
+        _statusLab.textColor = [UIColor redColor];
+    }
+    
 
 }
 

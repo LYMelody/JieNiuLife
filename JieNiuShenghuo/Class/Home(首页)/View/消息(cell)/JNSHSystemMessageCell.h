@@ -14,5 +14,6 @@
 
 @property(nonatomic,copy)NSString *message;
 
+@property(nonatomic,strong)UILabel *titleLab;
 
 @end

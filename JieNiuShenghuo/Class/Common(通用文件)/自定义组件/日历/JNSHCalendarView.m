@@ -139,7 +139,7 @@
     
     
     if (self.datechoseblock) {
-        self.datechoseblock();
+        self.datechoseblock(self.leftBtn.titleLabel.text,self.rightBtn.titleLabel.text);
     }
     
     [self dismiss];
@@ -167,8 +167,6 @@
                frame.origin.x = maxX + [JNSHAutoSize width:14];
                
                self.bottomLine.frame = frame;
-               
-              
                
            }];
             

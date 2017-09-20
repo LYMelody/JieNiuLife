@@ -562,6 +562,7 @@
             vipOrder.money = totalPrice;
             vipOrder.orderNo = resultdic[@"orderNo"];
             vipOrder.orderTime = resultdic[@"orderTime"];
+            vipOrder.productName = @"购买会员";
             NSArray *arrar = [[NSArray alloc] init];
             //判断绑定卡数组是否有数据
             if ([resultdic[@"bindCards"] isKindOfClass:[NSArray class]]) {

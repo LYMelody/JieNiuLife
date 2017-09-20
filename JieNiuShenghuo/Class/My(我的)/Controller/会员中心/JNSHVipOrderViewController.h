@@ -18,4 +18,6 @@
 
 @property(nonatomic,strong)NSArray *cardsArray;
 
+@property(nonatomic,copy)NSString *productName;
+
 @end

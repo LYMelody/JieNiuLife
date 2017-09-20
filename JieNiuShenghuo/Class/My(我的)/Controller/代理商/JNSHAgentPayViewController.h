@@ -10,4 +10,14 @@
 
 @interface JNSHAgentPayViewController : UIViewController
 
+@property(nonatomic,copy)NSString *payOrder;
+
+@property(nonatomic,copy)NSString *payPrice;
+
+@property(nonatomic,copy)NSString *orgType;
+
+@property(nonatomic,copy)NSString *email;
+
+@property(nonatomic,copy)NSString *taskId;
+
 @end

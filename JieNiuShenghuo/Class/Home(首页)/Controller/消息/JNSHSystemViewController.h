@@ -7,7 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "JNSHSystemMessageModel.h"
 
 @interface JNSHSystemViewController : UIViewController
+
+@property(nonatomic,strong)JNSHSystemMessageModel *model;
+
+@property(nonatomic,strong)NSArray *messageList;
 
 @end

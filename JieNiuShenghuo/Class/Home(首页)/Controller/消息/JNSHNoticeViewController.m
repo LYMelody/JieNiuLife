@@ -11,6 +11,12 @@
 #import "AppDelegate.h"
 #import "JNSHMessageListCell.h"
 #import "JNSHSystemViewController.h"
+#import "SBJSON.h"
+#import "JNSYUserInfo.h"
+#import "IBHttpTool.h"
+#import "JNSHSystemMessageModel.h"
+#import "JNSHActiveMessageController.h"
+
 @interface JNSHNoticeViewController ()<UITableViewDelegate,UITableViewDataSource>
 
 @end
@@ -18,7 +24,12 @@
 @implementation JNSHNoticeViewController {
     
     UITableView *table;
-    
+    NSString *activeLastMsg;
+    NSString *activeLastMsgTime;
+    NSString *activeUnRead;
+    NSString *systemLastMSG;
+    NSString *systemLastMsgTime;
+    NSString *systemUnRead;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -31,9 +42,9 @@
     
     self.navigationController.navigationBar.translucent = NO;
     
-    [table reloadData];
-    
-    
+    //获取消息
+    [self requestForAllMessage];
+
 }
 
 
@@ -83,14 +94,15 @@
         if (indexPath.row == 0) {
             cell.leftImg.image = [UIImage imageNamed:@"notice1"];
             cell.titleLab.text = @"系统通知";
-            cell.messageLab.text = @"公告:今天公司停电，放假一天,望大家互相转告!";
-            cell.timeLab.text = @"2017-09-06";
-            cell.badge = 1;
+            cell.messageLab.text = systemLastMSG;
+            cell.timeLab.text = systemLastMsgTime;
+            cell.badge = [systemUnRead integerValue];
         }else {
             cell.leftImg.image = [UIImage imageNamed:@"notice2"];
             cell.titleLab.text = @"活动通知";
-            cell.messageLab.text = @"公告:会员升级啦，快围过来看看~";
-            cell.timeLab.text = @"2017-09-03";
+            cell.messageLab.text = activeLastMsg;
+            cell.timeLab.text = activeLastMsgTime;
+            cell.badge = [activeUnRead integerValue];
             cell.isBottom = YES;
             
         }
@@ -109,16 +121,116 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    JNSHMessageListCell *cell = [table cellForRowAtIndexPath:indexPath];
-    cell.badge = 0;
+//    JNSHMessageListCell *cell = [table cellForRowAtIndexPath:indexPath];
+//    cell.badge = 0;
     
     if (indexPath.row == 0) {
         
-        JNSHSystemViewController *Systemvc = [[JNSHSystemViewController alloc] init];
-        Systemvc.hidesBottomBarWhenPushed = YES;
-        [self.navigationController pushViewController:Systemvc animated:YES];
+        
     }
+    
+    //获取消息列表
+    [self getMessage:[NSString stringWithFormat:@"%ld",indexPath.row + 1]];
+    
 }
+
+//根据类型获取系统消息和活动消息
+- (void)getMessage:(NSString *)type {
+    
+    NSDictionary *dic = @{
+                          @"noticeType":type,
+                          @"page":@"0"
+                          };
+    NSString *action = @"UserNoticeMsgListState";
+    
+    NSDictionary *requestDic = @{
+                                 @"action":action,
+                                 @"token":[JNSYUserInfo getUserInfo].userToken,
+                                 @"data":dic
+                                 };
+    NSString *params = [requestDic JSONFragment];
+    
+    [IBHttpTool postWithURL:JNSHTestUrl params:params success:^(id result) {
+        NSDictionary *resultDic = [result JSONValue];
+        NSString *code = resultDic[@"code"];
+        NSString *msg = resultDic[@"msg"];
+        if ([code isEqualToString:@"000000"]) {
+            NSLog(@"消息:%@",resultDic);
+            if([resultDic[@"records"] isKindOfClass:[NSArray class]]) {
+                if ([type isEqualToString:@"1"]) {   //系统通知
+                    
+                    JNSHSystemViewController *Systemvc = [[JNSHSystemViewController alloc] init];
+                    Systemvc.messageList = resultDic[@"records"];
+                    Systemvc.hidesBottomBarWhenPushed = YES;
+                    [self.navigationController pushViewController:Systemvc animated:YES];
+                    
+                }else {   //活动通知
+                    
+                    JNSHActiveMessageController *ActiveVc = [[JNSHActiveMessageController alloc] init];
+                    ActiveVc.hidesBottomBarWhenPushed = YES;
+                    [self.navigationController pushViewController:ActiveVc animated:YES];
+                    
+                }
+            }
+            
+            
+            
+            
+        }else {
+            
+            [JNSHAutoSize showMsg:msg];
+            
+        }
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
+    
+    
+}
+
+
+//获取消息
+- (void)requestForAllMessage {
+    
+    NSDictionary *dic = @{
+                          @"timestamp":[JNSHAutoSize getTimeNow]
+                          };
+    NSString *action = @"UserNoticeMsg";
+    NSDictionary *requestDic = @{
+                                 @"action":action,
+                                 @"token":[JNSYUserInfo getUserInfo].userToken,
+                                 @"data":dic
+                                 };
+    NSString *params = [requestDic JSONFragment];
+    
+    [IBHttpTool postWithURL:JNSHTestUrl params:params success:^(id result) {
+        NSDictionary *resultDic = [result JSONValue];
+        NSString *code = resultDic[@"code"];
+        //NSLog(<#NSString * _Nonnull format, ...#>)
+        if([code isEqualToString:@"000000"]) {
+            activeLastMsg = resultDic[@"activeLastMsg"];
+            activeLastMsgTime = resultDic[@"activeLastMsgTime"];
+            activeUnRead = [NSString stringWithFormat:@"%@",resultDic[@"activeUnRead"]];
+            systemLastMSG = resultDic[@"systemLastMsg"];
+            systemLastMsgTime = resultDic[@"systemLastMsgTime"];
+            systemUnRead = [NSString stringWithFormat:@"%@",resultDic[@"systemUnRead"]];
+            
+            [table reloadData];
+            
+        }else {
+            
+            NSString *msg = resultDic[@"msg"];
+            
+            [JNSHAutoSize showMsg:msg];
+        }
+        
+        
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
+    
+}
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

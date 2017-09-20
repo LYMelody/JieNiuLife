@@ -194,7 +194,7 @@
         }else if (indexPath.row == 1) {
             JNSHTitleCell *Cell = [[JNSHTitleCell alloc] init];
             Cell.leftLab.text = @"订单名称";
-            Cell.rightLab.text = @"购买会员";
+            Cell.rightLab.text = self.productName;
             cell = Cell;
             cell.backgroundColor = [UIColor whiteColor];
         }else if (indexPath.row == 2) {

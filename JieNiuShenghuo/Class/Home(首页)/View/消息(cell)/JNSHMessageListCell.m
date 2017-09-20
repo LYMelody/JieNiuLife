@@ -65,9 +65,6 @@
     self.bottomLineView.backgroundColor = ColorLineSeperate;
     [self.contentView addSubview:self.bottomLineView];
     
-    
-    
-    
 }
 
 - (void)layoutSubviews {
@@ -101,7 +98,7 @@
     [self.timeLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.titleLab);
         make.right.equalTo(self).offset(-[JNSHAutoSize width:15]);
-        make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:100], [JNSHAutoSize height:10]));
+        make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:160], [JNSHAutoSize height:10]));
     }];
     
     [self.bottomLineView mas_makeConstraints:^(MASConstraintMaker *make) {

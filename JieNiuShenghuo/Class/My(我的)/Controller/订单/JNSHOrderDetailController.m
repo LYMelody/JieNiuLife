@@ -47,7 +47,7 @@
     moneyLab.font = [UIFont systemFontOfSize:24];
     moneyLab.textColor = ColorText;
     moneyLab.textAlignment = NSTextAlignmentCenter;
-    moneyLab.text = @"￥1234234.00";
+    moneyLab.text = [NSString stringWithFormat:@"￥%.2f",[self.model.orderPrice floatValue]];
     
     [headerView addSubview:moneyLab];
     
@@ -61,8 +61,16 @@
     statusLab.font = [UIFont systemFontOfSize:15];
     statusLab.textAlignment = NSTextAlignmentCenter;
     statusLab.textColor = greenColor;
-    statusLab.text = @"支付成功!";
+    statusLab.text = self.model.orderStatus;
 
+    if ([self.model.orderStatus isEqualToString:@"初始化"]) {
+        statusLab.textColor = [UIColor orangeColor];
+    }else if ([self.model.orderStatus isEqualToString:@"支付成功"]) {
+        statusLab.textColor = greenColor;
+    }else if ([self.model.orderStatus isEqualToString:@"支付失败"]) {
+        statusLab.textColor = [UIColor redColor];
+    }
+    
     [headerView addSubview:statusLab];
     
     [statusLab mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -91,23 +99,29 @@
         cell = [[JNSHLabFldCell alloc] init];
         if (indexPath.row == 0) {
             cell.leftLab.text = @"交易名称";
-            cell.textFiled.text = @"收款";
+            if ([self.model.product isEqualToString:@"1000"]) {
+                cell.textFiled.text = @"商户收款";
+            }else if ([self.model.product  isEqualToString:@"1001"]) {
+                cell.textFiled.text = @"会员购买";
+            }else if([self.model.product isEqualToString:@"1002"]) {
+                cell.textFiled.text = @"升级代理商";
+            }
             cell.textFiled.enabled = NO;
         }else if (indexPath.row == 1){
             cell.leftLab.text = @"交易银行";
-            cell.textFiled.text = @"中信银行";
+            cell.textFiled.text = self.model.cardBank;
             cell.textFiled.enabled = NO;
         }else if (indexPath.row == 2){
             cell.leftLab.text = @"交易账户";
-            cell.textFiled.text = @"4033********1232";
+            cell.textFiled.text = self.model.cardNo;
             cell.textFiled.enabled = NO;
         }else if (indexPath.row == 3) {
             cell.leftLab.text = @"订单编号";
-            cell.textFiled.text = @"10120170817123123";
+            cell.textFiled.text = self.model.orderNo;
             cell.textFiled.enabled = NO;
         }else if (indexPath.row == 4) {
             cell.leftLab.text = @"交易时间";
-            cell.textFiled.text = @"2017-08-17 13:34:34";
+            cell.textFiled.text = self.model.orderReqTime;
             cell.textFiled.enabled = NO;
         }
             

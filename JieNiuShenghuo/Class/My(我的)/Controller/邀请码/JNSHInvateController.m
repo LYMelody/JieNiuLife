@@ -215,11 +215,19 @@
 //分享
 - (void)Share:(UIButton *)btn {
     
+    SSDKPlatformType type;
+    
+    
     if (btn.tag == 100) {
+        
+        type = SSDKPlatformSubTypeWechatSession;
+        
         NSLog(@"分享给微信好友");
     }else if (btn.tag == 101) {
+        type = SSDKPlatformSubTypeWechatTimeline;
         NSLog(@"分享到朋友圈");
     }else {
+        type = SSDKPlatformTypeSinaWeibo;
         NSLog(@"分享到新浪微博");
     }
     
@@ -236,7 +244,7 @@
                                            type:SSDKContentTypeAuto];
         //有的平台要客户端分享需要加此方法，例如微博
         [shareParams SSDKEnableUseClientShare];
-        [ShareSDK share:SSDKPlatformTypeSinaWeibo parameters:shareParams onStateChanged:^(SSDKResponseState state, NSDictionary *userData, SSDKContentEntity *contentEntity, NSError *error) {
+        [ShareSDK share:type parameters:shareParams onStateChanged:^(SSDKResponseState state, NSDictionary *userData, SSDKContentEntity *contentEntity, NSError *error) {
             switch (state) {
                 case SSDKResponseStateSuccess:
                 {
@@ -262,8 +270,6 @@
                     break;
             }
         }];
-        
-        
     }
 }
 - (void)InvateHistory {

@@ -205,13 +205,13 @@
     
     NSLog(@"我要成为代理商");
     
-//    JNSHCommitEmailViewController *CommitVc = [[JNSHCommitEmailViewController alloc] init];
-//    CommitVc.hidesBottomBarWhenPushed = YES;
-//    [self.navigationController pushViewController:CommitVc animated:YES];
+    JNSHCommitEmailViewController *CommitVc = [[JNSHCommitEmailViewController alloc] init];
+    CommitVc.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:CommitVc animated:YES];
     
-    JNSHAgentPayViewController *PayVc = [[JNSHAgentPayViewController alloc] init];
-    PayVc.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:PayVc animated:YES];
+//    JNSHAgentPayViewController *PayVc = [[JNSHAgentPayViewController alloc] init];
+//    PayVc.hidesBottomBarWhenPushed = YES;
+//    [self.navigationController pushViewController:PayVc animated:YES];
     
     
 }

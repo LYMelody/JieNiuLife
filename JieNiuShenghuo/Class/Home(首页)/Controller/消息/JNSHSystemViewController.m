@@ -51,17 +51,26 @@
 
 }
 
-
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    return 4;
+    return self.messageList.count;
     
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    return 162;
+    NSDictionary *dic = self.messageList[indexPath.row];
     
+    NSString *message = dic[@"noticeContent"];
+    
+    float height = [self heightForString:message andWidth:(KscreenWidth - [JNSHAutoSize width:50])];
+    
+    if (height > 76) {
+        return 86 + height;
+    }else {
+        return 162;
+    }
+
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -73,14 +82,28 @@
     if (cell == nil) {
         
         cell = [[JNSHSystemMessageCell alloc] init];
-        cell.timeLab.text = @"2017-08-09";
-        cell.message = @"为给您提供更加优质的服务，我公司定于2017年08月15 日对相关系统进行升级，届时将会对业务办理、查询等 造成影响。";
+        NSDictionary *dic = self.messageList[indexPath.row];
+        cell.timeLab.text = dic[@"noticeTime"];
+        cell.message = dic[@"noticeContent"];
+        cell.titleLab.text = dic[@"noticeTitle"];
         
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
     
 }
+
+- (float)heightForString:(NSString *)value andWidth:(float)width {
+    
+    NSAttributedString *attrStr = [[NSAttributedString alloc] initWithString:value];
+    NSRange range = NSMakeRange(0, attrStr.length);
+    NSDictionary *dic = [attrStr attributesAtIndex:0 effectiveRange:&range];
+    CGSize sietofit = [value boundingRectWithSize:CGSizeMake(width - 16, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading attributes:dic context:nil].size;
+    return sietofit.height + 16 + 40;
+    
+    
+}
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

@@ -5,7 +5,10 @@ PODS:
     - JCore (~> 1.1.1)
   - Masonry (1.0.2)
   - MBProgressHUD (0.9.2)
+  - MJRefresh (3.1.12)
   - MOBFoundation (3.0.2)
+  - Pgyer (2.8.7)
+  - PgyUpdate (1.5)
   - SBJson (5.0.0)
   - SDWebImage (4.1.0):
     - SDWebImage/Core (= 4.1.0)
@@ -27,7 +30,10 @@ DEPENDENCIES:
   - JPush
   - Masonry
   - MBProgressHUD (~> 0.9.2)
+  - MJRefresh
   - MOBFoundation
+  - Pgyer
+  - PgyUpdate
   - SBJson
   - SDWebImage
   - ShareSDK3
@@ -41,11 +47,14 @@ SPEC CHECKSUMS:
   JPush: c41be50eb1a574a66aeb68d237f00a4ec6ec3a82
   Masonry: 7c429b56da9d4ee0bbb3ed77a5ea710d6a5df39e
   MBProgressHUD: 1569cf7ace17a8bac47aabfbb8580a49690386d1
+  MJRefresh: b96cdb21c4aa75a7b07654311ab2f315c497e806
   MOBFoundation: d5e27c4638d911d3c7501aa5df458955d4814359
+  Pgyer: 94e52b954e7595c86fa5ba70a154cb1d31d4be0d
+  PgyUpdate: bad71685b91bba4aa520b7fe29356a476700fdf2
   SBJson: 73c848dc34be51fda282fab12bda6c426f5ead08
   SDWebImage: 0e435c14e402a6730315a0fb79f95e68654d55a4
   ShareSDK3: 6983a9b5209b63f2f4297fb0328d9a8dd6abd5f1
 
-PODFILE CHECKSUM: ec76b3968ca01dfef5da2a326b3336e762cb8931
+PODFILE CHECKSUM: 1d13b9ce0c41651976619de39a8ff0f2ff2724f3
 
 COCOAPODS: 1.1.1

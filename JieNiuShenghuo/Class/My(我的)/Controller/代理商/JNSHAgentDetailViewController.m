@@ -12,12 +12,27 @@
 #import "JNSHAgentCell.h"
 #import "UIViewController+Cloudox.h"
 #import "UINavigationController+Cloudox.h"
+#import "SBJSON.h"
+#import "IBHttpTool.h"
+#import "JNSYUserInfo.h"
 
 @interface JNSHAgentDetailViewController ()<UITableViewDelegate,UITableViewDataSource>
 
 @end
 
-@implementation JNSHAgentDetailViewController
+@implementation JNSHAgentDetailViewController {
+    
+    NSString *dayProfit;     //日分润
+    NSString *payCount;      //日交易笔数
+    NSString *allProfit;     //累计分润
+    NSString *paySumPrice;   //日交易金额
+    NSString *dayOrg;        //日新增代理商
+    NSString *subAgent;       //下级代理商
+    NSString *passUser;      //日审核通过商户
+    NSString *regUser;       //日注册商户
+    UITableView *table;
+    
+}
 
 - (void)viewWillAppear:(BOOL)animated {
     
@@ -37,10 +52,9 @@
     backImg.userInteractionEnabled = YES;
     [self.view addSubview:backImg];
     
-    
     self.automaticallyAdjustsScrollViewInsets = NO;
     
-    UITableView *table = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight - 64) style:UITableViewStylePlain];
+    table = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight - 64) style:UITableViewStylePlain];
     table.delegate = self;
     table.dataSource = self;
     table.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -50,6 +64,9 @@
     table.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, CGFLOAT_MIN)];
     
     [backImg addSubview:table];
+    
+    //获取代理商信息
+    [self requestForAgentInfo];
     
 }
 
@@ -76,16 +93,23 @@
             
             JNSHAccountInfoCell *Cell = [[JNSHAccountInfoCell alloc] init];
             Cell.leftLab.text = @"日分润";
-            Cell.rightLab.text = @"￥1100.02";
+            Cell.rightLab.text = [NSString stringWithFormat:@"￥%.2f",[dayProfit floatValue]];
             Cell.rightLab.textColor = ColorTabBarBackColor;
             cell = Cell;
             
         }else if (indexPath.row == 2) {
             JNSHTradeNumCell *Cell = [[JNSHTradeNumCell alloc] init];
+            Cell.numLab.text = [NSString stringWithFormat:@"共%@笔",payCount];
+            Cell.dayNumLab.text = [NSString stringWithFormat:@"￥%.2f",[paySumPrice floatValue]];
+            Cell.totalBenefitLab.text = [NSString stringWithFormat:@"￥%.2f",[allProfit floatValue]];
             cell = Cell;
         }else if (indexPath.row == 4) {
             
             JNSHAgentCell *Cell = [[JNSHAgentCell alloc] init];
+            Cell.addDalyLab.text = dayOrg;
+            Cell.totalAgentLab.text = subAgent;
+            Cell.legalAgentDalyLab.text = passUser;
+            Cell.resignDalyLab.text = regUser;
             cell = Cell;
             
         }
@@ -136,6 +160,49 @@
         return [JNSHAutoSize height:41];
     }
     
+}
+
+- (void)requestForAgentInfo {
+    
+    NSDictionary *dic = @{
+                          @"timestamp":[JNSHAutoSize getTimeNow]
+                          };
+    NSString *action = @"OrgStsDay";
+    NSDictionary *requestDic = @{
+                                 @"action":action,
+                                 @"token":[JNSYUserInfo getUserInfo].userToken,
+                                 @"data":dic
+                                 };
+    
+    NSString *params = [requestDic JSONFragment];
+    
+    [IBHttpTool postWithURL:JNSHTestUrl params:params success:^(id result) {
+        NSDictionary *resultDic = [result JSONValue];
+        NSString *code = resultDic[@"code"];
+        NSLog(@"%@",resultDic);
+        if ([code isEqualToString:@"000000"]) {
+            
+            dayProfit = [NSString stringWithFormat:@"%@",resultDic[@"dayProfit"]];
+            payCount = [NSString stringWithFormat:@"%@",resultDic[@"payCount"]];
+            paySumPrice = [NSString stringWithFormat:@"%@",resultDic[@"paySumPrice"]];
+            allProfit = [NSString stringWithFormat:@"%@",resultDic[@"allProfit"]];
+            dayOrg = [NSString stringWithFormat:@"%@",resultDic[@"dayOrg"]];
+            subAgent = [NSString stringWithFormat:@"%@",resultDic[@"childOrgCount"]];
+            passUser = [NSString stringWithFormat:@"%@",resultDic[@"passUser"]];
+            regUser = [NSString stringWithFormat:@"%@",resultDic[@"regUser"]];
+            
+            [table reloadData];
+            
+        }else {
+            
+            [JNSHAutoSize showMsg:code];
+            
+        }
+        
+        
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
     
 }
 

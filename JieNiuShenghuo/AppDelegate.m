@@ -18,8 +18,11 @@
 //JPush
 #import "JPUSHService.h"
 #import <UserNotifications/UserNotifications.h>
-//如果需要使用idfa功能所需要引入的头文件
-//#import <AdSupport/AdSupport.h>
+//蒲公英
+#import <PgySDK/PgyManager.h>
+#import <PgyUpdate/PgyUpdateManager.h>
+
+/*********************************第三方宏定义*********************************/
 
 //JPushSDK DEFINE
 #define JPushAPPKey @"29eb4671de05f1476e7f499d"
@@ -27,6 +30,8 @@
 //shareSDK DEFINE
 #define ShareAPPKey @"20a05793b4000"
 #define ShareAPPSecet @"a561847dbe57010c896062d0730516a1"
+//蒲公英
+#define PgyAPPID @"f496f2435afee567bd3a11bd633b19de"
 
 
 @interface AppDelegate ()<JPUSHRegisterDelegate>
@@ -40,6 +45,12 @@
     
     
     //[NSThread sleepForTimeInterval:1];
+    
+    //蒲公英
+    [[PgyManager sharedPgyManager] startManagerWithAppId:PgyAPPID];
+    [[PgyUpdateManager sharedPgyManager] startManagerWithAppId:PgyAPPID];
+    [[PgyManager sharedPgyManager] setEnableFeedback:NO];
+    [[PgyUpdateManager sharedPgyManager] checkUpdate];
     
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.window.backgroundColor = ColorTabBarBackColor;
@@ -59,9 +70,7 @@
         JNSHMainBarController *barVc = [[JNSHMainBarController alloc] init];
         self.window.rootViewController = barVc;
     }
-    
-    
-    
+
     
     [self.window makeKeyAndVisible];
     
@@ -130,8 +139,8 @@
                                                    [appInfo SSDKSetupSinaWeiboByAppKey:@"4170893334" appSecret:@"cf551ab577ed24a0b1152ec449cb5858" redirectUri:@"http://ktb.4006007909.com/down" authType:SSDKAuthTypeBoth];
                                                    break;
                                                case SSDKPlatformTypeWechat:
-                                                   [appInfo SSDKSetupWeChatByAppId:@""
-                                                                         appSecret:@""];
+                                                   [appInfo SSDKSetupWeChatByAppId:@"wxf10a747a553b4625"
+                                                                         appSecret:@"3ced17b896a1831032df0a68354b7829"];
                                                    break;
                                                default:
                                                    break;
@@ -149,8 +158,9 @@
     [JPUSHService registerForRemoteNotificationConfig:entity delegate:self];
     //初始化JPush
     [JPUSHService setupWithOption:launchOptions appKey:JPushAPPKey channel:@"APP Store" apsForProduction:NO];
-
+    //设置APP角标
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
+    
     
     return YES;
 }

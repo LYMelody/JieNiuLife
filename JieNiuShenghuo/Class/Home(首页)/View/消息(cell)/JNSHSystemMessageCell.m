@@ -13,7 +13,6 @@
 
 @property(nonatomic,strong)UIImageView *backImg;
 
-@property(nonatomic,strong)UILabel *titleLab;
 
 @property(nonatomic,strong)UILabel *messageLab;
 
@@ -75,14 +74,24 @@
     [self.timeLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self).offset([JNSHAutoSize height:15]);
         make.centerX.equalTo(self);
-        make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:81], [JNSHAutoSize height:21]));
+        make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:140], [JNSHAutoSize height:21]));
     }];
+    
+    float height = [self heightForString:_message andWidth:(KscreenWidth - [JNSHAutoSize width:50])];
+    
+    if (height > 76) {
+        
+        height = height + 24;
+        
+    }else {
+        height = 100;
+    }
     
     [self.backImg mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.timeLab.mas_bottom).offset([JNSHAutoSize height:13]);
         make.left.equalTo(self).offset([JNSHAutoSize width:15]);
         make.right.equalTo(self).offset(-[JNSHAutoSize width:15]);
-        make.height.mas_equalTo([JNSHAutoSize height:100]);
+        make.height.mas_equalTo([JNSHAutoSize height:height]);
     }];
     
     [self.titleLab mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -108,6 +117,17 @@
     self.messageLab.text = message;
 
     [self layoutIfNeeded];
+    
+}
+
+- (float)heightForString:(NSString *)value andWidth:(float)width {
+    
+    NSAttributedString *attrStr = [[NSAttributedString alloc] initWithString:value];
+    NSRange range = NSMakeRange(0, attrStr.length);
+    NSDictionary *dic = [attrStr attributesAtIndex:0 effectiveRange:&range];
+    CGSize sietofit = [value boundingRectWithSize:CGSizeMake(width - 16, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading attributes:dic context:nil].size;
+    return sietofit.height + 16 + 40;
+    
     
 }
 

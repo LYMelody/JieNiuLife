@@ -10,4 +10,8 @@
 
 @interface JNSHCommitEmailViewController : UIViewController
 
+@property(nonatomic,copy)NSString *message;
+
+@property(nonatomic,copy)NSString *email;
+
 @end

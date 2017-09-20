@@ -370,6 +370,8 @@
                 __strong typeof(self) strongSelf = weakSelf;
                 [strongSelf selectImg:indexPath];
             };
+            //身份证正面照
+            Cell.rightImg.image = [UIImage imageNamed:@"微信图片_20170918154807-拷贝"];
             cell = Cell;
         }else if (indexPath.row == 4) {
             JNSHImgUploadCell *Cell = [[JNSHImgUploadCell alloc] init];
@@ -381,6 +383,7 @@
                 __strong typeof(self) strongSelf = weakSelf;
                 [strongSelf selectImg:indexPath];
             };
+            Cell.rightImg.image = [UIImage imageNamed:@"微信图片_20170918154807"];
             cell = Cell;
         }else if (indexPath.row == 5) {
             JNSHImgUploadCell *Cell = [[JNSHImgUploadCell alloc] init];
@@ -392,6 +395,7 @@
                 __strong typeof(self) strongSelf = weakSelf;
                 [strongSelf selectImg:indexPath];
             };
+            Cell.rightImg.image = [UIImage imageNamed:@"矩形-3"];
             cell = Cell;
         }else if (indexPath.row == 6) {
             cell.backgroundColor = [UIColor whiteColor];

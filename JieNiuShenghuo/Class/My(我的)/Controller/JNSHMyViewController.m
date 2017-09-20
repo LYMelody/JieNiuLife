@@ -28,6 +28,9 @@
 #import "UIImageView+WebCache.h"
 #import "UIViewController+Cloudox.h"
 #import "UINavigationController+Cloudox.h"
+#import "JNSHCommitEmailViewController.h"
+#import "JNSHAgentPayViewController.h"
+#import "JNSHAgentDetailViewController.h"
 
 @interface JNSHMyViewController ()<UITableViewDelegate,UITableViewDataSource,UIGestureRecognizerDelegate,UINavigationControllerDelegate>
 
@@ -503,12 +506,15 @@
         [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"telprompt://%@",@"400-600-7909"]]];
         
     }
-    else if (indexPath.row == 15) {
+    else if (indexPath.row == 15) {     //代理商
         
         if (islogoedIn) {
-            JNSHBecomeAgentViewController *BecomeAgentVc = [[JNSHBecomeAgentViewController alloc] init];
-            BecomeAgentVc.hidesBottomBarWhenPushed = YES;
-            [self.navigationController pushViewController:BecomeAgentVc animated:YES];
+            
+            //获取代理商信息
+            
+            [self getAgentInfo];
+            
+            
             
         }else {
             JNSHLoginController *LogInVc = [[JNSHLoginController alloc] init];
@@ -517,10 +523,74 @@
             
             [self presentViewController:nav animated:YES completion:nil];
         }
-        
-        
     }
+}
+
+//获取代理商信息
+- (void)getAgentInfo {
     
+    NSDictionary *dic = @{
+                          @"timestamp":[JNSHAutoSize getTimeNow]
+                          };
+    NSString *action = @"UserOrgInfo";
+    
+    NSDictionary *requestDic = @{
+                                 @"action":action,
+                                 @"token":[JNSYUserInfo getUserInfo].userToken,
+                                 @"data":dic
+                                 };
+    NSString *params = [requestDic JSONFragment];
+    
+    [IBHttpTool postWithURL:JNSHTestUrl params:params success:^(id result) {
+        NSDictionary *resultDic = [result JSONValue];
+        NSString *code = resultDic[@"code"];
+        NSString *msg = resultDic[@"msg"];
+        NSLog(@"%@",resultDic);
+        if ([code isEqualToString:@"000000"]) {
+            //代理商状态
+            NSString *orgStatus = [NSString stringWithFormat:@"%@",resultDic[@"orgStatus"]];
+            if ([orgStatus isEqualToString:@"0"]) {   //未申请
+                
+                JNSHBecomeAgentViewController *BecomeAgentVc = [[JNSHBecomeAgentViewController alloc] init];
+                BecomeAgentVc.hidesBottomBarWhenPushed = YES;
+                [self.navigationController pushViewController:BecomeAgentVc animated:YES];
+                
+            }else if ([orgStatus isEqualToString:@"1"] || [orgStatus isEqualToString:@"3"]) {  //等待审核、审核驳回
+                
+                JNSHCommitEmailViewController *CommitEmailVc = [[JNSHCommitEmailViewController alloc] init];
+                CommitEmailVc.message = [NSString stringWithFormat:@"%@",orgStatus];
+                CommitEmailVc.email = resultDic[@"userEmail"];
+                CommitEmailVc.hidesBottomBarWhenPushed = YES;
+                [self.navigationController pushViewController:CommitEmailVc animated:YES];
+                
+            }else if ([orgStatus isEqualToString:@"2"])  {  //审核通过
+                
+                JNSHAgentDetailViewController *payVc = [[JNSHAgentDetailViewController alloc] init];
+                payVc.hidesBottomBarWhenPushed = YES;
+                [self.navigationController pushViewController:payVc animated:YES];
+                
+                
+            }else if ([orgStatus isEqualToString:@"9"]) {   //等待支付
+                
+                JNSHAgentPayViewController *PayVc = [[JNSHAgentPayViewController alloc] init];
+                PayVc.payOrder = resultDic[@"payOrder"];
+                PayVc.payPrice = [NSString stringWithFormat:@"%@",resultDic[@"payPrice"]];
+                PayVc.orgType = [NSString stringWithFormat:@"%@",resultDic[@"orgType"]];
+                PayVc.email = resultDic[@"userEmail"];
+                PayVc.taskId = [NSString stringWithFormat:@"%@",resultDic[@"taskId"]];
+                PayVc.hidesBottomBarWhenPushed = YES;
+                [self.navigationController pushViewController:PayVc animated:YES];
+                
+            }
+        
+        }else {
+            
+            [JNSHAutoSize showMsg:msg];
+            
+        }
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
 }
 
 

@@ -98,7 +98,7 @@
     [self.useBtn setTitle:@"立即使用" forState:UIControlStateNormal];
     [self.useBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     self.useBtn.titleLabel.font = [UIFont systemFontOfSize:12];
-    self.useBtn.backgroundColor = blueColor;
+    self.useBtn.backgroundColor = BlueColor;
     self.useBtn.layer.cornerRadius = 2;
     self.useBtn.layer.masksToBounds = YES;
     

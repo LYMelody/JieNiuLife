@@ -163,7 +163,7 @@
         y+=LSActionSheetBottomMargin;
     }
 
-    UIButton *cancel=[self  createButtonWithTitle:@"取消" color:blueColor font:LSActionSheetCancelButtonFont height:LSActionSheetCancelButtonHeight y:y];
+    UIButton *cancel=[self  createButtonWithTitle:@"取消" color:BlueColor font:LSActionSheetCancelButtonFont height:LSActionSheetCancelButtonHeight y:y];
     cancel.tag=tag;
     [contentView addSubview:cancel];
     

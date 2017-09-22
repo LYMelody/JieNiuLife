@@ -205,7 +205,7 @@
             [JNSYUserInfo getUserInfo].branderCardFlg = resultdic[@"branderCardFlg"];
             [JNSYUserInfo getUserInfo].branderCardNo = resultdic[@"branderCardNo"];
             [JNSYUserInfo getUserInfo].picHeader = resultdic[@"picHeader"];
-            [JNSYUserInfo getUserInfo].userVipFlag = [NSString stringWithFormat:@"%@",resultdic[@"vipFlg"]];
+            [JNSYUserInfo getUserInfo].userVipFlag = [NSString stringWithFormat:@"%@",resultdic[@"vipFig"]];
             //[JNSYUserInfo getUserInfo].userVipFlag = @"1";
             [JNSYUserInfo getUserInfo].SettleCard = resultdic[@"userBank"];
             
@@ -297,7 +297,7 @@
             }
             
             Cell.rightLab.text = [NSString stringWithFormat:@"￥%.2f",[self.vipDiscount integerValue]/100.0];
-            Cell.rightLab.textColor = blueColor;
+            Cell.rightLab.textColor = BlueColor;
             
             __weak typeof(self) weakSelf = self;
             Cell.continueVipBlock = ^{
@@ -384,20 +384,19 @@
         
         [cell.textFiled resignFirstResponder];
         
-        NSDictionary *dic = @{
-                              @"bankName":@"工商银行",
-                              @"bankNum":@"6222021202041714172"
-                              };
-        NSDictionary *dicTwo = @{
-                                 @"bankName":@"广发银行",
-                                 @"bankNum":@"6258091653275896",
-                                 };
-        NSDictionary *dicThree = @{
-                                   @"bankName":@"招商银行",
-                                   @"bankNum":@"6225767400096103"
-                                   };
-        NSArray *bankArray = [[NSArray alloc] initWithObjects:dic,dicTwo,dicThree, nil];
-        
+//        NSDictionary *dic = @{
+//                              @"bankName":@"工商银行",
+//                              @"bankNum":@"6222021202041714172"
+//                              };
+//        NSDictionary *dicTwo = @{
+//                                 @"bankName":@"广发银行",
+//                                 @"bankNum":@"6258091653275896",
+//                                 };
+//        NSDictionary *dicThree = @{
+//                                   @"bankName":@"招商银行",
+//                                   @"bankNum":@"6225767400096103"
+//                                   };
+        //NSArray *bankArray = [[NSArray alloc] initWithObjects:dic,dicTwo,dicThree, nil];
         Popview = [[JNSHPopBankCardView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight)];
         Popview.typetag = 1;
         Popview.bankArray = self.bindCards;

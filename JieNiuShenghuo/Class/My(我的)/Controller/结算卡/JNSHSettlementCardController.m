@@ -254,6 +254,7 @@
                 [strongSelf pickImage];
             };
             Cell.leftLab.text = @"请上传储蓄卡正面照";
+            Cell.rightImg.image = [UIImage imageNamed:@"card_example"];
             cell = Cell;
         }else if (indexPath.row == 6) {
             cell.backgroundColor = [UIColor whiteColor];

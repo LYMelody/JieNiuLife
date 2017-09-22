@@ -95,7 +95,7 @@
     
     [self setPickViews];
     
-    table = [[UITableView alloc] initWithFrame:CGRectMake(0, [JNSHAutoSize height:46], KscreenWidth, KscreenHeight - [JNSHAutoSize height:46] - 64) style:UITableViewStylePlain];
+    table = [[UITableView alloc] initWithFrame:CGRectMake(0, [JNSHAutoSize height:46], KscreenWidth, KscreenHeight - [JNSHAutoSize height:45] - 64) style:UITableViewStylePlain];
     table.delegate = self;
     table.dataSource = self;
     table.backgroundColor = ColorTableBackColor;
@@ -283,11 +283,14 @@
                     }else {
                         //如果没有数据 page减1
                         _currentPage --;
-                        
+
                         MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
                         hud.mode = MBProgressHUDModeText;
                         hud.labelText = @"没有更多数据了";
                         [hud hide:YES afterDelay:1];
+                        
+                        [table.mj_footer endRefreshing];
+                        
                     }
                     
                 }else {

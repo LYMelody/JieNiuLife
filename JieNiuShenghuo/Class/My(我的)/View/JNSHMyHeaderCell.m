@@ -124,9 +124,7 @@
     }else {
         _vipImgView.image = [UIImage imageNamed:@"vip_head_vip_grey"];
     }
-    
 }
-
 
 - (void)setIsLogoedIn:(BOOL)isLogoedIn {
     

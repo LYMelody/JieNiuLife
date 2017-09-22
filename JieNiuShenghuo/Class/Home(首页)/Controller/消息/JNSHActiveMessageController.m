@@ -7,7 +7,8 @@
 //
 
 #import "JNSHActiveMessageController.h"
-
+#import "JNSHActiveMessageCell.h"
+#import "UIImageView+WebCache.h"
 @interface JNSHActiveMessageController ()<UITableViewDelegate,UITableViewDataSource>
 
 @end
@@ -32,17 +33,31 @@
     UITableView *table = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight - 64) style:UITableViewStylePlain];
     table.delegate = self;
     table.dataSource = self;
-    
+    table.backgroundColor = ColorTableBackColor;
+    table.separatorStyle = UITableViewCellSeparatorStyleNone;
+    table.tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, CGFLOAT_MIN)];
+    table.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, CGFLOAT_MIN)];
     [self.view addSubview:table];
     
-    
+    //禁止滑动延迟
+    table.delaysContentTouches = NO;
+    for(id view in table.subviews) {
+        
+        if ([NSStringFromClass([view class]) isEqualToString:@"UITableViewWrapperView"]) {
+            if ([view isKindOfClass:[UIScrollView class]]) {
+                UIScrollView *scrrowView = (UIScrollView *)view;
+                scrrowView.delaysContentTouches = NO;
+            }
+            break;
+        }
+    }
     
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
     
-    return self.messageList.count;
+    return self.messageList.count + 1;
     
     
 }
@@ -53,15 +68,41 @@
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:identy];
     
     if (cell == nil) {
+        
         cell = [[UITableViewCell alloc] init];
+        
+        if (indexPath.row == self.messageList.count) {
+            cell.backgroundColor = ColorTableBackColor;
+        }else {
+            JNSHActiveMessageCell *Cell = [[JNSHActiveMessageCell alloc] init];
+            NSDictionary *dic = self.messageList[indexPath.row];
+            Cell.timeLab.text = dic[@"noticeTime"];
+            Cell.titleLab.text = dic[@"noticeTitle"];
+            Cell.contentLab.text = dic[@"noticeContent"];
+            NSString *icon = dic[@"noticeIcon"];
+            
+            if (![icon isKindOfClass:[NSNull class]]) {
+                [Cell.titleImg sd_setImageWithURL:[NSURL URLWithString:icon]];
+            }
+        
+            cell = Cell;
+        }
+
     }
-    
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
-    
-    
+
 }
 
-
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (indexPath.row == self.messageList.count) {
+        return 20;
+    }
+    
+    return 270;
+    
+}
 
 
 - (void)didReceiveMemoryWarning {

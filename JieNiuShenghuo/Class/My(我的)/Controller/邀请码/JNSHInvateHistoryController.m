@@ -17,7 +17,7 @@
 #import "UIViewController+Cloudox.h"
 #import "UINavigationController+Cloudox.h"
 #import "MBProgressHUD.h"
-
+#import "UIImageView+WebCache.h"
 @interface JNSHInvateHistoryController ()<UITableViewDelegate,UITableViewDataSource>
 
 @end
@@ -143,8 +143,10 @@
         table.tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, CGFLOAT_MIN)];
     }
     
+    //获取兑换好友列表
     [self getFriendsList:@"0"];
-    
+    //获取兑换信息
+    [self requestFriendsInfo];
 }
 
 //查看已兑换名单
@@ -172,12 +174,50 @@
     
 }
 
+//获取兑换信息
+- (void)requestFriendsInfo{
+    
+    NSDictionary *dic = @{
+                          @"timestamp":[JNSHAutoSize getTimeNow],
 
+                          };
+    NSString *action = @"UserInviteDetail";
+    NSDictionary *requestDic = @{
+                                 @"action":action,
+                                 @"token":[JNSYUserInfo getUserInfo].userToken,
+                                 @"data":dic
+                                 };
+    NSString *params = [requestDic JSONFragment];
+    [IBHttpTool postWithURL:JNSHTestUrl params:params success:^(id result) {
+        NSDictionary *resultDic = [result JSONValue];
+        NSString *code = resultDic[@"code"];
+        NSLog(@"%@",resultDic);
+        if ([code isEqualToString:@"000000"]) {
+            
+            NSString *ischarge = [NSString stringWithFormat:@"%@",resultDic[@"isCharge"]];
+            if ([ischarge isEqualToString:@"1"]) {
+                [changeBtn setBackgroundColor:ColorTabBarBackColor];
+                changeBtn.alpha = 1;
+                changeBtn.enabled = YES;
+            }
+            
+        }else {
+            NSString *msg = resultDic[@"msg"];
+            [JNSHAutoSize showMsg:msg];
+        }
+        
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
+}
+
+
+//兑换会员
 - (void)requestForVip {
     
     NSDictionary *dic = @{
-                          @"chargeUser":[NSString stringWithFormat:@"%ld",self.listArray.count],
-                          @"chargeDay":[NSString stringWithFormat:@"%ld",self.listArray.count*10]
+                          @"chargeUser":[NSString stringWithFormat:@"%ld",(long)self.listArray.count],
+                          @"chargeDay":[NSString stringWithFormat:@"%ld",(long)self.listArray.count*10]
                           };
     NSString *action = @"UserInviteExchange";
     NSDictionary *requestDic = @{
@@ -236,23 +276,10 @@
         NSString *msg = resultdic[@"msg"];
         if ([code isEqualToString:@"000000"]) {
             
-            NSString *allCount = resultdic[@"allCount"];
-            
-            if([allCount integerValue] >= 5) {  //数量大于5
-                
-                [changeBtn setBackgroundColor:ColorTabBarBackColor];
-                changeBtn.alpha = 1;
-                changeBtn.enabled = YES;
-                
-            }
-            
             if ([resultdic[@"records"] isKindOfClass:[NSArray class]]) {
                 self.listArray = resultdic[@"records"];
                 [table reloadData];
             }
-            
-            
-            
             
         }else {
             
@@ -270,9 +297,9 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
     
-    if (self.tag == 2) {
-        return 9;
-    }
+//    if (self.tag == 2) {
+//        return 9;
+//    }
     
     return self.listArray.count;
     
@@ -286,16 +313,34 @@
     
     if (cell == nil) {
         cell = [[JNSHInvateHistoryCell alloc] init];
+        
+        NSDictionary *dic =self.listArray[indexPath.row];
+        NSString *picHeader = dic[@"picHeader"];             //头像
+        NSString *userNick = dic[@"userNick"];
+        NSString *userPhone = dic[@"userPhone"];
+        
+        cell.nameLab.text = userNick;
+        cell.phoneLab.text = [userPhone stringByReplacingCharactersInRange:NSMakeRange(3, 4) withString:@"****"];
+        if ([picHeader isEqualToString:@""]) {
+            
+        }else {
+            [cell.headerImg sd_setImageWithURL:[NSURL URLWithString:picHeader]];
+        }
+        
         if (self.tag == 2) {
             if (indexPath.row == 3) {
                 cell.statusLab.text = @"已完成";
-                cell.statusLab.textColor = greenColor;
+                cell.statusLab.textColor = GreenColor;
             }else if (indexPath.row > 3) {
                 cell.statusLab.text = @"已完成";
-                cell.statusLab.textColor = greenColor;
+                cell.statusLab.textColor = GreenColor;
                 cell.isUsed = YES;
             }
+        }else {
+            
+            
         }
+        
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;

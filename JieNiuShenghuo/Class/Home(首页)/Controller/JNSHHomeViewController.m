@@ -88,6 +88,7 @@
     messageCountLab.layer.cornerRadius = 7.5;
     messageCountLab.layer.masksToBounds = YES;
     messageCountLab.text = @"1";
+    messageCountLab.hidden = YES;
     [MessageBtn addSubview:messageCountLab];
     
     [messageCountLab mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -663,17 +664,25 @@
     
 }
 
-
 //消息按钮
 - (void)messageTap {
     
-    messageCountLab.hidden = YES;
-
-    JNSHNoticeViewController *NoticeVc = [[JNSHNoticeViewController alloc] init];
-    NoticeVc.hidesBottomBarWhenPushed = YES;
-    
-    [self.navigationController pushViewController:NoticeVc animated:YES];
-    
+    if (![JNSYUserInfo getUserInfo].isLoggedIn) {
+        
+        JNSHLoginController *LogInVc = [[JNSHLoginController alloc] init];
+        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:LogInVc];
+        [self presentViewController:nav animated:YES completion:nil];
+        
+    }else {
+        
+        messageCountLab.hidden = YES;
+        
+        JNSHNoticeViewController *NoticeVc = [[JNSHNoticeViewController alloc] init];
+        NoticeVc.hidesBottomBarWhenPushed = YES;
+        
+        [self.navigationController pushViewController:NoticeVc animated:YES];
+        
+    }
 }
 
 //收银台

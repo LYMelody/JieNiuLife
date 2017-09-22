@@ -116,7 +116,7 @@
     commitBtn.titleLabel.font = [UIFont systemFontOfSize:14];
     commitBtn.layer.cornerRadius = 3;
     commitBtn.layer.masksToBounds = YES;
-    commitBtn.backgroundColor = blueColor;
+    commitBtn.backgroundColor = BlueColor;
     [commitBtn addTarget:self action:@selector(commit) forControlEvents:UIControlEventTouchUpInside];
     [_headerView addSubview:commitBtn];
     

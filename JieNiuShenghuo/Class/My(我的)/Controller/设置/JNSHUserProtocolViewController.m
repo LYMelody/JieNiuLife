@@ -23,7 +23,30 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    
+    UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight)];
+    [self.view addSubview:scrollView];
+    
+    NSString * path = [[NSBundle mainBundle]pathForResource:@"jnsh" ofType:@"txt"];
+    NSString * pathString = [NSString stringWithContentsOfFile:path encoding:CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000) error:nil];
+    if (nil ==  pathString ||pathString.length <= 0) {
+        pathString = [NSString stringWithContentsOfFile:path encoding:4 error:nil];
+    }
+    
+    UILabel * label = [[UILabel alloc]initWithFrame:CGRectMake([JNSHAutoSize width:15], 0, KscreenWidth - [JNSHAutoSize width:32], 0)];
+    self.automaticallyAdjustsScrollViewInsets = NO;
+    
+    //label.backgroundColor = [UIColor clearColor];
+    label.text = pathString;
+    label.textColor = [UIColor blackColor];
+    label.font = [UIFont systemFontOfSize:13.0f];
+    label.lineBreakMode = NSLineBreakByWordWrapping;
+    label.numberOfLines = 0;
+    [label sizeToFit];
+    
+    [scrollView addSubview:label];
+    scrollView.contentSize = CGSizeMake(0, label.bounds.size.height+64);
+    
 }
 
 - (void)didReceiveMemoryWarning {

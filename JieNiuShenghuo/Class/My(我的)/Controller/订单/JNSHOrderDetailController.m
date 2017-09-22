@@ -60,13 +60,13 @@
     UILabel *statusLab = [[UILabel alloc] init];
     statusLab.font = [UIFont systemFontOfSize:15];
     statusLab.textAlignment = NSTextAlignmentCenter;
-    statusLab.textColor = greenColor;
+    statusLab.textColor = GreenColor;
     statusLab.text = self.model.orderStatus;
 
     if ([self.model.orderStatus isEqualToString:@"初始化"]) {
         statusLab.textColor = [UIColor orangeColor];
     }else if ([self.model.orderStatus isEqualToString:@"支付成功"]) {
-        statusLab.textColor = greenColor;
+        statusLab.textColor = GreenColor;
     }else if ([self.model.orderStatus isEqualToString:@"支付失败"]) {
         statusLab.textColor = [UIColor redColor];
     }

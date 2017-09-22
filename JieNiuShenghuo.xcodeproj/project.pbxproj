@@ -29,6 +29,8 @@
 		CC1406581F3BF81F00675AA7 /* JNSHLabFldCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CC1406571F3BF81F00675AA7 /* JNSHLabFldCell.m */; };
 		CC14065C1F3C027100675AA7 /* JNSHPopBankCardView.m in Sources */ = {isa = PBXBuildFile; fileRef = CC14065B1F3C027100675AA7 /* JNSHPopBankCardView.m */; };
 		CC14065F1F3C0E2100675AA7 /* JNSHBankSelectCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CC14065E1F3C0E2100675AA7 /* JNSHBankSelectCell.m */; };
+		CC23AC941F73A748009F0B6C /* NSTimer+JNSHAddition.m in Sources */ = {isa = PBXBuildFile; fileRef = CC23AC931F73A748009F0B6C /* NSTimer+JNSHAddition.m */; };
+		CC23AC961F73BC5E009F0B6C /* jnsh.txt in Resources */ = {isa = PBXBuildFile; fileRef = CC23AC951F73BC5E009F0B6C /* jnsh.txt */; };
 		CC2C445B1F44148800B4982B /* DAYCalendarView.m in Sources */ = {isa = PBXBuildFile; fileRef = CC2C44501F44148800B4982B /* DAYCalendarView.m */; };
 		CC2C445C1F44148800B4982B /* DAYComponentView.m in Sources */ = {isa = PBXBuildFile; fileRef = CC2C44541F44148800B4982B /* DAYComponentView.m */; };
 		CC2C445D1F44148800B4982B /* DAYIndicatorView.m in Sources */ = {isa = PBXBuildFile; fileRef = CC2C44561F44148800B4982B /* DAYIndicatorView.m */; };
@@ -106,6 +108,11 @@
 		CC983CBC1F4C283C00249B2C /* JNSHPopYXQView.m in Sources */ = {isa = PBXBuildFile; fileRef = CC983CBB1F4C283C00249B2C /* JNSHPopYXQView.m */; };
 		CC9E84351F344B6F00AEDF2C /* JNSHMyHeaderCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CC9E84341F344B6F00AEDF2C /* JNSHMyHeaderCell.m */; };
 		CC9E84381F34530400AEDF2C /* JNSHMyCommonCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CC9E84371F34530400AEDF2C /* JNSHMyCommonCell.m */; };
+		CCA591651F749EAD00EE4648 /* JNSHRightIntroduceViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CCA591641F749EAD00EE4648 /* JNSHRightIntroduceViewController.m */; };
+		CCA591671F74B19D00EE4648 /* 代理商-.png in Resources */ = {isa = PBXBuildFile; fileRef = CCA591661F74B19D00EE4648 /* 代理商-.png */; };
+		CCA5916B1F74C4B100EE4648 /* launchback.png in Resources */ = {isa = PBXBuildFile; fileRef = CCA591681F74C4B000EE4648 /* launchback.png */; };
+		CCA5916C1F74C4B100EE4648 /* launchAni.png in Resources */ = {isa = PBXBuildFile; fileRef = CCA591691F74C4B100EE4648 /* launchAni.png */; };
+		CCA5916D1F74C4B100EE4648 /* launchtitle.png in Resources */ = {isa = PBXBuildFile; fileRef = CCA5916A1F74C4B100EE4648 /* launchtitle.png */; };
 		CCA7843F1F5F9E8C00AC5288 /* JNSHMessageListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CCA7843E1F5F9E8C00AC5288 /* JNSHMessageListCell.m */; };
 		CCA784421F5FC1F600AC5288 /* JNSHSystemViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CCA784411F5FC1F600AC5288 /* JNSHSystemViewController.m */; };
 		CCA784451F5FC6A600AC5288 /* JNSHSystemMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CCA784441F5FC6A600AC5288 /* JNSHSystemMessageCell.m */; };
@@ -198,6 +205,9 @@
 		CC14065B1F3C027100675AA7 /* JNSHPopBankCardView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNSHPopBankCardView.m; sourceTree = "<group>"; };
 		CC14065D1F3C0E2100675AA7 /* JNSHBankSelectCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNSHBankSelectCell.h; sourceTree = "<group>"; };
 		CC14065E1F3C0E2100675AA7 /* JNSHBankSelectCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNSHBankSelectCell.m; sourceTree = "<group>"; };
+		CC23AC921F73A748009F0B6C /* NSTimer+JNSHAddition.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSTimer+JNSHAddition.h"; sourceTree = "<group>"; };
+		CC23AC931F73A748009F0B6C /* NSTimer+JNSHAddition.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSTimer+JNSHAddition.m"; sourceTree = "<group>"; };
+		CC23AC951F73BC5E009F0B6C /* jnsh.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = jnsh.txt; sourceTree = "<group>"; };
 		CC2C444F1F44148800B4982B /* DAYCalendarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = DAYCalendarView.h; path = ../DAYCalendarView.h; sourceTree = "<group>"; };
 		CC2C44501F44148800B4982B /* DAYCalendarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = DAYCalendarView.m; path = ../DAYCalendarView.m; sourceTree = "<group>"; };
 		CC2C44511F44148800B4982B /* Daysquare.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Daysquare.h; path = ../Daysquare.h; sourceTree = "<group>"; };
@@ -343,6 +353,12 @@
 		CC9E84341F344B6F00AEDF2C /* JNSHMyHeaderCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNSHMyHeaderCell.m; sourceTree = "<group>"; };
 		CC9E84361F34530400AEDF2C /* JNSHMyCommonCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNSHMyCommonCell.h; sourceTree = "<group>"; };
 		CC9E84371F34530400AEDF2C /* JNSHMyCommonCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNSHMyCommonCell.m; sourceTree = "<group>"; };
+		CCA591631F749EAD00EE4648 /* JNSHRightIntroduceViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JNSHRightIntroduceViewController.h; sourceTree = "<group>"; };
+		CCA591641F749EAD00EE4648 /* JNSHRightIntroduceViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JNSHRightIntroduceViewController.m; sourceTree = "<group>"; };
+		CCA591661F74B19D00EE4648 /* 代理商-.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "代理商-.png"; sourceTree = "<group>"; };
+		CCA591681F74C4B000EE4648 /* launchback.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = launchback.png; sourceTree = "<group>"; };
+		CCA591691F74C4B100EE4648 /* launchAni.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = launchAni.png; sourceTree = "<group>"; };
+		CCA5916A1F74C4B100EE4648 /* launchtitle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = launchtitle.png; sourceTree = "<group>"; };
 		CCA7843D1F5F9E8C00AC5288 /* JNSHMessageListCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNSHMessageListCell.h; sourceTree = "<group>"; };
 		CCA7843E1F5F9E8C00AC5288 /* JNSHMessageListCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNSHMessageListCell.m; sourceTree = "<group>"; };
 		CCA784401F5FC1F600AC5288 /* JNSHSystemViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNSHSystemViewController.h; sourceTree = "<group>"; };
@@ -542,6 +558,8 @@
 				CC14064D1F3BEA3C00675AA7 /* JNSHVipViewController.m */,
 				CC14064F1F3BEA7800675AA7 /* JNSHVipOrderViewController.h */,
 				CC1406501F3BEA7800675AA7 /* JNSHVipOrderViewController.m */,
+				CCA591631F749EAD00EE4648 /* JNSHRightIntroduceViewController.h */,
+				CCA591641F749EAD00EE4648 /* JNSHRightIntroduceViewController.m */,
 			);
 			path = "会员中心";
 			sourceTree = "<group>";
@@ -772,6 +790,7 @@
 		CC95DCE01F315F4500539A03 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				CC23AC951F73BC5E009F0B6C /* jnsh.txt */,
 				CCB6FAC21F41BB63005C29FA /* provinces.plist */,
 				CCB6FAC01F41BB5C005C29FA /* cities.plist */,
 				CC95DCE31F315F4500539A03 /* AppDelegate.h */,
@@ -1006,6 +1025,9 @@
 		CC95DD151F31629800539A03 /* 启动页:引导页 */ = {
 			isa = PBXGroup;
 			children = (
+				CCA591691F74C4B100EE4648 /* launchAni.png */,
+				CCA591681F74C4B000EE4648 /* launchback.png */,
+				CCA5916A1F74C4B100EE4648 /* launchtitle.png */,
 				CC7D61181F677F1400F2BE88 /* 引导页1.png */,
 				CC7D61191F677F1400F2BE88 /* 引导页2.png */,
 				CC7D611A1F677F1400F2BE88 /* 引导页3.png */,
@@ -1023,6 +1045,7 @@
 		CC95DD171F31629800539A03 /* 首页 */ = {
 			isa = PBXGroup;
 			children = (
+				CCA591661F74B19D00EE4648 /* 代理商-.png */,
 				CC10BE331F663382006B9640 /* AD04.png */,
 				CC10BE341F663382006B9640 /* APP05.png */,
 				CC10BE351F663382006B9640 /* banner01@2x.png */,
@@ -1047,6 +1070,8 @@
 				CC95DD201F3163C500539A03 /* JNSHServiceViewController.m */,
 				CCF83D541F6A7B6500121B89 /* JNSHWebViewController.h */,
 				CCF83D551F6A7B6500121B89 /* JNSHWebViewController.m */,
+				CC23AC921F73A748009F0B6C /* NSTimer+JNSHAddition.h */,
+				CC23AC931F73A748009F0B6C /* NSTimer+JNSHAddition.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -1412,16 +1437,21 @@
 			buildActionMask = 2147483647;
 			files = (
 				CC10BE361F663382006B9640 /* AD04.png in Resources */,
+				CCA5916B1F74C4B100EE4648 /* launchback.png in Resources */,
+				CC23AC961F73BC5E009F0B6C /* jnsh.txt in Resources */,
 				CC7D611C1F677F1400F2BE88 /* 引导页2.png in Resources */,
 				CC95DCF01F315F4500539A03 /* LaunchScreen.storyboard in Resources */,
 				CC7D611D1F677F1400F2BE88 /* 引导页3.png in Resources */,
 				CC7D611B1F677F1400F2BE88 /* 引导页1.png in Resources */,
+				CCA591671F74B19D00EE4648 /* 代理商-.png in Resources */,
 				CC10BE371F663382006B9640 /* APP05.png in Resources */,
 				CC10BE381F663382006B9640 /* banner01@2x.png in Resources */,
 				CC95DCED1F315F4500539A03 /* Assets.xcassets in Resources */,
 				CCB6FAC31F41BB63005C29FA /* provinces.plist in Resources */,
 				CC95DCEB1F315F4500539A03 /* Main.storyboard in Resources */,
 				CCB6FAC11F41BB5C005C29FA /* cities.plist in Resources */,
+				CCA5916C1F74C4B100EE4648 /* launchAni.png in Resources */,
+				CCA5916D1F74C4B100EE4648 /* launchtitle.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1591,8 +1621,10 @@
 				CC64BAF51F4EACCA00A1B692 /* JNSHResignViewController.m in Sources */,
 				CCF890E61F383FFF0045FD4D /* JNSHProgressView.m in Sources */,
 				CC14065C1F3C027100675AA7 /* JNSHPopBankCardView.m in Sources */,
+				CC23AC941F73A748009F0B6C /* NSTimer+JNSHAddition.m in Sources */,
 				CCF83D531F6A352500121B89 /* JNSHServiceCell.m in Sources */,
 				CCB7D4671F3986D000132C59 /* JNSHSettingViewController.m in Sources */,
+				CCA591651F749EAD00EE4648 /* JNSHRightIntroduceViewController.m in Sources */,
 				CC983CB61F4C02B800249B2C /* JNSHGetCodeCell.m in Sources */,
 				CC14065F1F3C0E2100675AA7 /* JNSHBankSelectCell.m in Sources */,
 				CC64BB101F4FD49000A1B692 /* AFNetworkReachabilityManager.m in Sources */,

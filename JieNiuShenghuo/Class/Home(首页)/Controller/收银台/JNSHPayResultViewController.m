@@ -98,7 +98,7 @@
     //交易状态原因
     UILabel *causeLab = [[UILabel alloc] init];
     causeLab.font = [UIFont systemFontOfSize:12];
-    causeLab.textColor = blueColor;
+    causeLab.textColor = BlueColor;
     causeLab.textAlignment = NSTextAlignmentCenter;
     [headerView addSubview:causeLab];
     if ([self.orderStatus isEqualToString:@"FAIL"]) {

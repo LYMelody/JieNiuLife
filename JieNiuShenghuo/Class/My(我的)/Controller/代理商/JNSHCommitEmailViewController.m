@@ -82,7 +82,7 @@
         if ([self.message isEqualToString:@"1"]) {
             bindBtn.hidden = YES;
             lab.text = @"等待审核";
-            lab.textColor = blueColor;
+            lab.textColor = BlueColor;
         }
         
     }else {

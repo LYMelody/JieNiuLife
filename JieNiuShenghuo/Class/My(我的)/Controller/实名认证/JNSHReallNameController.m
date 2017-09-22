@@ -93,7 +93,7 @@
     leftLab = [[UILabel alloc] init];
     leftLab.font = [UIFont systemFontOfSize:13];
     leftLab.textAlignment = NSTextAlignmentLeft;
-    leftLab.textColor = blueColor;
+    leftLab.textColor = BlueColor;
     //leftLab.backgroundColor = [UIColor redColor];
     [headerView addSubview:leftLab];
     
@@ -183,7 +183,7 @@
                     editBtn.hidden = YES;
                 }
                 if ([showMsg isEqualToString:@"您的实名认证信息已通过"]) {
-                    leftLab.textColor = greenColor;
+                    leftLab.textColor = GreenColor;
                 }else if ([showMsg isEqualToString:@""]) {
                     
                 }
@@ -363,7 +363,7 @@
         }else if (indexPath.row == 3) {
             JNSHImgUploadCell *Cell = [[JNSHImgUploadCell alloc] init];
             Cell.leftLab.text = @"身份证正面照";
-            if (CertFaceHttp) {
+            if (![CertFaceHttp isEqualToString:@""]) {
                 [Cell.leftImg sd_setImageWithURL:[NSURL URLWithString:CertFaceHttp]];
             }
             Cell.uploadImgBlock = ^{
@@ -376,7 +376,7 @@
         }else if (indexPath.row == 4) {
             JNSHImgUploadCell *Cell = [[JNSHImgUploadCell alloc] init];
             Cell.leftLab.text = @"身份证背面照";
-            if (CertBackHttp) {
+            if (![CertBackHttp isEqualToString:@""]) {
                 [Cell.leftImg sd_setImageWithURL:[NSURL URLWithString:CertBackHttp]];
             }
             Cell.uploadImgBlock = ^{
@@ -388,7 +388,7 @@
         }else if (indexPath.row == 5) {
             JNSHImgUploadCell *Cell = [[JNSHImgUploadCell alloc] init];
             Cell.leftLab.text = @"手持身份证半身照";
-            if (HoldCertHttp) {
+            if (![HoldCertHttp isEqualToString:@""]) {
                 [Cell.leftImg sd_setImageWithURL:[NSURL URLWithString:HoldCertHttp]];
             }
             Cell.uploadImgBlock = ^{

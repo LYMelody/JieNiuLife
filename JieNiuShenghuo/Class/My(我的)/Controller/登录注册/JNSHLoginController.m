@@ -34,19 +34,21 @@
     
     [super viewWillAppear:animated];
     
-   //self.navigationController.navigationBar.hidden = YES;
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
     
     self.view.backgroundColor = [UIColor whiteColor];
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
     
-    self.navigationController.navigationBar.subviews.firstObject.alpha = 0;
+    //self.navigationController.navigationBar.subviews.firstObject.alpha = 0;
     
     self.navigationController.navigationBar.barTintColor = ColorTabBarBackColor;
     //设置导航栏标题颜色
     [self.navigationController.navigationBar setTitleTextAttributes:@{
                                                                       NSForegroundColorAttributeName:[UIColor whiteColor]
                                                                       }];
+    
+    
     
 }
 
@@ -56,17 +58,7 @@
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     
-    self.navigationController.navigationBar.hidden = NO;
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    
-    [super viewDidAppear:animated];
-    
-    
-    self.navigationController.navigationBar.hidden = YES;
-    
-    
+    //self.navigationController.navigationBar.hidden = NO;
 }
 
 
@@ -282,7 +274,6 @@
 //    [User setObject:pwdTextFiled.text forKey:@"UserPwd"];
 //    [User synchronize];
     
-
     UILabel *rightLab = [[UILabel alloc] init];
     rightLab.text = @"记住密码";
     rightLab.font = [UIFont systemFontOfSize:13];
@@ -315,7 +306,7 @@
     //注册
     UIButton *resignBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [resignBtn setTitle:@"没有账号？立即注册>>" forState:UIControlStateNormal];
-    [resignBtn setTitleColor:blueColor forState:UIControlStateNormal];
+    [resignBtn setTitleColor:BlueColor forState:UIControlStateNormal];
     resignBtn.titleLabel.font = [UIFont systemFontOfSize:15];
     resignBtn.titleLabel.textAlignment = NSTextAlignmentRight;
     [resignBtn addTarget:self action:@selector(resign) forControlEvents:UIControlEventTouchUpInside];
@@ -353,7 +344,6 @@
 - (void)forget {
     
     NSLog(@"忘记密码");
-    
     JNSHForgetPwdViewController *forgetVc = [[JNSHForgetPwdViewController alloc] init];
     forgetVc.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:forgetVc animated:YES];
@@ -366,16 +356,18 @@
     NSLog(@"登录");
     
     if ([accountFiled.text isEqualToString:@""] ) {
-        [JNSHAutoSize showMsg:@"账户名为空!"];
+        [JNSHAutoSize showMsg:@"请输入手机号!"];
+        return;
+    }else if (accountFiled.text.length < 11) {
+        [JNSHAutoSize showMsg:@"手机号不正确"];
         return;
     }
-    if ([pwdTextFiled.text isEqualToString:@""]) {
-        [JNSHAutoSize showMsg:@"密码为空"];
+    if (pwdTextFiled.text.length < 6 || pwdTextFiled.text.length > 12) {
+        [JNSHAutoSize showMsg:@"请输入6-12位密码"];
+        
         return;
     }
     
-    
-   
     
     NSDictionary *dic = @{
                           @"phone":accountFiled.text,
@@ -480,13 +472,24 @@
     
     NSInteger length = (textField.text.length == range.location) ? range.location : (range.location - 1);
     
-    if (textField.tag == 101) {
+    if (textField.tag == 101) {     //密码
+        
+        //限制输入位数  12位
+        if (range.location > 11) {
+            return NO;
+        }
+        
         if (![accountFiled.text isEqualToString:@""] && (length >= 0)) {
             LogoInBtn.enabled = YES;
         }else {
             LogoInBtn.enabled = NO;
         }
-    }else if (textField.tag == 100) {
+    }else if (textField.tag == 100) {  //账户
+        
+        //限制输入位数  11位
+        if (range.location > 10) {
+            return NO;
+        }
         
         if(![pwdTextFiled.text isEqualToString:@""] && (length >= 0)){
             LogoInBtn.enabled = YES;

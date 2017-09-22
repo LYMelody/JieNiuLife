@@ -45,7 +45,7 @@
     table.dataSource = self;
     table.separatorStyle = UITableViewCellSeparatorStyleNone;
     table.backgroundColor = ColorTableBackColor;
-    table.showsVerticalScrollIndicator = NO;
+    //table.showsVerticalScrollIndicator = NO;
     table.tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, CGFLOAT_MIN)];
     [backImg addSubview:table];
 

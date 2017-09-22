@@ -101,7 +101,7 @@
     
     UIButton *forgetBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [forgetBtn setTitle:@"忘记密码？" forState:UIControlStateNormal];
-    [forgetBtn setTitleColor:blueColor forState:UIControlStateNormal];
+    [forgetBtn setTitleColor:BlueColor forState:UIControlStateNormal];
     forgetBtn.titleLabel.font = [UIFont systemFontOfSize:13];
     [forgetBtn addTarget:self action:@selector(forget) forControlEvents:UIControlEventTouchUpInside];
     [whiteBackImgOne addSubview:forgetBtn];

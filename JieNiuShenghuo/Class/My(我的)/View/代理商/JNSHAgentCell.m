@@ -50,7 +50,7 @@
     _OneLab = [[UILabel alloc] init];
     _OneLab.font = [UIFont systemFontOfSize:13];
     _OneLab.textAlignment = NSTextAlignmentCenter;
-    _OneLab.textColor = blueColor;
+    _OneLab.textColor = BlueColor;
     _OneLab.text = @"日新增代理商";
     [self.contentView addSubview:_OneLab];
     
@@ -64,7 +64,7 @@
     _TwoLab = [[UILabel alloc] init];
     _TwoLab.font = [UIFont systemFontOfSize:13];
     _TwoLab.textAlignment = NSTextAlignmentCenter;
-    _TwoLab.textColor = blueColor;
+    _TwoLab.textColor = BlueColor;
     _TwoLab.text = @"下级代理商";
     [self.contentView addSubview:_TwoLab];
     
@@ -78,7 +78,7 @@
     _ThreeLab = [[UILabel alloc] init];
     _ThreeLab.font = [UIFont systemFontOfSize:13];
     _ThreeLab.textAlignment = NSTextAlignmentCenter;
-    _ThreeLab.textColor = blueColor;
+    _ThreeLab.textColor = BlueColor;
     _ThreeLab.text = @"日审核通过商户";
     [self.contentView addSubview:_ThreeLab];
     
@@ -92,7 +92,7 @@
     _FourLab = [[UILabel alloc] init];
     _FourLab.font = [UIFont systemFontOfSize:13];
     _FourLab.textAlignment = NSTextAlignmentCenter;
-    _FourLab.textColor = blueColor;
+    _FourLab.textColor = BlueColor;
     _FourLab.text = @"日注册商户";
     [self.contentView addSubview:_FourLab];
     

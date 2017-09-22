@@ -33,7 +33,7 @@
     
     if ([super initWithFrame:frame]) {
         
-        _color = blueColor;
+        _color = BlueColor;
         
         [self setUpViews:nil suretext:@"确定"];
     }
@@ -82,14 +82,18 @@
     [self.cancleBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     self.cancleBtn.layer.cornerRadius = 3;
     self.cancleBtn.layer.masksToBounds = YES;
-    self.cancleBtn.backgroundColor = blueColor;
+    self.cancleBtn.backgroundColor = BlueColor;
     self.cancleBtn.titleLabel.font = [UIFont systemFontOfSize:15];
     self.cancleBtn.hidden = YES;
     [self.cancleBtn addTarget:self action:@selector(cancle) forControlEvents:UIControlEventTouchUpInside];
     [_contentView addSubview:self.cancleBtn];
     
+    NSLog(@"手机系统：%@",SystemVersion);
+    
+    
+    
     [self.cancleBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(_contentView).offset(-[JNSHAutoSize height:60]);
+        make.bottom.equalTo(_contentView).offset(-[JNSHAutoSize height:([SystemVersion floatValue] >= 11.0)?30:60]);
         make.left.equalTo(_contentView).offset([JNSHAutoSize width:40]);
         make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:80], [JNSHAutoSize height:30]));
     }];
@@ -103,7 +107,7 @@
     [_sureBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     _sureBtn.layer.cornerRadius = 3;
     _sureBtn.layer.masksToBounds = YES;
-    _sureBtn.backgroundColor = blueColor;
+    _sureBtn.backgroundColor = BlueColor;
     _sureBtn.titleLabel.font = [UIFont systemFontOfSize:15];
     //_sureBtn.frame = CGRectMake([JNSHAutoSize width:(111)]/2.0, [JNSHAutoSize height:82], [JNSHAutoSize width:110], [JNSHAutoSize height:30]);
     [_sureBtn addTarget:self action:@selector(sure) forControlEvents:UIControlEventTouchUpInside];
@@ -115,18 +119,16 @@
         
         [_sureBtn mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(self.cancleBtn);
-            make.right.equalTo(_contentView).offset(-[JNSHAutoSize width:80]);
+            make.right.equalTo(_contentView).offset(-[JNSHAutoSize width:([SystemVersion floatValue] >= 11.0)?40:80]);
             make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:80], [JNSHAutoSize height:30]));
         }];
         
     }else {
-        
         [_sureBtn mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerX.equalTo(_messageLab);
             make.top.equalTo(_contentView).offset([JNSHAutoSize height:82]);
             make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:110], [JNSHAutoSize height:30]));
         }];
-
     }
 }
 

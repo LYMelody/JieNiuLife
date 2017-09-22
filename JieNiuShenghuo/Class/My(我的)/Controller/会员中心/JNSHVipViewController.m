@@ -18,7 +18,7 @@
 #import "UIViewController+Cloudox.h"
 #import "UINavigationController+Cloudox.h"
 #import "JNSHOrderSureViewController.h"
-
+#import "JNSHRightIntroduceViewController.h"
 @interface JNSHVipViewController ()
 
 @end
@@ -161,9 +161,17 @@
         make.size.mas_equalTo(CGSizeMake((KscreenWidth-2)/2.0, [JNSHAutoSize height:72]));
     }];
     
+    //点击手势
+    UITapGestureRecognizer *vipTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapForVip)];
+    vipTap.numberOfTapsRequired = 1;
+    [ratingBackImg addGestureRecognizer:vipTap];
+    
+    
+    
+    
+    
     UIImageView *ratingImg = [[UIImageView alloc] init];
     ratingImg.image = [UIImage imageNamed:@"vip_rate"];
-    
     [ratingBackImg addSubview:ratingImg];
     
     [ratingImg mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -205,6 +213,11 @@
     safeBackImg.backgroundColor = [UIColor whiteColor];
     safeBackImg.userInteractionEnabled = YES;
     [scrollView addSubview:safeBackImg];
+    
+    UITapGestureRecognizer *PiccTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(TapForPICC)];
+    PiccTap.numberOfTapsRequired = 1;
+    [safeBackImg addGestureRecognizer:PiccTap];
+    
     
     [safeBackImg mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(ratingBackImg);
@@ -519,7 +532,22 @@
         mealDic = [[NSArray alloc] init];
     }
 
+    //
+    //禁止滑动延迟
+    scrollView.delaysContentTouches = NO;
+    
 }
+
+//- (BOOL)touchesShouldCancelInContentView:(UIView *)view
+//{
+//    if ([view isKindOfClass:[UIImageView class]])
+//    {
+//        return YES;
+//    }
+//    return [super touchesShouldCancelInContentView:view];
+//
+//}
+
 
 //跳转订单
 - (void)beVip {
@@ -567,8 +595,6 @@
             //判断绑定卡数组是否有数据
             if ([resultdic[@"bindCards"] isKindOfClass:[NSArray class]]) {
                  arrar = resultdic[@"bindCards"];
-                
-                
                 
             }
             
@@ -673,6 +699,28 @@
         NSLog(@"%@",error);
     }];
 }
+
+//专属费率
+- (void)tapForVip {
+    
+    JNSHRightIntroduceViewController *RightVc = [[JNSHRightIntroduceViewController alloc] init];
+    RightVc.typetag = 100;
+    RightVc.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:RightVc animated:YES];
+    
+}
+
+//PICC介绍
+- (void)TapForPICC {
+    
+    JNSHRightIntroduceViewController *RightVc = [[JNSHRightIntroduceViewController alloc] init];
+    RightVc.typetag = 101;
+    RightVc.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:RightVc animated:YES];
+    
+}
+
+
 
 - (void)viewWillDisappear:(BOOL)animated {
     

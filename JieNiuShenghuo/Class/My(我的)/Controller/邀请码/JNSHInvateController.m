@@ -217,7 +217,6 @@
     
     SSDKPlatformType type;
     
-    
     if (btn.tag == 100) {
         
         type = SSDKPlatformSubTypeWechatSession;

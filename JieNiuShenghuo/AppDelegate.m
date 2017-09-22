@@ -33,19 +33,15 @@
 //蒲公英
 #define PgyAPPID @"f496f2435afee567bd3a11bd633b19de"
 
-
 @interface AppDelegate ()<JPUSHRegisterDelegate>
 
 @end
 
 @implementation AppDelegate
 
-
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
-    
     //[NSThread sleepForTimeInterval:1];
-    
     //蒲公英
     [[PgyManager sharedPgyManager] startManagerWithAppId:PgyAPPID];
     [[PgyUpdateManager sharedPgyManager] startManagerWithAppId:PgyAPPID];
@@ -70,35 +66,37 @@
         JNSHMainBarController *barVc = [[JNSHMainBarController alloc] init];
         self.window.rootViewController = barVc;
     }
-
-    
     [self.window makeKeyAndVisible];
     
     //设置状态栏
     [application setStatusBarStyle:UIStatusBarStyleLightContent animated:NO];
-   
     [application setStatusBarHidden:NO];
     
     [JNSYUserInfo getUserInfo].userKey = KEY;
     [JNSYUserInfo getUserInfo].userToken = TOKEN;
     
-    
-    //启动动画
+    //启动动画、背景图
     UIImageView *lanchView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"图层-2-拷贝-2"]];
     lanchView.frame = CGRectMake(0, 0, KscreenWidth, KscreenHeight);
     [self.window addSubview:lanchView];
     [self.window bringSubviewToFront:lanchView];
     
-    //
+    //缩小的星星视图
     UIImageView *logoImg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"启动页2-"]];
     logoImg.frame = CGRectMake(0, 0, KscreenWidth, KscreenHeight);
     [self.window addSubview:logoImg];
     [self.window bringSubviewToFront:logoImg];
-    
+    //固定的钱包、文字视图
     UIImageView *frontImg = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"启动页1-"]];
     frontImg.frame = CGRectMake(0, 0, KscreenWidth, KscreenHeight);
     [self.window addSubview:frontImg];
     [self.window bringSubviewToFront:frontImg];
+    
+    if (IS_IphoneX) {
+        lanchView.image = [UIImage imageNamed:@"launchback"];
+        logoImg.image = [UIImage imageNamed:@"launchAni"];
+        frontImg.image = [UIImage imageNamed:@"launchtitle"];
+    }
     
     [UIView animateWithDuration:2 animations:^{
         logoImg.transform = CGAffineTransformMakeScale(0.9, 0.9);

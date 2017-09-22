@@ -167,6 +167,7 @@
                 }else {   //活动通知
                     
                     JNSHActiveMessageController *ActiveVc = [[JNSHActiveMessageController alloc] init];
+                    ActiveVc.messageList = resultDic[@"records"];
                     ActiveVc.hidesBottomBarWhenPushed = YES;
                     [self.navigationController pushViewController:ActiveVc animated:YES];
                     

@@ -37,24 +37,20 @@
     self.title = @"账户注册";
     self.view.backgroundColor = ColorTabBarBackColor;
     
-    //self.navigationController.navigationBar.hidden = NO;
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
     
     self.navigationController.navigationBar.barTintColor = ColorTabBarBackColor;
     //设置导航栏标题颜色
     [self.navigationController.navigationBar setTitleTextAttributes:@{
                                                                       NSForegroundColorAttributeName:[UIColor whiteColor]
                                                                       }];
-    
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    UIImageView *tabbarBackimg = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, 64)];
-    tabbarBackimg.backgroundColor = ColorTabBarBackColor;
-    [self.view addSubview:tabbarBackimg];
     
-    table = [[UITableView alloc] initWithFrame:CGRectMake(0, 64, KscreenWidth, KscreenHeight-64) style:UITableViewStylePlain];
+    table = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight) style:UITableViewStylePlain];
     table.delegate = self;
     table.dataSource = self;
     table.backgroundColor = ColorTableBackColor;
@@ -167,7 +163,11 @@
     
     //发送注册请求
     if ([CodeCell.textFiled.text isEqualToString:@""] || CodeCell.textFiled == nil) {
-        [JNSHAutoSize showMsg:@"手机号为空!"];
+        [JNSHAutoSize showMsg:@"请输入手机号码"];
+        return;
+    }else if (CodeCell.textFiled.text.length < 11) {
+        
+        [JNSHAutoSize showMsg:@"手机号不正确"];
         return;
     }
     if(PwdCell.textFiled.text.length <= 12 && PwdCell.textFiled.text.length >= 6) {
@@ -186,8 +186,6 @@
         [JNSHAutoSize showMsg:@"邀请码为空!"];
         return;
     }
-    
-    
     
     NSDictionary *dic = @{
                           @"phone":CodeCell.textFiled.text,

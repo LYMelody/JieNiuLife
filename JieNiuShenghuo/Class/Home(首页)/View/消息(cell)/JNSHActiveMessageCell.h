@@ -8,12 +8,20 @@
 
 #import <UIKit/UIKit.h>
 
+typedef void(^MessageTapBlock)(void);
+
 @interface JNSHActiveMessageCell : UITableViewCell
 
 @property(nonatomic,strong)UILabel *timeLab;
 
+@property(nonatomic,strong)UILabel *titleLab;
+
 @property(nonatomic,strong)UIImageView *titleImg;
 
 @property(nonatomic,strong)UILabel *contentLab;
+
+
+
+@property(nonatomic,copy)MessageTapBlock messageTapBlock;
 
 @end

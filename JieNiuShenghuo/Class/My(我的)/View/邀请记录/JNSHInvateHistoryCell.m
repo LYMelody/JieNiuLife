@@ -62,7 +62,7 @@
     self.statusLab = [[UILabel alloc] init];
     self.statusLab.text = @"未完成";
     self.statusLab.font = [UIFont systemFontOfSize:14];
-    self.statusLab.textColor = blueColor;
+    self.statusLab.textColor = BlueColor;
     self.statusLab.textAlignment = NSTextAlignmentRight;
     
     [self.contentView addSubview:self.statusLab];

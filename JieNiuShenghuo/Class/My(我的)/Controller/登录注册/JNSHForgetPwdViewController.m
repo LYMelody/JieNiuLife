@@ -27,24 +27,22 @@
     UITableView *table;
     JNSHLabFldCell *PwdCell;
     JNSHLabFldCell *NumCell;
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     
     self.title = @"忘记密码";
     self.view.backgroundColor = ColorTabBarBackColor;
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
     
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+
     
-    UIImageView *backImg = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, 64)];
-    backImg.backgroundColor = ColorTabBarBackColor;
-    
-    [self.view addSubview:backImg];
-    
-    table = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight - 64) style:UITableViewStylePlain];
+    table = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight) style:UITableViewStylePlain];
     table.delegate = self;
     table.dataSource = self;
     table.backgroundColor = ColorTableBackColor;
@@ -92,7 +90,10 @@
     
     //发送注册请求
     if ([CodeCell.textFiled.text isEqualToString:@""] || CodeCell.textFiled == nil) {
-        [JNSHAutoSize showMsg:@"手机号为空!"];
+        [JNSHAutoSize showMsg:@"请输入手机号"];
+        return;
+    }else if (CodeCell.textFiled.text.length > 12 || CodeCell.textFiled.text.length < 6) {
+        [JNSHAutoSize showMsg:@"手机号不正确"];
         return;
     }
     if(PwdCell.textFiled.text.length <= 12 && PwdCell.textFiled.text.length >= 6) {
@@ -103,11 +104,9 @@
     }
     
     if (NumCell.textFiled.text == nil || [NumCell.textFiled.text isEqualToString:@""]) {
-        [JNSHAutoSize showMsg:@"验证码为空!"];
+        [JNSHAutoSize showMsg:@"请输入验证码!"];
         return;
     }
-    
-    
     
     NSDictionary *dic = @{
                           @"phone":CodeCell.textFiled.text,

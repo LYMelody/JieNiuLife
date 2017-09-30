@@ -363,7 +363,7 @@
         return;
     }
     if (pwdTextFiled.text.length < 6 || pwdTextFiled.text.length > 12) {
-        [JNSHAutoSize showMsg:@"请输入6-12位密码"];
+        [JNSHAutoSize showMsg:@"请输入6-20位密码"];
         
         return;
     }
@@ -450,8 +450,7 @@
 
 //注册
 - (void)resign {
-    
-    
+
     NSLog(@"注册");
     JNSHResignViewController *ResignVc = [[JNSHResignViewController alloc] init];
     ResignVc.hidesBottomBarWhenPushed = YES;
@@ -475,7 +474,7 @@
     if (textField.tag == 101) {     //密码
         
         //限制输入位数  12位
-        if (range.location > 11) {
+        if (range.location > 19) {
             return NO;
         }
         

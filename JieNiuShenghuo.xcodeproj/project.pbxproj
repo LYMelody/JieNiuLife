@@ -162,6 +162,7 @@
 		CCF890EC1F38407C0045FD4D /* LSActionSheet.m in Sources */ = {isa = PBXBuildFile; fileRef = CCF890EB1F38407C0045FD4D /* LSActionSheet.m */; };
 		CCF890EF1F38455C0045FD4D /* JNSHAccountInfoCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CCF890EE1F38455C0045FD4D /* JNSHAccountInfoCell.m */; };
 		CCF890F21F3865B90045FD4D /* JNSHSexCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CCF890F11F3865B90045FD4D /* JNSHSexCell.m */; };
+		CCF8E7F51F79EBB600C820F6 /* JNSHAdvertiseView.m in Sources */ = {isa = PBXBuildFile; fileRef = CCF8E7F41F79EBB600C820F6 /* JNSHAdvertiseView.m */; };
 		CCFA50C61F5E79FA00492CB2 /* JNSHNoticeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CCFA50C51F5E79FA00492CB2 /* JNSHNoticeViewController.m */; };
 /* End PBXBuildFile section */
 
@@ -456,6 +457,8 @@
 		CCF890EE1F38455C0045FD4D /* JNSHAccountInfoCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNSHAccountInfoCell.m; sourceTree = "<group>"; };
 		CCF890F01F3865B90045FD4D /* JNSHSexCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNSHSexCell.h; sourceTree = "<group>"; };
 		CCF890F11F3865B90045FD4D /* JNSHSexCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNSHSexCell.m; sourceTree = "<group>"; };
+		CCF8E7F31F79EBB600C820F6 /* JNSHAdvertiseView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JNSHAdvertiseView.h; sourceTree = "<group>"; };
+		CCF8E7F41F79EBB600C820F6 /* JNSHAdvertiseView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JNSHAdvertiseView.m; sourceTree = "<group>"; };
 		CCFA50C21F5E448200492CB2 /* JieNiuShenghuo.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = JieNiuShenghuo.entitlements; sourceTree = "<group>"; };
 		CCFA50C41F5E79FA00492CB2 /* JNSHNoticeViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNSHNoticeViewController.h; sourceTree = "<group>"; };
 		CCFA50C51F5E79FA00492CB2 /* JNSHNoticeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNSHNoticeViewController.m; sourceTree = "<group>"; };
@@ -1334,6 +1337,7 @@
 		CCF890DF1F383FFF0045FD4D /* 自定义组件 */ = {
 			isa = PBXGroup;
 			children = (
+				CCF8E7F21F79EB8C00C820F6 /* 启动广告 */,
 				CC10BE1B1F663079006B9640 /* 广告轮播 */,
 				CC2C444E1F44148800B4982B /* 日历 */,
 				CCC440F71F3D57C500672F60 /* 弹出提示框 */,
@@ -1354,6 +1358,15 @@
 				CCF890EB1F38407C0045FD4D /* LSActionSheet.m */,
 			);
 			path = LSActionSheet;
+			sourceTree = "<group>";
+		};
+		CCF8E7F21F79EB8C00C820F6 /* 启动广告 */ = {
+			isa = PBXGroup;
+			children = (
+				CCF8E7F31F79EBB600C820F6 /* JNSHAdvertiseView.h */,
+				CCF8E7F41F79EBB600C820F6 /* JNSHAdvertiseView.m */,
+			);
+			path = "启动广告";
 			sourceTree = "<group>";
 		};
 		CCFA50C31F5E79D600492CB2 /* 消息 */ = {
@@ -1545,6 +1558,7 @@
 				CC64BB271F4FD49700A1B692 /* SBJsonBase.m in Sources */,
 				CCF890CA1F383DF60045FD4D /* JNSYHeaderEditorViewController.m in Sources */,
 				CC983CB01F4BD9D400249B2C /* JNSHOrderDisCountCell.m in Sources */,
+				CCF8E7F51F79EBB600C820F6 /* JNSHAdvertiseView.m in Sources */,
 				CC95DCE81F315F4500539A03 /* ViewController.m in Sources */,
 				CC5D85411F42FB6600C13022 /* JNSHOrderStatusCell.m in Sources */,
 				CC2C445E1F44148800B4982B /* DAYNavigationBar.m in Sources */,

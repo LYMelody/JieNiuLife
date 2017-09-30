@@ -41,6 +41,7 @@
     UILabel *halfLab;
     NSArray *mealDic;
     NSString *vipcode;
+    UIButton *confirmBtn;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -63,8 +64,10 @@
     //隐藏黑线
     self.navigationController.navigationBar.subviews[0].subviews[0].hidden = YES;
     self.navigationController.navigationBar.translucent = NO;
+    //获取VIP信息
     [self RequsetVipInfo];
-    
+    //获取基本信息
+    [self getBaseInfo];
 }
 
 - (void)viewDidLoad {
@@ -165,10 +168,6 @@
     UITapGestureRecognizer *vipTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapForVip)];
     vipTap.numberOfTapsRequired = 1;
     [ratingBackImg addGestureRecognizer:vipTap];
-    
-    
-    
-    
     
     UIImageView *ratingImg = [[UIImageView alloc] init];
     ratingImg.image = [UIImage imageNamed:@"vip_rate"];
@@ -489,6 +488,9 @@
     
     [bottomBackImg mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.right.bottom.equalTo(self.view);
+        if (IS_IphoneX) {
+            make.bottom.equalTo(self.view).offset(-44);
+        }
         make.height.mas_equalTo(KscreenHeight - CGRectGetMaxY(scrollView.frame));
     }];
     
@@ -508,7 +510,7 @@
         make.size.mas_equalTo(CGSizeMake(([JNSHAutoSize width:120]), [JNSHAutoSize height:20]));
     }];
     
-    UIButton *confirmBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    confirmBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [confirmBtn setBackgroundColor:ColorTabBarBackColor];
     [confirmBtn setTitle:@"立即开通" forState:UIControlStateNormal];
     [confirmBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
@@ -595,17 +597,13 @@
             //判断绑定卡数组是否有数据
             if ([resultdic[@"bindCards"] isKindOfClass:[NSArray class]]) {
                  arrar = resultdic[@"bindCards"];
-                
             }
-            
             vipOrder.cardsArray = arrar;
             vipOrder.hidesBottomBarWhenPushed = YES;
             [self.navigationController pushViewController:vipOrder animated:YES];
-            
+           
         }else {
-            
             [JNSHAutoSize showMsg:msg];
-            
         }
         
     } failure:^(NSError *error) {
@@ -618,7 +616,7 @@
     
     UIView *selectView = sender.view;
     
-    NSString *str = [NSString stringWithFormat:@"总价：￥%ld",[mealDic[0][@"price"] integerValue]/100];;
+    NSString *str = [NSString stringWithFormat:@"总价：￥%ld",[mealDic[0][@"price"] integerValue]/100];
     
     if (selectView == nityImg) {
         
@@ -630,7 +628,6 @@
     }else if (selectView == halfYearImg) {
         
         nityImg.backgroundColor = [UIColor whiteColor];
-        
         halfYearImg.backgroundColor = lightOrgeron;
         //设置总价
         str = [NSString stringWithFormat:@"总价：￥%ld",[mealDic[1][@"price"] integerValue]/100];
@@ -664,7 +661,7 @@
         
         NSDictionary *resultdic = [result JSONValue];
         NSString *code = resultdic[@"code"];
-        NSLog(@"%@",resultdic);
+        //NSLog(@"%@",resultdic);
         NSString *msg = resultdic[@"msg"];
         if ([code isEqualToString:@"000000"]) {
             NSString *rate = resultdic[@"vipRate"];
@@ -675,11 +672,17 @@
                 diamondImg.image = [UIImage imageNamed:@"my_head_vip"];
                 VipLab.text = [NSString stringWithFormat:@"%@天后会员到期",expireDay];
                 rightLab.text = @"会员专属特权";
+                [confirmBtn setTitle:@"立即续费" forState:UIControlStateNormal];
+            }else if ([Vip isEqualToString:@"0"]) {  //
+                [confirmBtn setTitle:@"立即开通" forState:UIControlStateNormal];
+            }else {
+                [confirmBtn setTitle:@"立即续费" forState:UIControlStateNormal];
             }
             mealDic = resultdic[@"meal"];
             if([resultdic[@"meal"] isKindOfClass:[NSArray class]]) {
-                
-                totalPrice = [NSString stringWithFormat:@"%ld",[mealDic[0][@"price"] integerValue]/100];
+                if((totalPrice == nil) || [totalPrice isEqualToString:@""]) {
+                    totalPrice = [NSString stringWithFormat:@"%ld",[mealDic[0][@"price"] integerValue]/100];
+                }
                 leftLab.text = mealDic[0][@"title"];
                 NityrightLab.text = [NSString stringWithFormat:@"￥%ld",[mealDic[0][@"price"] integerValue]/100];
                 halfYearLab.text = mealDic[1][@"title"];
@@ -699,6 +702,82 @@
         NSLog(@"%@",error);
     }];
 }
+
+//获取用户基本信息
+- (void)getBaseInfo {
+    
+    NSString *timestamp = [JNSHAutoSize getTimeNow];
+    
+    NSDictionary *dic = @{
+                          @"timestamp":timestamp
+                          };
+    
+    NSString *action = @"UserBaseInfoState";
+    
+    NSLog(@"%@",[JNSYUserInfo getUserInfo].userToken);
+    NSDictionary *requestDic = @{
+                                 @"action":action,
+                                 @"token":[JNSYUserInfo getUserInfo].userToken,
+                                 @"data":dic
+                                 };
+    NSString *params = [requestDic JSONFragment];
+    
+    [IBHttpTool postWithURL:JNSHTestUrl params:params success:^(id result) {
+        //NSLog(@"%@",result);
+        NSDictionary *resultdic = [result JSONValue];
+        NSString *code = resultdic[@"code"];
+        if([code isEqualToString:@"000000"]) {
+            
+            [JNSYUserInfo getUserInfo].userCode = resultdic[@"userCode"];
+            [JNSYUserInfo getUserInfo].userPhone = resultdic[@"userPhone"];
+            [JNSYUserInfo getUserInfo].userAccount = resultdic[@"userAccount"];
+            [JNSYUserInfo getUserInfo].userCert = resultdic[@"userCert"];
+            [JNSYUserInfo getUserInfo].userPoints = resultdic[@"userPoints"];
+            [JNSYUserInfo getUserInfo].userSex = [NSString stringWithFormat:@"%@",resultdic[@"sex"]];
+            [JNSYUserInfo getUserInfo].picHeader = resultdic[@"picHeader"];
+            [JNSYUserInfo getUserInfo].userVipFlag = [NSString stringWithFormat:@"%@",resultdic[@"vipFig"]];
+            [JNSYUserInfo getUserInfo].userQr = resultdic[@"picQr"];
+            [JNSYUserInfo getUserInfo].birthday = resultdic[@"birthday"];
+            [JNSYUserInfo getUserInfo].SettleCard = resultdic[@"userBank"];
+            
+            //实名认证状态
+            NSString *userStatus = resultdic[@"userStatus"];
+            if ([userStatus isEqualToString:@"11"]) {
+                [JNSYUserInfo getUserInfo].userStatus = @"待审核";
+            }else if ([userStatus isEqualToString:@"12"]){
+                [JNSYUserInfo getUserInfo].userStatus = @"审核驳回";
+            }else if ([userStatus isEqualToString:@"20"]) {
+                [JNSYUserInfo getUserInfo].userStatus = @"审核通过";
+            }else if([userStatus isEqualToString:@"10"]){
+                [JNSYUserInfo getUserInfo].userStatus = @"初始化";
+            }else if ([userStatus isEqualToString:@"19"]) {
+                [JNSYUserInfo getUserInfo].userStatus = @"初审通过";
+            }else if ([userStatus isEqualToString:@"30"]) {
+                [JNSYUserInfo getUserInfo].userStatus = @"系统风控";
+            }else {
+                [JNSYUserInfo getUserInfo].userStatus = @"停用删除";
+            }
+            //判断是否是Vip  g    0:未开通 1:开通有效 2:开通已到期
+            if ([[JNSYUserInfo getUserInfo].userVipFlag isEqualToString:@"1"]) {
+                
+                isVip = YES;
+                
+            }
+           
+            
+        }else {
+            NSString *msg = resultdic[@"msg"];
+            [JNSHAutoSize showMsg:msg];
+        }
+        
+    } failure:^(NSError *error) {
+        
+        //[JNSYAutoSize showMsg:error];
+        
+    }];
+    
+}
+
 
 //专属费率
 - (void)tapForVip {

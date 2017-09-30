@@ -47,6 +47,6 @@
 
 #define IS_IphoneX [UIScreen mainScreen].bounds.size.height==812.00?YES:NO
 
-
+#define IS_IOS11 ([[[UIDevice currentDevice] systemVersion] floatValue] >= 11.0)
 
 #endif /* JNSHCommon_h */

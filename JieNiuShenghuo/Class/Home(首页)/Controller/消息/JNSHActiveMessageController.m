@@ -9,6 +9,8 @@
 #import "JNSHActiveMessageController.h"
 #import "JNSHActiveMessageCell.h"
 #import "UIImageView+WebCache.h"
+#import "JNSHWebViewController.h"
+
 @interface JNSHActiveMessageController ()<UITableViewDelegate,UITableViewDataSource>
 
 @end
@@ -52,6 +54,9 @@
         }
     }
     
+    NSLog(@"消息列表:%@",self.messageList);
+    
+    
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -80,18 +85,25 @@
             Cell.titleLab.text = dic[@"noticeTitle"];
             Cell.contentLab.text = dic[@"noticeContent"];
             NSString *icon = dic[@"noticeIcon"];
-            
+            Cell.messageTapBlock = ^{
+                
+                NSString *url = [NSString stringWithFormat:@"%@",dic[@"noticeUrl"]];
+                if ((![url isEqualToString:@"<null>"]) && (![url isKindOfClass:[NSNull class]]) ) {
+                    JNSHWebViewController *WebVc = [[JNSHWebViewController alloc] init];
+                    WebVc.url = url;
+                    WebVc.hidesBottomBarWhenPushed = YES;
+                    [self.navigationController pushViewController:WebVc animated:YES];
+                }
+                
+            };
             if (![icon isKindOfClass:[NSNull class]]) {
                 [Cell.titleImg sd_setImageWithURL:[NSURL URLWithString:icon]];
             }
-        
             cell = Cell;
         }
-
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
-
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {

@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+typedef void(^UseBlock)(void);
+
 @interface JNSHTicketsCell : UITableViewCell
 
 @property(nonatomic,assign)BOOL isUsed;
@@ -17,5 +19,7 @@
 @property(nonatomic,strong)UILabel *titleLab;
 
 @property(nonatomic,strong)UILabel *timeLab;
+
+@property(nonatomic,copy)UseBlock useBlock;
 
 @end

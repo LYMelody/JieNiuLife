@@ -20,7 +20,6 @@
 
 @property(nonatomic,strong)UIButton *usageBtn;
 
-
 @end
 
 
@@ -63,8 +62,12 @@
     
     [self.midImg mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.customView).offset([JNSHAutoSize height:23]);
-        make.left.equalTo(self.customView).offset([JNSHAutoSize width:30]);
-        make.right.equalTo(self.customView).offset(-[JNSHAutoSize width:40]);
+        if([[[UIDevice currentDevice] systemVersion] floatValue] >= 11.0) {
+            make.centerX.equalTo(self.customView);
+        }else {
+            make.left.equalTo(self.customView).offset([JNSHAutoSize width:30]);
+            make.right.equalTo(self.customView).offset(-[JNSHAutoSize width:40]);
+        }
         make.bottom.equalTo(self.customView).offset(-[JNSHAutoSize height:84]);
     }];
     
@@ -75,7 +78,12 @@
     
     [self.dismissBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.customView);
-        make.right.equalTo(self.customView).offset(-[JNSHAutoSize width:21]);
+       
+        if (IS_IOS11) {
+            make.right.equalTo(self.customView);
+        }else {
+             make.right.equalTo(self.customView).offset(-[JNSHAutoSize width:21]);
+        }
         make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:21], [JNSHAutoSize height:21]));
     }];
     
@@ -90,8 +98,13 @@
     [self.customView addSubview:self.usageBtn];
     
     [self.usageBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.customView).offset([JNSHAutoSize width:48]);
-        make.right.equalTo(self.customView).offset(-[JNSHAutoSize width:68]);
+        if (IS_IOS11) {
+            make.left.equalTo(self.customView).offset([JNSHAutoSize width:48]);
+            make.right.equalTo(self.customView).offset(-[JNSHAutoSize width:48]);
+        }else {
+            make.left.equalTo(self.customView).offset([JNSHAutoSize width:48]);
+            make.right.equalTo(self.customView).offset(-[JNSHAutoSize width:68]);
+        }
         make.top.equalTo(self.midImg.mas_bottom).offset([JNSHAutoSize height:20]);
         make.height.mas_equalTo([JNSHAutoSize height:26]);
         
@@ -110,7 +123,6 @@
         
         self.watchTicksBlock();
     }
-
 }
 
 - (void)showinView:(UIWindow *)view {

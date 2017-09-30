@@ -57,6 +57,9 @@
     [self.midImg mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.customView).offset([JNSHAutoSize height:29]);
         make.centerX.equalTo(self.customView).offset(-[JNSHAutoSize width:6]);
+        if (IS_IOS11) {
+            make.centerX.equalTo(self.customView);
+        }
         make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:35], [JNSHAutoSize width:35]));
     }];
     
@@ -70,6 +73,9 @@
     
     [textLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(self.customView).offset(-[JNSHAutoSize width:6]);
+        if (IS_IOS11) {
+            make.centerX.equalTo(self.customView);
+        }
         make.top.equalTo(self.midImg.mas_bottom).offset([JNSHAutoSize height:19]);
         make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:221], [JNSHAutoSize height:20]));
     }];

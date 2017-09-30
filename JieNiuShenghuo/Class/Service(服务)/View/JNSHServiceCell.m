@@ -17,7 +17,6 @@
         
         [self setUpViews];
         
-        
     }
     
     return self;
@@ -41,6 +40,10 @@
     self.subTitleLab.textAlignment = NSTextAlignmentLeft;
     self.subTitleLab.textColor = ColorLightText;
     [self.contentView addSubview:self.subTitleLab];
+    
+    self.bottomLineView = [[UIImageView alloc] init];
+    self.bottomLineView.backgroundColor = ColorLineSeperate;
+    [self.contentView addSubview:self.bottomLineView];
     
 }
 
@@ -66,6 +69,13 @@
         make.left.equalTo(self.titleLab);
         make.size.mas_equalTo(CGSizeMake(KscreenWidth, [JNSHAutoSize height:15]));
     }];
+    
+    [self.bottomLineView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.bottom.right.equalTo(self);
+        make.left.equalTo(self).offset([JNSHAutoSize width:15]);
+        make.height.mas_equalTo(SeperateLineWidth);
+    }];
+    
 }
 
 

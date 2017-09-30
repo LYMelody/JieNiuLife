@@ -80,7 +80,7 @@
     [_rightLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(self);
         make.size.mas_equalTo(CGSizeMake(100, 20));
-        if ([_rightLab.text isEqualToString:@"400-600-7909"]) { //如果是客服电话则向右移
+        if ([_rightLab.text isEqualToString:@"400-101-8258"]) { //如果是客服电话则向右移400-101-8258
              make.right.equalTo(self).offset(-16);
         }else {
             make.right.equalTo(self).offset(-32);

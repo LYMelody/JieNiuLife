@@ -16,4 +16,6 @@
 
 @property(nonatomic,strong)UILabel *subTitleLab;
 
+@property(nonatomic,strong)UIImageView *bottomLineView;
+
 @end

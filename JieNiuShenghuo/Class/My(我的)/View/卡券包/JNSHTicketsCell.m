@@ -49,6 +49,7 @@
     
     self.backImg = [[UIImageView alloc] init];
     self.backImg.backgroundColor = [UIColor whiteColor];
+    self.backImg.userInteractionEnabled = YES;
     [self.contentView addSubview:self.backImg];
     
     [self.backImg mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -101,7 +102,7 @@
     self.useBtn.backgroundColor = BlueColor;
     self.useBtn.layer.cornerRadius = 2;
     self.useBtn.layer.masksToBounds = YES;
-    
+    [self.useBtn addTarget:self action:@selector(use) forControlEvents:UIControlEventTouchUpInside];
     [self.backImg addSubview:self.useBtn];
     
     [self.useBtn mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -124,12 +125,8 @@
 
 - (void)layoutSubviews {
     
-    
     [super layoutSubviews];
-    
-    
-    
-    
+
 }
 
 - (void)setIsUsed:(BOOL)isUsed {
@@ -146,8 +143,6 @@
         
         self.useBtn.enabled = NO;
     }
-    
-   
 }
 
 - (void)setIsUpDate:(BOOL)isUpDate {
@@ -167,6 +162,16 @@
     }
     
 }
+//点击使用
+- (void)use {
+    
+    if (self.useBlock) {
+        self.useBlock();
+    }
+    
+    
+}
+
 
 
 @end

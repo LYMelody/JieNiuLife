@@ -36,11 +36,18 @@
     self.view.backgroundColor = ColorTabBarBackColor;
     [self.navigationController setNavigationBarHidden:NO animated:YES];
     
+    self.navigationController.navigationBar.translucent = NO;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+    CGFloat height = 0;
+    if (IS_IphoneX) {
+        height = 88;
+    }else {
+        height = 0;
+    }
     
     table = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight) style:UITableViewStylePlain];
     table.delegate = self;
@@ -99,7 +106,7 @@
     if(PwdCell.textFiled.text.length <= 12 && PwdCell.textFiled.text.length >= 6) {
         
     }else {
-        [JNSHAutoSize showMsg:@"请输入6-12位密码!"];
+        [JNSHAutoSize showMsg:@"请输入6-20位密码!"];
         return;
     }
     
@@ -237,11 +244,11 @@
         NSLog(@"%@",result);
         NSDictionary *resultDic = [result JSONValue];
         NSString *code = resultDic[@"code"];
-        NSString *msg = resultDic[@"respMsg"];
+        NSString *msg = resultDic[@"msg"];
         if ([code isEqualToString:@"000000"]) {
             
             index = 59;
-            [CodeCell.codeBtn setTitle:[NSString stringWithFormat:@"重新获取%lds",index] forState:UIControlStateNormal];
+            [CodeCell.codeBtn setTitle:[NSString stringWithFormat:@"重新获取%lds",(long)index] forState:UIControlStateNormal];
             [CodeCell.codeBtn setBackgroundColor:GrayColor];
             CodeCell.codeBtn.enabled = NO;
             
@@ -258,8 +265,6 @@
         NSLog(@"%@",error);
         CodeCell.codeBtn.enabled = YES;
     }];
-    
-    
 }
 
 - (void)countDown {
@@ -273,7 +278,7 @@
         [timer invalidate];
     }else {
         
-        [CodeCell.codeBtn setTitle:[NSString stringWithFormat:@"重新获取%lds",index] forState:UIControlStateNormal];
+        [CodeCell.codeBtn setTitle:[NSString stringWithFormat:@"重新获取%lds",(long)index] forState:UIControlStateNormal];
         [CodeCell.codeBtn setBackgroundColor:GrayColor];
         CodeCell.codeBtn.enabled = NO;
         
@@ -304,9 +309,6 @@
     return YES;
     
 }
-
-
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

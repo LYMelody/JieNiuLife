@@ -29,12 +29,16 @@
     NSTimer *anthorTimer;
     NSInteger index;
     NSInteger anthorIndex;
+    NSString *name;
+    NSString *cert;
     JNSHGetCodeCell *CodeCell;
     JNSHLabFldCell *YxqCell;
     JNSHLabFldCell *CVVCell;
     JNSHLabFldCell *PhoneCell;
     JNSHCommonButton *CommitBtn;
     MBProgressHUD *HUD;
+    JNSHLabFldCell *NameCell;
+    JNSHLabFldCell *CertCell;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -57,10 +61,13 @@
     navBackImg.backgroundColor = ColorTabBarBackColor;
     [self.view addSubview:navBackImg];
 
-    
     //返回按钮
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:self action:nil];
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    
+    //初始字段
+    name = [JNSYUserInfo getUserInfo].userAccount;
+    cert = [JNSYUserInfo getUserInfo].userCert;
     
     UITableView *table = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight - 64) style:UITableViewStylePlain];
     table.dataSource = self;
@@ -110,6 +117,10 @@
     CommitBtn.enabled = NO;
     if ([CodeCell.textFiled.text isEqualToString:@""]) {
         [JNSHAutoSize showMsg:@"验证码为空"];
+        CommitBtn.enabled = YES;
+        return;
+    }else if ((CodeCell.textFiled.text.length < 4) || (CodeCell.textFiled.text.length > 6)) {
+        [JNSHAutoSize showMsg:@"验证码格式不正确"];
         CommitBtn.enabled = YES;
         return;
     }
@@ -264,17 +275,27 @@
             cell = Cell;
         }else if (indexPath.row == 1) {
             
-            JNSHTitleCell *Cell = [[JNSHTitleCell alloc] init];
-            Cell.leftLab.text = @"姓      名";
-            Cell.rightLab.text = [JNSYUserInfo getUserInfo].userAccount;
-            cell = Cell;
+            NameCell = [[JNSHLabFldCell alloc] init];
+            NameCell.leftLab.text = @"姓      名";
+            NameCell.textFiled.text = name;
+            NameCell.textFiled.delegate = self;
+            NameCell.textFiled.tag = 100;
+            NameCell.textFiled.clearButtonMode = UITextFieldViewModeAlways;
+            cell = NameCell;
             
         }else if (indexPath.row == 2) {
             
-            JNSHTitleCell *Cell = [[JNSHTitleCell alloc] init];
-            Cell.leftLab.text = @"身份证号";
-            Cell.rightLab.text = [[JNSYUserInfo getUserInfo].userCert stringByReplacingCharactersInRange:NSMakeRange(6, 8) withString:@"********"];
-            cell = Cell;
+            CertCell = [[JNSHLabFldCell alloc] init];
+            CertCell.leftLab.text = @"身份证号";
+            if (cert.length > 10) {
+                CertCell.textFiled.text = [cert stringByReplacingCharactersInRange:NSMakeRange(6, 8) withString:@"********"];
+            }else {
+                CertCell.textFiled.text = cert;
+            }
+            CertCell.textFiled.delegate = self;
+            CertCell.textFiled.tag = 101;
+            CertCell.textFiled.clearButtonMode = UITextFieldViewModeAlways;
+            cell = CertCell;
             
         }else if (indexPath.row == 3) {
             
@@ -306,6 +327,7 @@
             CVVCell.textFiled.keyboardType = UIKeyboardTypeNumberPad;
             CVVCell.textFiled.secureTextEntry = YES;
             CVVCell.textFiled.delegate = self;
+            CVVCell.textFiled.tag = 102;
             cell = CVVCell;
             
         }else if (indexPath.row == 7) {
@@ -364,13 +386,28 @@
     }
 }
 
+#define TextFiledDelegate
+
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     
-    if (range.location > 2) {
-        return NO;
+    if (textField.tag == 102) {
+        if (range.location > 2) {
+            return NO;
+        }
+    }
+
+    return YES;
+    
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField {
+    
+    if (textField.tag == 100) {
+        name = NameCell.textFiled.text;
+    }else if (textField.tag == 101) {
+        cert = CertCell.textFiled.text;
     }
     
-    return YES;
 }
 
 
@@ -378,8 +415,15 @@
 - (void)getcode {
     
     CodeCell.codeBtn.enabled = NO;
-    
-    if ([YxqCell.textFiled.text isEqualToString:@""]) {
+    if ([name isEqualToString:@""]) {
+        [JNSHAutoSize showMsg:@"姓名为空!"];
+        CodeCell.codeBtn.enabled = YES;
+        return;
+    }else if ([cert isEqualToString:@""]) {
+        [JNSHAutoSize showMsg:@"身份证为空"];
+        CodeCell.codeBtn.enabled = YES;
+        return;
+    }else if ([YxqCell.textFiled.text isEqualToString:@""]) {
         [JNSHAutoSize showMsg:@"有效期为空!"];
          CodeCell.codeBtn.enabled = YES;
         return;
@@ -387,8 +431,17 @@
         [JNSHAutoSize showMsg:@"CVV为空!"];
          CodeCell.codeBtn.enabled = YES;
         return;
-    }else if ([PhoneCell.textFiled.text isEqualToString:@""]){
+    }else if (CVVCell.textFiled.text.length < 3) {
+        [JNSHAutoSize showMsg:@"CVV格式不正确"];
+        CodeCell.codeBtn.enabled = YES;
+        return;
+    }
+    else if ([PhoneCell.textFiled.text isEqualToString:@""]){
         [JNSHAutoSize showMsg:@"手机号为空!"];
+        CodeCell.codeBtn.enabled = YES;
+        return;
+    }else if (PhoneCell.textFiled.text.length != 11) {
+        [JNSHAutoSize showMsg:@"手机号格式不正确"];
         CodeCell.codeBtn.enabled = YES;
         return;
     }
@@ -396,8 +449,8 @@
     //发起验证码请求
     NSDictionary *dic = @{
                           @"orderNo":self.orderNo,
-                          @"cardAccount":[JNSYUserInfo getUserInfo].userAccount,
-                          @"cardCert":[JNSYUserInfo getUserInfo].userCert,
+                          @"cardAccount":name,
+                          @"cardCert":cert,
                           @"cardPhone":[self.cardPhone isEqualToString:@""]?PhoneCell.textFiled.text:self.cardPhone,
                           @"cardCvv":CVVCell.textFiled.text,
                           @"cardYxq":YxqCell.textFiled.text
@@ -419,7 +472,7 @@
         if([code isEqualToString:@"000000"]) {
             
             index = 59;
-            [CodeCell.codeBtn setTitle:[NSString stringWithFormat:@"重新获取%lds",index] forState:UIControlStateNormal];
+            [CodeCell.codeBtn setTitle:[NSString stringWithFormat:@"重新获取%lds",(long)index] forState:UIControlStateNormal];
             [CodeCell.codeBtn setBackgroundColor:GrayColor];
             CodeCell.codeBtn.enabled = NO;
             
@@ -449,7 +502,7 @@
         [timer invalidate];
     }else {
         
-        [CodeCell.codeBtn setTitle:[NSString stringWithFormat:@"重新获取%lds",index] forState:UIControlStateNormal];
+        [CodeCell.codeBtn setTitle:[NSString stringWithFormat:@"重新获取%lds",(long)index] forState:UIControlStateNormal];
         [CodeCell.codeBtn setBackgroundColor:GrayColor];
         CodeCell.codeBtn.enabled = NO;
         

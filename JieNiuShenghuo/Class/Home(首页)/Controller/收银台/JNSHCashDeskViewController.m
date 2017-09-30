@@ -138,6 +138,13 @@
     
     CGFloat width = (KscreenWidth - 2*3)/4.0;
     CGFloat height = [JNSHAutoSize height:64];
+    CGFloat midHeight = 0;
+    if(IS_IphoneX) {
+        
+        midHeight = 64;
+    }else {
+        midHeight = 0;
+    }
     
     for (NSInteger i = 0; i < 4; i++) {
         for (NSInteger j = 0; j < 3; j++) {
@@ -148,7 +155,7 @@
             
             [numberBtn setTitleColor:ColorText forState:UIControlStateNormal];
             numberBtn.titleLabel.font = [UIFont systemFontOfSize:20];
-            numberBtn.frame = CGRectMake(j*(width + 2), (KscreenHeight-64) - ((4-i)*(height) + (3- i)*2), width, height);
+            numberBtn.frame = CGRectMake(j*(width + 2), (KscreenHeight-64-midHeight) - ((4-i)*(height) + (3- i)*2), width, height);
             [numberBtn addTarget:self action:@selector(numSelect:) forControlEvents:UIControlEventTouchUpInside];
             
             [backImg addSubview:numberBtn];
@@ -162,7 +169,7 @@
     [delectBtn setImage:[UIImage imageNamed:@"cashier_delete"] forState:UIControlStateNormal];
     [delectBtn setAdjustsImageWhenHighlighted:YES];
     [delectBtn addTarget:self action:@selector(numSelect:) forControlEvents:UIControlEventTouchUpInside];
-    delectBtn.frame = CGRectMake(KscreenWidth - width, (KscreenHeight-64) - ((4)*(height) + (3)*2), width, height * 2 + 2);
+    delectBtn.frame = CGRectMake(KscreenWidth - width, (KscreenHeight-64-midHeight) - ((4)*(height) + (3)*2), width, height * 2 + 2);
     
     [backImg addSubview:delectBtn];
     
@@ -174,7 +181,7 @@
     payBtn.titleLabel.font = [UIFont systemFontOfSize:18];
     [payBtn setBackgroundColor:ColorTabBarBackColor];
     [payBtn addTarget:self action:@selector(numSelect:) forControlEvents:UIControlEventTouchUpInside];
-    payBtn.frame = CGRectMake(KscreenWidth - width, (KscreenHeight-64) - ((2)*(height) + 2*2), width, height * 2 + 2*2);
+    payBtn.frame = CGRectMake(KscreenWidth - width, (KscreenHeight-64-midHeight) - ((2)*(height) + 2*2), width, height * 2 + 2*2);
     [backImg addSubview:payBtn];
     
 }

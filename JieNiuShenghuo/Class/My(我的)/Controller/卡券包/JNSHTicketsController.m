@@ -15,6 +15,7 @@
 #import "IBHttpTool.h"
 #import "UIViewController+Cloudox.h"
 #import "UINavigationController+Cloudox.h"
+#import "JNSHCashDeskViewController.h"
 
 @interface JNSHTicketsController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -26,16 +27,12 @@
     
 }
 
-
 - (void)viewWillAppear:(BOOL)animated {
     
     [super viewWillAppear:animated];
     
     self.title = @"卡券包";
-    
-    
     self.navigationController.navigationBar.barTintColor = [UIColor whiteColor];
-    
     [self.navigationController.navigationBar setTitleTextAttributes:@{
                                                                       NSForegroundColorAttributeName:ColorTabBarBackColor
      
@@ -50,14 +47,12 @@
 //    backimg.alpha = 0;
     self.navBarBgAlpha = @"1.0";
     self.navigationController.navigationBar.translucent = NO;
-    
+    //是否是已过期
     if (self.tag == 2) {
         [self requestForTickets:YES];
     }else {
         [self requestForTickets:NO];
     }
-    
-    
     //[self.navigationController setNavigationBarHidden:NO animated:NO];
 }
 
@@ -67,14 +62,11 @@
     
     [self.navigationController.navigationBar setTitleTextAttributes:@{
                                                                       NSForegroundColorAttributeName:[UIColor whiteColor]
-                                                                      
                                                                       }];
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
-    
-     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:NO];
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:NO];
     //UIImageView *backimg = self.navigationController.navigationBar.subviews.firstObject;
     //backimg.alpha = 1;
-    
 }
 
 - (void)viewDidLoad {
@@ -171,7 +163,6 @@
     
     table.hidden = NO;
     backImg.hidden = YES;
-    
 }
 
 //过期刷卡金
@@ -183,7 +174,6 @@
     [self.navigationController pushViewController:Tickets animated:YES];
     
 }
-
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
@@ -200,22 +190,28 @@
     if (cell == nil) {
         cell = [[JNSHTicketsCell alloc] init];
         
-        
         cell.timeLab.text = [NSString stringWithFormat:@"有效期至 %@",self.listArray[indexPath.row][@"expireTime"]];
         cell.titleLab = self.listArray[indexPath.row][@"vouchersName"];
+        //点击使用
+        cell.useBlock = ^{
+            JNSHCashDeskViewController *CashDeskVc = [[JNSHCashDeskViewController alloc] init];
+            CashDeskVc.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:CashDeskVc animated:YES];
+        };
+        //是否过期
+        //NSString *isUsed =self.listArray[indexPath.row][@""];
         
         if (self.tag == 2) {
-            if (indexPath.row == 3) {
+           
                 cell.isUsed = YES;
-            }else if (indexPath.row == 4) {
-                cell.titleLab.text = @"生日刷卡抵用券";
-                cell.isUpDate = YES;
-            }
+            
+//                cell.titleLab.text = @"生日刷卡抵用券";
+//                cell.isUpDate = YES;
         }
+        
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
-    
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -226,6 +222,8 @@
 
 //获取卡券包
 - (void)requestForTickets:(BOOL)isUse {
+    
+    
     
     NSDictionary *dic = @{
                           @"isUse":isUse?@"1":@"0",
@@ -255,7 +253,6 @@
             }
             
             [table reloadData];
-            
             
         }else {
             

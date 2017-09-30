@@ -58,6 +58,8 @@
 
 @property(nonatomic,copy)NSString *userVipFlag;         //用户是否为会员
 
+@property(nonatomic,copy)NSString *vipExpireDay;       //会员过期日
+
 @property(nonatomic,copy)NSString *SettleCard;         //结算卡
 
 @property(nonatomic,copy)NSString *userStatus;        //实名认证状态

@@ -107,8 +107,12 @@
     
     CommitBtn.enabled = NO;
     
-    if ([CodeCell.textFiled.text isEqualToString:@""]) {
+     if ([CodeCell.textFiled.text isEqualToString:@""]) {
         [JNSHAutoSize showMsg:@"验证码为空"];
+        CommitBtn.enabled = YES;
+        return;
+    }else if ((CodeCell.textFiled.text.length < 4) || (CodeCell.textFiled.text.length > 6)) {
+        [JNSHAutoSize showMsg:@"验证码格式错误"];
         CommitBtn.enabled = YES;
         return;
     }
@@ -337,6 +341,10 @@
     if ([PhoneCell.textFiled.text isEqualToString:@""]) {
         [JNSHAutoSize showMsg:@"手机号为空"];
         CodeCell.codeBtn.enabled = YES;
+        return;
+    }else if (PhoneCell.textFiled.text.length != 11) {
+        [JNSHAutoSize showMsg:@"手机号格式错误"];
+        CommitBtn.enabled = YES;
         return;
     }
     

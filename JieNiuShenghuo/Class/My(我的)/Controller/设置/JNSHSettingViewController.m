@@ -19,6 +19,7 @@
 #import "JNSYUserInfo.h"
 #import "UIViewController+Cloudox.h"
 #import "UINavigationController+Cloudox.h"
+#import "JNSHLoginController.h"
 
 @interface JNSHSettingViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -27,7 +28,6 @@
 @implementation JNSHSettingViewController {
     
     UITableView *table;
-    
     
 }
 
@@ -70,13 +70,10 @@
     UITapGestureRecognizer *tapGus = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(logOut)];
     tapGus.numberOfTapsRequired =1;
     
-    
     JNSYHighLightImageView *logOutBackView = [[JNSYHighLightImageView alloc] initWithFrame:CGRectMake(0, 20, KscreenWidth, 44)];
     logOutBackView.backgroundColor = [UIColor whiteColor];
     logOutBackView.userInteractionEnabled = YES;
     [logOutBackView addGestureRecognizer:tapGus];
-    
-   
     
     //上线
     UIImageView *TopLine = [[UIImageView alloc] init];
@@ -210,9 +207,21 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (indexPath.row == 0) {
-        JNSHR_eSetPwdViewController *ReVc  = [[JNSHR_eSetPwdViewController alloc] init];
-        ReVc.hidesBottomBarWhenPushed = YES;
-        [self.navigationController pushViewController:ReVc animated:YES];
+        
+        if ([JNSYUserInfo getUserInfo].isLoggedIn) {
+            JNSHR_eSetPwdViewController *ReVc  = [[JNSHR_eSetPwdViewController alloc] init];
+            ReVc.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:ReVc animated:YES];
+        }else {
+            
+            JNSHLoginController *LogInVc = [[JNSHLoginController alloc] init];
+            
+            UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:LogInVc];
+            
+            [self presentViewController:nav animated:YES completion:nil];
+        }
+        
+        
     }else if (indexPath.row == 1) {
         JNSHUserProtocolViewController *UserProtocolVc = [[JNSHUserProtocolViewController alloc] init];
         UserProtocolVc.hidesBottomBarWhenPushed = YES;
@@ -222,9 +231,19 @@
         AboutUsVc.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:AboutUsVc animated:YES];
     }else if (indexPath.row == 3) {
-        JNSHFeedBackViewController *FeedBackVc = [[JNSHFeedBackViewController alloc] init];
-        FeedBackVc.hidesBottomBarWhenPushed = YES;
-        [self.navigationController pushViewController:FeedBackVc animated:YES];
+        
+        if ([JNSYUserInfo getUserInfo].isLoggedIn) {
+            JNSHFeedBackViewController *FeedBackVc = [[JNSHFeedBackViewController alloc] init];
+            FeedBackVc.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:FeedBackVc animated:YES];
+        }else {
+            
+            JNSHLoginController *LogInVc = [[JNSHLoginController alloc] init];
+            UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:LogInVc];
+            [self presentViewController:nav animated:YES completion:nil];
+        }
+        
+        
     }
     
     

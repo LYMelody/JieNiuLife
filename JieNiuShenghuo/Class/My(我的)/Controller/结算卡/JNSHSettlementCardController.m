@@ -133,7 +133,10 @@
         msg = @"手机号为空!";
         [alertView show:msg inView:self.view];
         return;
-    }else if ([CardCell.textFiled.text isEqualToString:@""]){
+    }else if(NameCell.textFiled.text.length != 11) {
+        
+    }
+    else if ([CardCell.textFiled.text isEqualToString:@""]){
         msg = @"卡号为空!";
         [alertView show:msg inView:self.view];
         return;
@@ -294,7 +297,7 @@
         UIImagePickerController *Picker = [[UIImagePickerController alloc] init];
         Picker.sourceType = sourcetype;
         Picker.delegate = self;
-        Picker.allowsEditing = YES;
+        //Picker.allowsEditing = YES;
         
         [self.navigationController presentViewController:Picker animated:YES completion:nil];
         
@@ -305,9 +308,18 @@
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary<NSString *,id> *)info {
     
     
-    UIImage *image = info[UIImagePickerControllerEditedImage];
+    UIImage *image = info[UIImagePickerControllerOriginalImage];
     
-    NSData *imgdata = UIImagePNGRepresentation(image);
+    CGSize size = image.size;
+    if (size.width > 1024) {
+        size = CGSizeMake(size.width/4, size.height/4);
+    }
+    
+    UIImage *newImage = [self imageWithImage:image scaledToSize:size];
+    
+    NSData *imgdata =  UIImageJPEGRepresentation(newImage, 1.0);
+    NSData *originalData = UIImageJPEGRepresentation(image, 1.0);
+    NSLog(@"图片大小:%ld,%ld,图片尺寸:%f,%f",(unsigned long)originalData.length,(unsigned long)imgdata.length,newImage.size.width,newImage.size.height);
     
     NSString *encodedImagStr = [GTMBase64 stringByEncodingData:imgdata];
     
@@ -324,6 +336,17 @@
     
     
 }
+
+- (UIImage *)imageWithImage:(UIImage *)image scaledToSize:(CGSize)newSize {
+    
+    UIGraphicsBeginImageContext(newSize);
+    [image drawInRect:CGRectMake(0, 0, newSize.width, newSize.height)];
+    UIImage *newImg = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return newImg;
+
+}
+
 
 //上传图片
 - (void)uploadImg:(NSString *)fileBase64 type:(NSString *)type {
@@ -436,8 +459,24 @@
         cardNum = textField.text;
     }
     
+}
+
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    
+    if (textField.tag == 100) {   //手机号
+        if (range.location > 10) {
+            return NO;
+        }
+    }else if (textField.tag == 101) { //卡号
+        if (range.location > 19) {
+            return NO;
+        }
+    }
+    return YES;
+    
     
 }
+
 
 - (void)alert:(NSString *)Msg {
     

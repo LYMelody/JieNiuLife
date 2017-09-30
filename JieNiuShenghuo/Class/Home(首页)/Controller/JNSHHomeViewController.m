@@ -23,6 +23,8 @@
 #import "SBJSON.h"
 #import "IBHttpTool.h"
 #import "JNSHTicketFailView.h"
+#import "JNSHVipViewController.h"
+#import "JNSHWebViewController.h"
 
 @interface JNSHHomeViewController ()<SDCycleScrollViewDelegate>
 
@@ -41,6 +43,7 @@
     UILabel *timeLab;
     NSString *ticketExsist;
     NSString *timetag;
+    SDCycleScrollView *ADScrollView;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -62,6 +65,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+    //接收通知
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pushToAD) name:@"pushtoAd" object:nil];
+    
+    
     self.view.backgroundColor = ColorTableBackColor;
     
     UIImageView *navBackImg = [[UIImageView alloc] init];
@@ -107,7 +115,7 @@
     
     NSArray *imgaeArray = [NSArray arrayWithObjects:[UIImage imageNamed:@"banner01"],[UIImage imageNamed:@"AD04.png"],[UIImage imageNamed:@"APP05.png"], nil];
     
-    SDCycleScrollView *ADScrollView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0, 0, KscreenWidth, [JNSHAutoSize height:188]) shouldInfiniteLoop:YES imageNamesGroup:imgaeArray];
+    ADScrollView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0, 0, KscreenWidth, [JNSHAutoSize height:188]) shouldInfiniteLoop:YES imageNamesGroup:imgaeArray];
     ADScrollView.delegate = self;
     ADScrollView.pageControlStyle = SDCycleScrollViewPageContolStyleAnimated;
     [self.view addSubview:ADScrollView];
@@ -167,6 +175,11 @@
         make.right.equalTo(self.view);
         make.height.mas_equalTo([JNSHAutoSize height:72]);
     }];
+    
+    //会员tap
+    UITapGestureRecognizer *vipTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapToVip)];
+    vipTap.numberOfTapsRequired = 1;
+    [VipBackImg addGestureRecognizer:vipTap];
     
     UIImageView *VipLogoImg = [[UIImageView alloc] init];
     VipLogoImg.image = [UIImage imageNamed:@"home_grid_1_2"];
@@ -401,14 +414,32 @@
         make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:60], [JNSHAutoSize height:12]));
     }];
     
+    //底部图片
+    UIImageView *bottomView = [[UIImageView alloc] init];
+    bottomView.image = [UIImage imageNamed:@"臻享指尖便利，还看捷牛生活"];
+    [self.view addSubview:bottomView];
+    
+    [bottomView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(ticketBackImg.mas_bottom).offset([JNSHAutoSize height:4]);
+        make.left.right.equalTo(self.view);
+        make.height.mas_equalTo([JNSHAutoSize height:92]);
+    }];
+    
     //开启定时器
     [self startTimer];
+    
+    //获取广告信息
+    
+   // dispatch_queue_t queue = dispatch_queue_create(@"com.getad.queue", NULL);
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0 ), ^{
+        [self getAdvertisingImage];
+    });
     
     //注册通知 (当应用从后台到前台重新获取当时时间计时)
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startTimer) name:UIApplicationWillEnterForegroundNotification object:nil];
     
 }
-
 
 - (NSString *)get:(NSString *)time{
     
@@ -480,6 +511,8 @@
     }
     
     timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(countDown) userInfo:nil repeats:YES];
+    
+    
     
 }
 
@@ -571,7 +604,7 @@
                 _TestBtn.enabled = NO;
             }
         }
-        NSLog(@"%@",dic);
+        //NSLog(@"%@",dic);
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
     }];
@@ -636,6 +669,60 @@
 
 }
 
+//获取广告轮播图片
+- (void)getAdvertisingImage {
+    
+    NSDictionary *dic = @{
+                          @"adArea":@"A1002",
+                          @"adSize":@"1"
+                          };
+    NSString *action = @"AdInfoState";
+    NSDictionary *requestDic = @{
+                                 @"action":action,
+                                 @"token":TOKEN,
+                                 @"data":dic
+                                 };
+    NSString *params = [requestDic JSONFragment];
+    
+    [IBHttpTool postWithURL:JNSHTestUrl params:params success:^(id result) {
+        NSDictionary *resultDic = [result JSONValue];
+        NSLog(@"%@",resultDic);
+        
+        if ([resultDic[@"adInfoList"] isKindOfClass:[NSArray class]]) {
+            
+            NSArray *adUrlList =resultDic[@"adInfoList"];
+            NSMutableArray *imageUrlList = [[NSMutableArray alloc] init];
+            NSMutableArray *hrefurlList = [[NSMutableArray alloc] init];
+            
+            for(NSInteger i = 0;i<adUrlList.count;i++){
+                NSString *areaPic = adUrlList[i][@"areaPic"];
+                NSString *areaHref = adUrlList[i][@"areaHref"];
+                [imageUrlList addObject:areaPic];
+                [hrefurlList addObject:areaHref];
+            }
+            
+            if (imageUrlList.count > 0) {
+                ADScrollView.imageURLStringsGroup = imageUrlList;
+                ADScrollView.selectUrlList = hrefurlList;
+            }
+            
+        }
+        
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
+}
+
+//点击广告图方法
+- (void)cycleScrollView:(SDCycleScrollView *)cycleScrollView didSelectItemAtIndex:(NSInteger)index {
+    
+    JNSHWebViewController *WebVc = [[JNSHWebViewController alloc] init];
+    WebVc.url = cycleScrollView.selectUrlList[index];
+    WebVc.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:WebVc animated:YES];
+    
+}
+
 //抢券成功，弹出视图
 - (void)showImage {
     
@@ -695,15 +782,43 @@
     [self.navigationController pushViewController:jnshCashDeskVc animated:YES];
     
 }
+//开通会员
+- (void)tapToVip {
+    
+    
+    if ([JNSYUserInfo getUserInfo].isLoggedIn) {
+        JNSHVipViewController *VipVc = [[JNSHVipViewController alloc] init];
+        VipVc.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:VipVc animated:YES];
+    }else {
+        JNSHLoginController *LogInVc = [[JNSHLoginController alloc] init];
+        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:LogInVc];
+        [self presentViewController:nav animated:YES completion:nil];
+        
+    }
+    
 
+}
+//跳转广告
+- (void)pushToAD {
+    
+    NSString *url = [[NSUserDefaults standardUserDefaults] objectForKey:@"ADURL"];
+    if (url) {
+        JNSHWebViewController *webVc = [[JNSHWebViewController alloc] init];
+        webVc.hidesBottomBarWhenPushed = YES;
+        webVc.url = url;
+        [self.navigationController pushViewController:webVc animated:YES];
+    }
+    
+}
 
 - (void)dealloc {
     
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIApplicationWillEnterForegroundNotification object:nil];
     
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:@"pushAD" object:nil];
     
 }
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

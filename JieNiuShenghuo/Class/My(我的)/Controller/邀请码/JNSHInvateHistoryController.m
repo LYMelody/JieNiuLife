@@ -67,7 +67,7 @@
     headerView.userInteractionEnabled = YES;
     
     UILabel *titleLab = [[UILabel alloc] init];
-    titleLab.text = @"邀请5位好友可兑换会员资格";
+    titleLab.text = @"邀请3位好友可兑换会员资格";
     titleLab.font = [UIFont systemFontOfSize:15];
     titleLab.textColor = ColorText;
     titleLab.textAlignment = NSTextAlignmentLeft;
@@ -143,10 +143,20 @@
         table.tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, CGFLOAT_MIN)];
     }
     
-    //获取兑换好友列表
-    [self getFriendsList:@"0"];
+    
     //获取兑换信息
     [self requestFriendsInfo];
+    
+    //获取兑换好友列表
+   // [self getFriendsList:@"0"];
+    //已过期
+    if(self.tag == 2) {
+        [self getFriendsList:@"1"];
+    }else {
+        [self getFriendsList:@"0"];
+    }
+    
+    
 }
 
 //查看已兑换名单
@@ -174,7 +184,7 @@
     
 }
 
-//获取兑换信息
+//获取兑换信息(是否可兑换)
 - (void)requestFriendsInfo{
     
     NSDictionary *dic = @{
@@ -211,13 +221,22 @@
     }];
 }
 
-
 //兑换会员
 - (void)requestForVip {
     
+    NSInteger count = 0;
+    
+    if(self.listArray.count >=3) {
+        
+        count = self.listArray.count/3*3;
+        
+    }else {
+        count = 3;
+    }
+    
     NSDictionary *dic = @{
-                          @"chargeUser":[NSString stringWithFormat:@"%ld",(long)self.listArray.count],
-                          @"chargeDay":[NSString stringWithFormat:@"%ld",(long)self.listArray.count*10]
+                          @"chargeUser":[NSString stringWithFormat:@"%ld",count],
+                          @"chargeDay":[NSString stringWithFormat:@"%ld",(long)count*10]
                           };
     NSString *action = @"UserInviteExchange";
     NSDictionary *requestDic = @{
@@ -243,7 +262,6 @@
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
     }];
-    
 }
 
 - (void)back {
@@ -272,7 +290,7 @@
         
         NSDictionary *resultdic = [result JSONValue];
         NSString *code = resultdic[@"code"];
-        NSLog(@"%@",resultdic);
+        //NSLog(@"%@",resultdic);
         NSString *msg = resultdic[@"msg"];
         if ([code isEqualToString:@"000000"]) {
             
@@ -292,7 +310,6 @@
     }];
 
 }
-
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
@@ -316,41 +333,39 @@
         
         NSDictionary *dic =self.listArray[indexPath.row];
         NSString *picHeader = dic[@"picHeader"];             //头像
-        NSString *userNick = dic[@"userNick"];
-        NSString *userPhone = dic[@"userPhone"];
-        
+        NSString *userNick = dic[@"userNick"];               //昵称
+        NSString *userPhone = dic[@"userPhone"];             //电话
+        NSString *isComplete = [NSString stringWithFormat:@"%@",dic[@"isOver"]];                 //是否已完成
         cell.nameLab.text = userNick;
         cell.phoneLab.text = [userPhone stringByReplacingCharactersInRange:NSMakeRange(3, 4) withString:@"****"];
+        //设置头像
         if ([picHeader isEqualToString:@""]) {
             
         }else {
             [cell.headerImg sd_setImageWithURL:[NSURL URLWithString:picHeader]];
         }
-        
+        //设置是否完成
+        if (![isComplete isEqualToString:@"0"]) {
+            cell.statusLab.text = @"已完成";
+            cell.statusLab.textColor = GreenColor;
+        }
         if (self.tag == 2) {
-            if (indexPath.row == 3) {
-                cell.statusLab.text = @"已完成";
-                cell.statusLab.textColor = GreenColor;
-            }else if (indexPath.row > 3) {
-                cell.statusLab.text = @"已完成";
-                cell.statusLab.textColor = GreenColor;
-                cell.isUsed = YES;
-            }
+           
+            cell.statusLab.text = @"已完成";
+            cell.statusLab.textColor = GreenColor;
+            cell.isUsed = YES;
+            
         }else {
             
-            
         }
-        
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
-
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     return [JNSHAutoSize height:51];
-    
     
 }
 
@@ -362,9 +377,6 @@
 //    [self.navigationController pushViewController:ctr animated:YES];
     
 }
-
-
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

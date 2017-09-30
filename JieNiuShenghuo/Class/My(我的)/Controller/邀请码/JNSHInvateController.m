@@ -13,13 +13,12 @@
 #import "UINavigationController+Cloudox.h"
 #import "JNSYUserInfo.h"
 #import "UIImageView+WebCache.h"
+#import "MBProgressHUD.h"
 
 #import <ShareSDKUI/ShareSDKUI.h>
 #import <ShareSDKUI/SSUIEditorViewStyle.h>
 #import <ShareSDKUI/SSUIShareActionSheetStyle.h>
 #import "WeiboSDK.h"
-
-
 
 @interface JNSHInvateController ()
 
@@ -78,7 +77,6 @@
     UIImageView *navImg = [[UIImageView alloc] initWithFrame:CGRectMake(0, -64, KscreenWidth, 64)];
     navImg.backgroundColor = [UIColor whiteColor];
     [self.view addSubview:navImg];
-    
     
     UIButton *rightBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [rightBtn setImage:[UIImage imageNamed:@"invited_record"] forState:UIControlStateNormal];
@@ -247,22 +245,20 @@
             switch (state) {
                 case SSDKResponseStateSuccess:
                 {
-                    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"分享成功"
-                                                                        message:nil
-                                                                       delegate:nil
-                                                              cancelButtonTitle:@"确定"
-                                                              otherButtonTitles:nil];
-                    [alertView show];
+                    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+                    hud.mode = MBProgressHUDModeText;
+                    hud.labelText = @"分享成功";
+                    [hud hide:YES afterDelay:1];
                     break;
                 }
                 case SSDKResponseStateFail:
                 {
-                    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"分享失败"
-                                                                    message:[NSString stringWithFormat:@"%@",error]
-                                                                   delegate:nil
-                                                          cancelButtonTitle:@"OK"
-                                                          otherButtonTitles:nil, nil];
-                    [alert show];
+
+                    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+                    hud.mode = MBProgressHUDModeText;
+                    hud.labelText = @"分享失败";
+                    [hud hide:YES afterDelay:1];
+                    
                     break;
                 }
                 default:

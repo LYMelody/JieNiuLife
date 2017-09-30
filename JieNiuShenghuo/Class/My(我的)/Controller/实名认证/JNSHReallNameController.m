@@ -314,6 +314,18 @@
     }
 }
 
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    
+    if (textField.tag == 101) {
+        if (range.location > 17) {
+            return NO;
+        }
+    }
+    
+    return YES;
+    
+}
+
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
     
     historyCard = nil;
@@ -469,7 +481,16 @@
     
     UIImage *image = info[UIImagePickerControllerOriginalImage];
     
-    NSData *imgdata = UIImageJPEGRepresentation(image, 0.5);
+    CGSize size = image.size;
+    if (size.width > 1024) {
+        size = CGSizeMake(size.width/4, size.height/4);
+    }
+    
+    UIImage *newImage = [self imageWithImage:image scaledToSize:size];
+    
+    NSData *imgdata =  UIImageJPEGRepresentation(newImage, 1.0);
+    NSData *originalData = UIImageJPEGRepresentation(image, 1.0);
+    NSLog(@"图片大小:%ld,%ld,图片尺寸:%f,%f",(unsigned long)originalData.length,(unsigned long)imgdata.length,newImage.size.width,newImage.size.height);
     
     NSString *encodedImagStr = [GTMBase64 stringByEncodingData:imgdata];
     
@@ -492,6 +513,16 @@
     
     //pop
     [picker dismissViewControllerAnimated:YES completion:nil];
+    
+}
+
+- (UIImage *)imageWithImage:(UIImage *)image scaledToSize:(CGSize)newSize {
+    
+    UIGraphicsBeginImageContext(newSize);
+    [image drawInRect:CGRectMake(0, 0, newSize.width, newSize.height)];
+    UIImage *newImg = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    return newImg;
     
 }
 

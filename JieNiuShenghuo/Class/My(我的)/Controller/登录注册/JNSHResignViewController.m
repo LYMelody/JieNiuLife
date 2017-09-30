@@ -15,6 +15,8 @@
 #import "IBHttpTool.h"
 #import "JNSHAutoSize.h"
 #import "MBProgressHUD.h"
+#import "JNSHUserProtocolViewController.h"
+
 @interface JNSHResignViewController ()<UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate>
 
 @end
@@ -44,11 +46,20 @@
     [self.navigationController.navigationBar setTitleTextAttributes:@{
                                                                       NSForegroundColorAttributeName:[UIColor whiteColor]
                                                                       }];
+    self.navigationController.navigationBar.translucent = NO;
+    
+    
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    CGFloat height = 0;
+    if (IS_IphoneX) {
+        height = 88;
+    }else {
+        height = 0;
+    }
     
     table = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight) style:UITableViewStylePlain];
     table.delegate = self;
@@ -88,6 +99,7 @@
     rightLab.font = [UIFont systemFontOfSize:13];
     rightLab.textColor = ColorTabBarBackColor;
     rightLab.textAlignment = NSTextAlignmentLeft;
+    rightLab.userInteractionEnabled = YES;
     [footView addSubview:rightLab];
     
     [rightLab mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -95,6 +107,10 @@
         make.left.equalTo(remberBtn.mas_right).offset([JNSHAutoSize width:5]);
         make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:200], [JNSHAutoSize height:15]));
     }];
+    
+    UITapGestureRecognizer *Protap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapPro)];
+    Protap.numberOfTapsRequired = 1;
+    [rightLab addGestureRecognizer:Protap];
     
     JNSHCommonButton *ResignBtn = [[JNSHCommonButton alloc] init];
     [ResignBtn setTitle:@"注册" forState:UIControlStateNormal];
@@ -131,7 +147,7 @@
     lab.textAlignment = NSTextAlignmentCenter;
     lab.textColor = ColorTabBarBackColor;
     lab.userInteractionEnabled = YES;
-    NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithString:@"客服电话：400-600-7909"];
+    NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithString:@"客服电话：400-101-8258"];
     [attr addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:NSMakeRange(0, 5)];
     
     lab.attributedText = attr;
@@ -149,10 +165,18 @@
     }];
 
 }
-
+//打电话
 - (void)call {
     
-     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"telprompt://%@",@"400-600-7909"]]];
+     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"telprompt://%@",@"400-101-8258"]]];
+    
+}
+//协议
+- (void)tapPro {
+    
+    JNSHUserProtocolViewController *ProVc = [[JNSHUserProtocolViewController alloc] init];
+    ProVc.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:ProVc animated:YES];
     
 }
 
@@ -173,7 +197,7 @@
     if(PwdCell.textFiled.text.length <= 12 && PwdCell.textFiled.text.length >= 6) {
         
     }else {
-        [JNSHAutoSize showMsg:@"请输入6-12位密码!"];
+        [JNSHAutoSize showMsg:@"请输入6-20位密码!"];
         return;
     }
     
@@ -245,7 +269,6 @@
     
 }
 
-
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
     return 5;
@@ -266,7 +289,8 @@
             CodeCell.textFiled.placeholder = @"请输入手机号码";
             CodeCell.showBottom = YES;
             CodeCell.textFiled.keyboardType = UIKeyboardTypeNumberPad;
-            
+            CodeCell.textFiled.delegate = self;
+            CodeCell.textFiled.tag = 100;
             __weak typeof(self) weakSelf = self;
             
             CodeCell.getcodeBlock = ^{
@@ -382,9 +406,7 @@
         
     }
     
-    
 }
-
 
 - (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
     
@@ -393,19 +415,24 @@
     JNSHLabFldCell *cell = [table cellForRowAtIndexPath:indexPath];
     
     
-    NSInteger length = (textField.text.length == range.location) ? range.location : (range.location - 1);
+    if (textField.tag == 100) {  //手机号
+        if (range.location > 10) {
+            return NO;
+        }
+    }else {                      //密码
+        
+        NSInteger length = (textField.text.length == range.location) ? range.location : (range.location - 1);
         
         if (length >= 5) {
             cell.rightImg.image = [UIImage imageNamed:@"password_checkmark"];
         }else {
             cell.rightImg.image = [UIImage imageNamed:@"password_checkmark_grey"];
         }
-    
-    
-    if (range.location > 19) {
-        return NO;
+        
+        if (range.location > 19) {
+            return NO;
+        }
     }
-    
     return YES;
     
 }

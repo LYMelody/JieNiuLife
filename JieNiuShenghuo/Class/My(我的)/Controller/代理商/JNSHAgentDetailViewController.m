@@ -15,6 +15,7 @@
 #import "SBJSON.h"
 #import "IBHttpTool.h"
 #import "JNSYUserInfo.h"
+#import "MBProgressHUD.h"
 
 @interface JNSHAgentDetailViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -159,6 +160,18 @@
     }else {
         return [JNSHAutoSize height:41];
     }
+    
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (indexPath.row > 5) {
+        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+        hud.mode = MBProgressHUDModeText;
+        hud.labelText = @"功能开发中";
+        [hud hide:YES afterDelay:2];
+    }
+    
     
 }
 

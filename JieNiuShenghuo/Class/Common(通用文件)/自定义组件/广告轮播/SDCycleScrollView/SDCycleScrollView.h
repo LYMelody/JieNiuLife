@@ -88,6 +88,9 @@ typedef enum {
 @property (nonatomic, strong) NSArray *localizationImageNamesGroup;
 
 
+/**  点击图片Url (17.09.30添加)  **/
+@property (nonatomic, strong) NSArray *selectUrlList;
+
 
 
 

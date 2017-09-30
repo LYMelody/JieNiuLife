@@ -71,6 +71,7 @@
     }
     
     [table reloadData];
+    
     self.navigationController.delegate = self;
     
 }
@@ -132,9 +133,20 @@
 //设置按钮跳转
 - (void)Setting {
     
-    JNSHSettingViewController *SettingVc = [[JNSHSettingViewController alloc] init];
-    SettingVc.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:SettingVc animated:YES];
+    if([JNSYUserInfo getUserInfo].isLoggedIn) {
+        JNSHSettingViewController *SettingVc = [[JNSHSettingViewController alloc] init];
+        SettingVc.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:SettingVc animated:YES];
+    }else {
+        
+        JNSHLoginController *LoginVc = [[JNSHLoginController alloc] init];
+        LoginVc.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:LoginVc animated:YES];
+        
+    }
+    
+    
+    
     
 }
 
@@ -158,7 +170,7 @@
     NSString *params = [requestDic JSONFragment];
     
     [IBHttpTool postWithURL:JNSHTestUrl params:params success:^(id result) {
-        NSLog(@"%@",result);
+        //NSLog(@"%@",result);
         NSDictionary *resultdic = [result JSONValue];
         NSString *code = resultdic[@"code"];
         if([code isEqualToString:@"000000"]) {
@@ -174,7 +186,8 @@
             [JNSYUserInfo getUserInfo].userQr = resultdic[@"picQr"];
             [JNSYUserInfo getUserInfo].birthday = resultdic[@"birthday"];
             [JNSYUserInfo getUserInfo].SettleCard = resultdic[@"userBank"];
-            
+            [JNSYUserInfo getUserInfo].vipExpireDay = [NSString stringWithFormat:@"%@",resultdic[@"vipExpireDay"]];
+            [JNSYUserInfo getUserInfo].userNick = resultdic[@"userNick"];
             //实名认证状态
             NSString *userStatus = resultdic[@"userStatus"];
             if ([userStatus isEqualToString:@"11"]) {
@@ -244,7 +257,7 @@
             }else {
                 Cell.showVip = NO;
             }
-            if (![[JNSYUserInfo getUserInfo].picHeader isEqualToString:@""]) {
+            if (![[JNSYUserInfo getUserInfo].picHeader isEqualToString:@""] && islogoedIn) {
                 [Cell.headerView sd_setImageWithURL:[NSURL URLWithString:[JNSYUserInfo getUserInfo].picHeader]];
             }else {
                 Cell.headerView.image = [UIImage imageNamed:@"my_head_portrait"];
@@ -263,13 +276,14 @@
             
             cell.backgroundColor = ColorTableBackColor;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
+            
         }else if (indexPath.row == 3) {
             
             JNSHMyCommonCell *Cell = [[JNSHMyCommonCell alloc] init];
             Cell.titleImage.image = [UIImage imageNamed:@"my_vip"];
             Cell.titleLab.text = @"会员中心";
-            if (isVip) {
-                Cell.rightLab.text = @"20天后到期";
+            if (isVip && [JNSYUserInfo getUserInfo].isLoggedIn) {
+                Cell.rightLab.text = [NSString stringWithFormat:@"%@天后到期",[JNSYUserInfo getUserInfo].vipExpireDay];
             }else {
                 Cell.rightLab.text = @"立即开通";
             }
@@ -282,7 +296,12 @@
             JNSHMyCommonCell *Cell = [[JNSHMyCommonCell alloc] init];
             Cell.titleImage.image = [UIImage imageNamed:@"my_Certification"];
             Cell.titleLab.text = @"实名认证";
-            Cell.rightLab.text = [JNSYUserInfo getUserInfo].userStatus;
+            if ([JNSYUserInfo getUserInfo].isLoggedIn) {
+                Cell.rightLab.text = [JNSYUserInfo getUserInfo].userStatus;
+            }else {
+                
+            }
+            
             Cell.showTopLine = YES;
             cell = Cell;
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
@@ -290,7 +309,7 @@
             JNSHMyCommonCell *Cell = [[JNSHMyCommonCell alloc] init];
             Cell.titleImage.image = [UIImage imageNamed:@"my_card"];
             Cell.titleLab.text = @"结算卡";
-            if (![[JNSYUserInfo getUserInfo].SettleCard isEqualToString:@""] && ([JNSYUserInfo getUserInfo].SettleCard != nil)) {
+            if (![[JNSYUserInfo getUserInfo].SettleCard isEqualToString:@""] && ([JNSYUserInfo getUserInfo].SettleCard != nil) && [JNSYUserInfo getUserInfo].isLoggedIn) {
                 Cell.rightLab.text = @"已绑定";
                 Cell.rightLab.textColor = GreenColor;
             }else {
@@ -327,7 +346,7 @@
             JNSHMyCommonCell *Cell = [[JNSHMyCommonCell alloc] init];
             Cell.titleImage.image = [UIImage imageNamed:@"my_phone"];
             Cell.titleLab.text = @"客服电话";
-            Cell.rightLab.text = @"400-600-7909";
+            Cell.rightLab.text = @"400-101-8258";
             cell = Cell;
         }else if (indexPath.row == 13) {
             JNSHMyCommonCell *Cell = [[JNSHMyCommonCell alloc] init];
@@ -501,7 +520,7 @@
         JNSHMyCommonCell *cell = [table cellForRowAtIndexPath:indexPath];
         cell.selected = NO;
         
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"telprompt://%@",@"400-600-7909"]]];
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"telprompt://%@",@"400-101-8258"]]];
         
     }
     else if (indexPath.row == 15) {     //代理商
@@ -563,14 +582,14 @@
                 [self.navigationController pushViewController:CommitEmailVc animated:YES];
                 
             }else if ([orgStatus isEqualToString:@"2"])  {  //审核通过
+
+                JNSHAgentDetailViewController *payVc = [[JNSHAgentDetailViewController alloc] init];
+                payVc.hidesBottomBarWhenPushed = YES;
+                [self.navigationController pushViewController:payVc animated:YES];
 //
-//                JNSHAgentDetailViewController *payVc = [[JNSHAgentDetailViewController alloc] init];
-//                payVc.hidesBottomBarWhenPushed = YES;
-//                [self.navigationController pushViewController:payVc animated:YES];
-//
-                JNSHBecomeAgentViewController *BecomeAgentVc = [[JNSHBecomeAgentViewController alloc] init];
-                BecomeAgentVc.hidesBottomBarWhenPushed = YES;
-                [self.navigationController pushViewController:BecomeAgentVc animated:YES];
+//                JNSHBecomeAgentViewController *BecomeAgentVc = [[JNSHBecomeAgentViewController alloc] init];
+//                BecomeAgentVc.hidesBottomBarWhenPushed = YES;
+//                [self.navigationController pushViewController:BecomeAgentVc animated:YES];
                 
             }else if ([orgStatus isEqualToString:@"9"]) {   //等待支付
                 

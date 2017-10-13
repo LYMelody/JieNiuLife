@@ -115,9 +115,9 @@
     textView.font = [UIFont systemFontOfSize:13];
     textView.userInteractionEnabled = NO;
     textView.textColor = ColorText;
-    NSMutableAttributedString *attrStr = [[NSMutableAttributedString alloc] initWithString:@"温馨提示：\n1、会员费率：0.39%+3；非会员费率：0.53%+3；\n2、单笔2万，单卡5万，每日10万；\n3、交易到账时间09：00-21：00。"];
+    NSMutableAttributedString *attrStr = [[NSMutableAttributedString alloc] initWithString:@"温馨提示：\n1、费率(带积分):会员0.39%+3，非会员0.53%+3；\n2、单笔2万，单卡5万；\n3、实时到账时间09:00-21:00。"];
     [attrStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:14] range:NSMakeRange(0, 5)];
-    [attrStr addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:NSMakeRange(8, 12)];
+    [attrStr addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:NSMakeRange(8, 7)];
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
     paragraphStyle.lineSpacing = 10;
     
@@ -133,7 +133,6 @@
     }];
     
     //数字键盘
-    
     NSArray *array = @[@"1",@"2",@"3",@"4",@"5",@"6",@"7",@"8",@"9",@".",@"0",@"X"];
     
     CGFloat width = (KscreenWidth - 2*3)/4.0;
@@ -273,6 +272,21 @@
         }
         
     }else if (sender.tag == 11) {  //X
+//        if (![moneyLab.text isEqualToString:@"0"]) {
+//
+//            if (1 >= moneyLab.text.length) {
+//                moneyLab.text = @"0";
+//            }else{
+//                moneyLab.text = [moneyLab.text substringToIndex:moneyLab.text.length-1];
+//            }
+//        }
+        
+        moneyLab.text = @"0";
+        
+    }else if (sender.tag == 12) {  //全清
+        
+        //moneyLab.text = @"0";
+        
         if (![moneyLab.text isEqualToString:@"0"]) {
             
             if (1 >= moneyLab.text.length) {
@@ -281,10 +295,6 @@
                 moneyLab.text = [moneyLab.text substringToIndex:moneyLab.text.length-1];
             }
         }
-        
-    }else if (sender.tag == 12) {  //全清
-        
-        moneyLab.text = @"0";
         
     }else if (sender.tag == 13) {  //确定
         
@@ -356,7 +366,7 @@
             OrderSureVc.vipDiscount = [NSString stringWithFormat:@"%@",resultdic[@"vipDiscount"]];
             OrderSureVc.rateVipFee = [NSString stringWithFormat:@"%@",resultdic[@"rateVipFee"]];
             OrderSureVc.rateVipFeeVale = [NSString stringWithFormat:@"%@",resultdic[@"rateVipFeeValue"]];
-            OrderSureVc.vipFlag = [NSString stringWithFormat:@"%@",resultdic[@"vipFig"]];
+            OrderSureVc.vipFlag = [NSString stringWithFormat:@"%@",resultdic[@"vipFlg"]];
             OrderSureVc.voucheersFlag = [NSString stringWithFormat:@"%@",resultdic[@"vouchersFlg"]];
             OrderSureVc.vouchersPrice = [NSString stringWithFormat:@"%@",resultdic[@"vouchersPrice"]];
             OrderSureVc.settleReal = [NSString stringWithFormat:@"%@",resultdic[@"settleReal"]];

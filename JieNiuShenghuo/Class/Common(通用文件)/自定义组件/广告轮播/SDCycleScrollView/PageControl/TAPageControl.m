@@ -254,7 +254,6 @@ static CGSize const kDefaultDotSize = {8, 8};
     }
 }
 
-
 - (void)resetDotViews
 {
     for (UIView *dotView in self.dots) {
@@ -264,7 +263,6 @@ static CGSize const kDefaultDotSize = {8, 8};
     [self.dots removeAllObjects];
     [self updateDots];
 }
-
 
 - (void)hideForSinglePage
 {

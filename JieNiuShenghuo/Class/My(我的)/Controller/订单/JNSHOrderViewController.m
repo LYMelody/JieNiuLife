@@ -465,7 +465,7 @@
             }else if ([goodsName isEqualToString:@"1001"]) {
                 goodsName = @"会员购买";
             }else {
-                goodsName = @"代理商升级";
+                goodsName = @"后台管理费";
             }
             [cell settype:goodsName time:time money:[NSString stringWithFormat:@"￥%@",money] status:statusName];
         }

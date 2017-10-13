@@ -45,15 +45,12 @@ static NSTimeInterval const KtimeInterval = 0.03;
     _progressLayer.path = path.CGPath;
     _progressLayer.strokeEnd = 0;
     _plusWidth = 0.01;
-    
     [self.navigationController.navigationBar.layer addSublayer:_progressLayer];
-    
-    
     //webView
     UIWebView *web = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight - 64)];
     web.delegate = self;
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:self.url]];
-    [request setHTTPMethod:@"POST"];
+    [request setHTTPMethod:@"GET"];
     [web loadRequest:request];
     
     [self.view addSubview:web];

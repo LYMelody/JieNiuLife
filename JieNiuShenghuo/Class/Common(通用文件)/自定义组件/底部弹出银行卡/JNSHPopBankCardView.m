@@ -289,6 +289,7 @@
         }else {
             if (bankArrayCode.count > 0) {
                 cell.bankNameLab.text = bankArrayCode[indexPath.row][@"bankName"];
+                [cell.bankLogoImg sd_setImageWithURL:[NSURL URLWithString:bankArrayCode[indexPath.row][@"bankIcon"]]];
             }
  
         }

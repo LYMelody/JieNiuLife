@@ -17,6 +17,7 @@
 #import "UIImageView+WebCache.h"
 #import "UIViewController+Cloudox.h"
 #import "UINavigationController+Cloudox.h"
+#import "Masonry.h"
 
 @interface JNSHSettleDetailController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -79,6 +80,13 @@
     [bindBtn addTarget:self action:@selector(changeCard) forControlEvents:UIControlEventTouchUpInside];
     
     [footView addSubview:bindBtn];
+    
+    [bindBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(footView).offset([JNSHAutoSize height:40]);
+        make.left.equalTo(footView).offset([JNSHAutoSize width:15]);
+        make.right.equalTo(footView).offset(-[JNSHAutoSize width:15]);
+        make.height.mas_equalTo([JNSHAutoSize height:41]);
+    }];
     
     table.tableFooterView = footView;
     

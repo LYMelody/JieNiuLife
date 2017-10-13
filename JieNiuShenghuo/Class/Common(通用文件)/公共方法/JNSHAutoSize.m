@@ -9,6 +9,7 @@
 #import "JNSHAutoSize.h"
 #import "JNSHCommon.h"
 #import <CommonCrypto/CommonDigest.h>
+
 @implementation JNSHAutoSize
 
 + (CGFloat)height:(CGFloat)height {
@@ -95,5 +96,8 @@
     NSString *mdfiveString = [hash lowercaseString];
     return mdfiveString;
 }
+
+
+
 
 @end

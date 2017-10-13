@@ -406,8 +406,6 @@
         CodeCell.codeBtn.enabled = NO;
         
     }
-    
-    
 }
 
 - (void)didReceiveMemoryWarning {

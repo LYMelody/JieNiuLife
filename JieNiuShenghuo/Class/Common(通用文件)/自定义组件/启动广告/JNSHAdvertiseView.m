@@ -8,6 +8,9 @@
 
 #import "JNSHAdvertiseView.h"
 #import "Masonry.h"
+#import "JNSHUpdateView.h"
+#import "SBJSON.h"
+#import "IBHttpTool.h"
 
 @interface JNSHAdvertiseView()
 
@@ -17,7 +20,7 @@
 
 @property(nonatomic,strong)NSTimer *countTimer;
 
-@property(nonatomic,assign) int count;
+@property(nonatomic,assign) NSInteger count;
 
 @property(nonatomic,strong)UILabel *leftLab;
 
@@ -50,7 +53,7 @@
         backBtnImg.userInteractionEnabled = YES;
         backBtnImg.layer.masksToBounds = YES;
         
-        UITapGestureRecognizer *slipTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(pushToAD)];
+        UITapGestureRecognizer *slipTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismiss)];
         slipTap.numberOfTouchesRequired = 1;
         [backBtnImg addGestureRecognizer:slipTap];
         [self addSubview:backBtnImg];
@@ -127,7 +130,7 @@
         return;
     }
     
-    self.leftLab.text = [NSString stringWithFormat:@"%d",_count];
+    self.leftLab.text = [NSString stringWithFormat:@"%ld",(long)_count];
     
     //[_slipBtn setTitle:[NSString stringWithFormat:@"跳过%d",_count] forState:UIControlStateNormal];
     
@@ -144,7 +147,6 @@
 //点击跳过按钮
 - (void)dismiss {
     
-    
     [_countTimer invalidate];
     self.countTimer = nil;
     
@@ -153,8 +155,10 @@
     } completion:^(BOOL finished) {
         
         [[UIApplication sharedApplication] setStatusBarHidden:NO];
-        
+    
         [self removeFromSuperview];
+        //检测更新
+        //[self VersionUpdate];
     }];
     
 }
@@ -185,6 +189,33 @@
     
     _adView.image = [UIImage imageWithContentsOfFile:filePath];
     
+}
+
+//版本检测
+- (void)VersionUpdate {
+    
+    NSDictionary *dic = @{
+                          @"os":@"IOS"
+                          };
+    NSString *action = @"AppVersionState";
+    
+    NSDictionary *requestDic = @{
+                                 @"action":action,
+                                 @"token":TOKEN,
+                                 @"data":dic
+                                 };
+    NSString *params = [requestDic JSONFragment];
+    [IBHttpTool postWithURL:JNSHTestUrl params:params success:^(id result) {
+        NSDictionary *resultDic = [params JSONValue];
+        NSLog(@"%@",resultDic);
+        
+        JNSHUpdateView *updateView = [[JNSHUpdateView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight)];
+        [updateView show:@"" message:@"" inView:[UIApplication sharedApplication].keyWindow];
+        
+        
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
 }
 
 

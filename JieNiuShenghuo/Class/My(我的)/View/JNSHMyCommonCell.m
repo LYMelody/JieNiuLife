@@ -8,6 +8,8 @@
 
 #import "JNSHMyCommonCell.h"
 #import "Masonry.h"
+#import "JNSYUserInfo.h"
+
 @implementation JNSHMyCommonCell
 
 - (instancetype)init {
@@ -80,12 +82,14 @@
     [_rightLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(self);
         make.size.mas_equalTo(CGSizeMake(100, 20));
-        if ([_rightLab.text isEqualToString:@"400-101-8258"]) { //如果是客服电话则向右移400-101-8258
+        NSString *front = [[JNSYUserInfo getUserInfo].phone substringToIndex:3];
+        NSString *mid = [[JNSYUserInfo getUserInfo].phone substringWithRange:NSMakeRange(3, 3)];
+        NSString *last = [[JNSYUserInfo getUserInfo].phone substringFromIndex:6];
+        if ([_rightLab.text isEqualToString:[NSString stringWithFormat:@"%@-%@-%@",front,mid,last]]) { //如果是客服电话则向右移400-101-8258
              make.right.equalTo(self).offset(-16);
         }else {
             make.right.equalTo(self).offset(-32);
         }
-        
     }];
     
     

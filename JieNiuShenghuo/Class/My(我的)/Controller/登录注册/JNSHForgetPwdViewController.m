@@ -115,8 +115,14 @@
         return;
     }
     
+    NSString *phone = @"";
+    if ([JNSYUserInfo getUserInfo].userPhone && [JNSYUserInfo getUserInfo].isLoggedIn) {
+        phone = [JNSYUserInfo getUserInfo].userPhone;
+    }else {
+        phone = CodeCell.textFiled.text;
+    }
     NSDictionary *dic = @{
-                          @"phone":CodeCell.textFiled.text,
+                          @"phone":phone,
                           @"code":NumCell.textFiled.text,
                           @"pass":PwdCell.textFiled.text
                           
@@ -188,6 +194,10 @@
             CodeCell.leftLab.text = @"手机号码";
             CodeCell.textFiled.placeholder = @"请输入手机号码";
             CodeCell.textFiled.keyboardType = UIKeyboardTypeNumberPad;
+            CodeCell.textFiled.clearButtonMode = UITextFieldViewModeWhileEditing;
+            if([JNSYUserInfo getUserInfo].isLoggedIn) {
+                CodeCell.textFiled.text = [[JNSYUserInfo getUserInfo].userPhone stringByReplacingCharactersInRange:NSMakeRange(3, 4) withString:@"****"];
+            }
             CodeCell.showBottom = YES;
             __weak typeof(self) weakSelf = self;
             CodeCell.getcodeBlock = ^{
@@ -229,10 +239,15 @@
         return;
     }
     
+    NSString *phone = @"";
+    if ([JNSYUserInfo getUserInfo].userPhone && [JNSYUserInfo getUserInfo].isLoggedIn) {
+        phone = [JNSYUserInfo getUserInfo].userPhone;
+    }else {
+        phone = CodeCell.textFiled.text;
+    }
     NSDictionary *dic = @{
-                          @"phone":CodeCell.textFiled.text
+                          @"phone":phone
                           };
-    
     NSString *action = @"UserFindPassStateSms";
     NSDictionary *RequestDic = @{
                                  @"action":action,
@@ -265,6 +280,7 @@
         NSLog(@"%@",error);
         CodeCell.codeBtn.enabled = YES;
     }];
+    
 }
 
 - (void)countDown {

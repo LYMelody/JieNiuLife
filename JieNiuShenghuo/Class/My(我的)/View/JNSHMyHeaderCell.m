@@ -24,7 +24,6 @@
 }
 
 
-
 - (void)setUpViews{
     
     self.backgroundColor = ColorTabBarBackColor;
@@ -33,6 +32,8 @@
     _headerView.layer.cornerRadius = 3;
     _headerView.layer.masksToBounds = YES;
     _headerView.backgroundColor = [UIColor whiteColor];
+    _headerView.contentMode = UIViewContentModeScaleAspectFill;
+    _headerView.clipsToBounds = YES;
     [self addSubview:_headerView];
     
     _nickNameLab = [[UILabel alloc] init];

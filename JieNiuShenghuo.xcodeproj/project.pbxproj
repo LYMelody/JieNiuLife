@@ -37,6 +37,7 @@
 		CC2C445E1F44148800B4982B /* DAYNavigationBar.m in Sources */ = {isa = PBXBuildFile; fileRef = CC2C44581F44148800B4982B /* DAYNavigationBar.m */; };
 		CC2C445F1F44148800B4982B /* DAYUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = CC2C445A1F44148800B4982B /* DAYUtils.m */; };
 		CC2C44621F4415CB00B4982B /* JNSHCalendarView.m in Sources */ = {isa = PBXBuildFile; fileRef = CC2C44611F4415CB00B4982B /* JNSHCalendarView.m */; };
+		CC3F19AD1F8B57A5005177D9 /* JNSHUpdateView.m in Sources */ = {isa = PBXBuildFile; fileRef = CC3F19AC1F8B57A5005177D9 /* JNSHUpdateView.m */; };
 		CC42C0791F6F5AD400600CD6 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC42C0781F6F5AD400600CD6 /* CoreTelephony.framework */; };
 		CC42C07B1F6F5AE000600CD6 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC42C07A1F6F5AE000600CD6 /* SystemConfiguration.framework */; };
 		CC42C07D1F6F5AE900600CD6 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC42C07C1F6F5AE900600CD6 /* AudioToolbox.framework */; };
@@ -74,6 +75,9 @@
 		CC64BB351F4FD85900A1B692 /* NSData+AES256.m in Sources */ = {isa = PBXBuildFile; fileRef = CC64BB301F4FD85900A1B692 /* NSData+AES256.m */; };
 		CC64BB361F4FD85900A1B692 /* NSString+AES256.m in Sources */ = {isa = PBXBuildFile; fileRef = CC64BB321F4FD85900A1B692 /* NSString+AES256.m */; };
 		CC64BB391F4FF8AC00A1B692 /* JNSYUserInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = CC64BB381F4FF8AC00A1B692 /* JNSYUserInfo.m */; };
+		CC6CFEEE1F8C93CC0020C342 /* JNSHAgentMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CC6CFEED1F8C93CC0020C342 /* JNSHAgentMessageViewController.m */; };
+		CC6CFEF11F8C957F0020C342 /* JNSHAgentmsgCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CC6CFEF01F8C957F0020C342 /* JNSHAgentmsgCell.m */; };
+		CC6CFEF41F8CACA80020C342 /* JNSHMessageDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CC6CFEF31F8CACA80020C342 /* JNSHMessageDetailViewController.m */; };
 		CC7D61171F6778B200F2BE88 /* JNSHGuidViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CC7D61161F6778B200F2BE88 /* JNSHGuidViewController.m */; };
 		CC7D611B1F677F1400F2BE88 /* 引导页1.png in Resources */ = {isa = PBXBuildFile; fileRef = CC7D61181F677F1400F2BE88 /* 引导页1.png */; };
 		CC7D611C1F677F1400F2BE88 /* 引导页2.png in Resources */ = {isa = PBXBuildFile; fileRef = CC7D61191F677F1400F2BE88 /* 引导页2.png */; };
@@ -88,6 +92,8 @@
 		CC8A6B011F56CD1900666CDF /* JNSHAgentDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CC8A6B001F56CD1900666CDF /* JNSHAgentDetailViewController.m */; };
 		CC8A6B051F56D34600666CDF /* JNSHTradeNumCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CC8A6B041F56D34600666CDF /* JNSHTradeNumCell.m */; };
 		CC8A6B081F56DB4100666CDF /* JNSHAgentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CC8A6B071F56DB4100666CDF /* JNSHAgentCell.m */; };
+		CC8F8B451F8DA4C100C914F1 /* JNSHUsageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CC8F8B441F8DA4C100C914F1 /* JNSHUsageViewController.m */; };
+		CC8F8B481F8DAE9E00C914F1 /* JNSHUsageDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CC8F8B471F8DAE9E00C914F1 /* JNSHUsageDetailViewController.m */; };
 		CC95DCE21F315F4500539A03 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = CC95DCE11F315F4500539A03 /* main.m */; };
 		CC95DCE51F315F4500539A03 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = CC95DCE41F315F4500539A03 /* AppDelegate.m */; };
 		CC95DCE81F315F4500539A03 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CC95DCE71F315F4500539A03 /* ViewController.m */; };
@@ -136,6 +142,7 @@
 		CCD1E81F1F723AC5000DB60B /* JNSHSystemMessageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = CCD1E81E1F723AC5000DB60B /* JNSHSystemMessageModel.m */; };
 		CCD1E8221F72515F000DB60B /* JNSHActiveMessageController.m in Sources */ = {isa = PBXBuildFile; fileRef = CCD1E8211F72515F000DB60B /* JNSHActiveMessageController.m */; };
 		CCD1E8251F725C0E000DB60B /* JNSHActiveMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CCD1E8241F725C0E000DB60B /* JNSHActiveMessageCell.m */; };
+		CCDF6C8E1F9055D500D88841 /* JNSHAgentTypeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CCDF6C8D1F9055D500D88841 /* JNSHAgentTypeCell.m */; };
 		CCE4E0081F4D2D95000572E6 /* JNSHPayResultViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CCE4E0071F4D2D95000572E6 /* JNSHPayResultViewController.m */; };
 		CCEE84281F4563AB00161397 /* JNSHOrderDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = CCEE84271F4563AB00161397 /* JNSHOrderDetailController.m */; };
 		CCEE842C1F4573D700161397 /* JNSHTicketsController.m in Sources */ = {isa = PBXBuildFile; fileRef = CCEE842B1F4573D700161397 /* JNSHTicketsController.m */; };
@@ -222,6 +229,8 @@
 		CC2C445A1F44148800B4982B /* DAYUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DAYUtils.m; sourceTree = "<group>"; };
 		CC2C44601F4415CB00B4982B /* JNSHCalendarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNSHCalendarView.h; sourceTree = "<group>"; };
 		CC2C44611F4415CB00B4982B /* JNSHCalendarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNSHCalendarView.m; sourceTree = "<group>"; };
+		CC3F19AB1F8B57A5005177D9 /* JNSHUpdateView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JNSHUpdateView.h; sourceTree = "<group>"; };
+		CC3F19AC1F8B57A5005177D9 /* JNSHUpdateView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JNSHUpdateView.m; sourceTree = "<group>"; };
 		CC42C0781F6F5AD400600CD6 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		CC42C07A1F6F5AE000600CD6 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		CC42C07C1F6F5AE900600CD6 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
@@ -291,6 +300,12 @@
 		CC64BB321F4FD85900A1B692 /* NSString+AES256.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+AES256.m"; sourceTree = "<group>"; };
 		CC64BB371F4FF8AC00A1B692 /* JNSYUserInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNSYUserInfo.h; sourceTree = "<group>"; };
 		CC64BB381F4FF8AC00A1B692 /* JNSYUserInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNSYUserInfo.m; sourceTree = "<group>"; };
+		CC6CFEEC1F8C93CC0020C342 /* JNSHAgentMessageViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JNSHAgentMessageViewController.h; sourceTree = "<group>"; };
+		CC6CFEED1F8C93CC0020C342 /* JNSHAgentMessageViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JNSHAgentMessageViewController.m; sourceTree = "<group>"; };
+		CC6CFEEF1F8C957F0020C342 /* JNSHAgentmsgCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JNSHAgentmsgCell.h; sourceTree = "<group>"; };
+		CC6CFEF01F8C957F0020C342 /* JNSHAgentmsgCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JNSHAgentmsgCell.m; sourceTree = "<group>"; };
+		CC6CFEF21F8CACA80020C342 /* JNSHMessageDetailViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JNSHMessageDetailViewController.h; sourceTree = "<group>"; };
+		CC6CFEF31F8CACA80020C342 /* JNSHMessageDetailViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JNSHMessageDetailViewController.m; sourceTree = "<group>"; };
 		CC7D61151F6778B200F2BE88 /* JNSHGuidViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNSHGuidViewController.h; sourceTree = "<group>"; };
 		CC7D61161F6778B200F2BE88 /* JNSHGuidViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNSHGuidViewController.m; sourceTree = "<group>"; };
 		CC7D61181F677F1400F2BE88 /* 引导页1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "引导页1.png"; sourceTree = "<group>"; };
@@ -316,6 +331,10 @@
 		CC8A6B041F56D34600666CDF /* JNSHTradeNumCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNSHTradeNumCell.m; sourceTree = "<group>"; };
 		CC8A6B061F56DB4100666CDF /* JNSHAgentCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNSHAgentCell.h; sourceTree = "<group>"; };
 		CC8A6B071F56DB4100666CDF /* JNSHAgentCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNSHAgentCell.m; sourceTree = "<group>"; };
+		CC8F8B431F8DA4C100C914F1 /* JNSHUsageViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JNSHUsageViewController.h; sourceTree = "<group>"; };
+		CC8F8B441F8DA4C100C914F1 /* JNSHUsageViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JNSHUsageViewController.m; sourceTree = "<group>"; };
+		CC8F8B461F8DAE9E00C914F1 /* JNSHUsageDetailViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JNSHUsageDetailViewController.h; sourceTree = "<group>"; };
+		CC8F8B471F8DAE9E00C914F1 /* JNSHUsageDetailViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JNSHUsageDetailViewController.m; sourceTree = "<group>"; };
 		CC95DCDD1F315F4500539A03 /* JieNiuShenghuo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = JieNiuShenghuo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC95DCE11F315F4500539A03 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		CC95DCE31F315F4500539A03 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -404,6 +423,8 @@
 		CCD1E8211F72515F000DB60B /* JNSHActiveMessageController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNSHActiveMessageController.m; sourceTree = "<group>"; };
 		CCD1E8231F725C0E000DB60B /* JNSHActiveMessageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNSHActiveMessageCell.h; sourceTree = "<group>"; };
 		CCD1E8241F725C0E000DB60B /* JNSHActiveMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNSHActiveMessageCell.m; sourceTree = "<group>"; };
+		CCDF6C8C1F9055D500D88841 /* JNSHAgentTypeCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JNSHAgentTypeCell.h; sourceTree = "<group>"; };
+		CCDF6C8D1F9055D500D88841 /* JNSHAgentTypeCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JNSHAgentTypeCell.m; sourceTree = "<group>"; };
 		CCE4E0061F4D2D95000572E6 /* JNSHPayResultViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNSHPayResultViewController.h; sourceTree = "<group>"; };
 		CCE4E0071F4D2D95000572E6 /* JNSHPayResultViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNSHPayResultViewController.m; sourceTree = "<group>"; };
 		CCEE84261F4563AB00161397 /* JNSHOrderDetailController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNSHOrderDetailController.h; sourceTree = "<group>"; };
@@ -746,6 +767,10 @@
 				CC8A6AFD1F569A5800666CDF /* JNSHAgentPayViewController.m */,
 				CC8A6AFF1F56CD1900666CDF /* JNSHAgentDetailViewController.h */,
 				CC8A6B001F56CD1900666CDF /* JNSHAgentDetailViewController.m */,
+				CC6CFEEC1F8C93CC0020C342 /* JNSHAgentMessageViewController.h */,
+				CC6CFEED1F8C93CC0020C342 /* JNSHAgentMessageViewController.m */,
+				CC6CFEF21F8CACA80020C342 /* JNSHMessageDetailViewController.h */,
+				CC6CFEF31F8CACA80020C342 /* JNSHMessageDetailViewController.m */,
 			);
 			path = "代理商";
 			sourceTree = "<group>";
@@ -757,8 +782,23 @@
 				CC8A6B041F56D34600666CDF /* JNSHTradeNumCell.m */,
 				CC8A6B061F56DB4100666CDF /* JNSHAgentCell.h */,
 				CC8A6B071F56DB4100666CDF /* JNSHAgentCell.m */,
+				CC6CFEEF1F8C957F0020C342 /* JNSHAgentmsgCell.h */,
+				CC6CFEF01F8C957F0020C342 /* JNSHAgentmsgCell.m */,
+				CCDF6C8C1F9055D500D88841 /* JNSHAgentTypeCell.h */,
+				CCDF6C8D1F9055D500D88841 /* JNSHAgentTypeCell.m */,
 			);
 			path = "代理商";
+			sourceTree = "<group>";
+		};
+		CC8F8B421F8DA4A200C914F1 /* 使用说明 */ = {
+			isa = PBXGroup;
+			children = (
+				CC8F8B431F8DA4C100C914F1 /* JNSHUsageViewController.h */,
+				CC8F8B441F8DA4C100C914F1 /* JNSHUsageViewController.m */,
+				CC8F8B461F8DAE9E00C914F1 /* JNSHUsageDetailViewController.h */,
+				CC8F8B471F8DAE9E00C914F1 /* JNSHUsageDetailViewController.m */,
+			);
+			path = "使用说明";
 			sourceTree = "<group>";
 		};
 		CC95DCD41F315F4500539A03 = {
@@ -921,6 +961,7 @@
 				CCF890BD1F383DF60045FD4D /* 个人信息 */,
 				CCC440E51F3D3A1400672F60 /* 实名认证 */,
 				CCB7D4641F39869800132C59 /* 设置 */,
+				CC8F8B421F8DA4A200C914F1 /* 使用说明 */,
 				CC8A6AF51F566A9C00666CDF /* 代理商 */,
 			);
 			path = Controller;
@@ -959,6 +1000,7 @@
 			children = (
 				CC95DD0D1F31620400539A03 /* Controller */,
 				CC95DD0E1F31620400539A03 /* Model */,
+				CC95DD0F1F31620400539A03 /* View */,
 			);
 			path = "Store(商城)";
 			sourceTree = "<group>";
@@ -975,7 +1017,6 @@
 		CC95DD0E1F31620400539A03 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				CC95DD0F1F31620400539A03 /* View */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -984,8 +1025,7 @@
 			isa = PBXGroup;
 			children = (
 			);
-			name = View;
-			path = ../View;
+			path = View;
 			sourceTree = "<group>";
 		};
 		CC95DD101F31620400539A03 /* 引导页:广告页 */ = {
@@ -1244,6 +1284,8 @@
 			children = (
 				CCC440F81F3D57E600672F60 /* JNSHAlertView.h */,
 				CCC440F91F3D57E600672F60 /* JNSHAlertView.m */,
+				CC3F19AB1F8B57A5005177D9 /* JNSHUpdateView.h */,
+				CC3F19AC1F8B57A5005177D9 /* JNSHUpdateView.m */,
 			);
 			path = "弹出提示框";
 			sourceTree = "<group>";
@@ -1565,6 +1607,7 @@
 				CCF890E81F383FFF0045FD4D /* JNSYHighLightImageView.m in Sources */,
 				CC10BE2E1F663079006B9640 /* TADotView.m in Sources */,
 				CC64BB0E1F4FD49000A1B692 /* AFHTTPRequestOperationManager.m in Sources */,
+				CC8F8B451F8DA4C100C914F1 /* JNSHUsageViewController.m in Sources */,
 				CC95DD1A1F31637600539A03 /* JNSHShoppingMallViewController.m in Sources */,
 				CC2C44621F4415CB00B4982B /* JNSHCalendarView.m in Sources */,
 				CC983CAC1F4BCF8000249B2C /* JNSHOrderSureViewController.m in Sources */,
@@ -1575,18 +1618,22 @@
 				CC64BAF81F4EC03200A1B692 /* JNSHForgetPwdViewController.m in Sources */,
 				CC64BB391F4FF8AC00A1B692 /* JNSYUserInfo.m in Sources */,
 				CCC440FA1F3D57E600672F60 /* JNSHAlertView.m in Sources */,
+				CC6CFEEE1F8C93CC0020C342 /* JNSHAgentMessageViewController.m in Sources */,
 				CC8A6B011F56CD1900666CDF /* JNSHAgentDetailViewController.m in Sources */,
 				CC5D85371F42C38500C13022 /* JNSHOrderViewController.m in Sources */,
 				CC8A6AFE1F569A5800666CDF /* JNSHAgentPayViewController.m in Sources */,
 				CC64BB0D1F4FD49000A1B692 /* AFHTTPRequestOperation.m in Sources */,
 				CC95DD271F31643100539A03 /* JNSHMainBarController.m in Sources */,
 				CC64BB281F4FD49700A1B692 /* SBJsonParser.m in Sources */,
+				CC3F19AD1F8B57A5005177D9 /* JNSHUpdateView.m in Sources */,
 				CC2C445D1F44148800B4982B /* DAYIndicatorView.m in Sources */,
+				CC6CFEF11F8C957F0020C342 /* JNSHAgentmsgCell.m in Sources */,
 				CCD1E8251F725C0E000DB60B /* JNSHActiveMessageCell.m in Sources */,
 				CCCD7E701F3997D1009E15F5 /* JNSHReSetPwdViewController.m in Sources */,
 				CC64BB241F4FD49700A1B692 /* NSObject+SBJSON.m in Sources */,
 				CCD1E81F1F723AC5000DB60B /* JNSHSystemMessageModel.m in Sources */,
 				CCF890C81F383DF60045FD4D /* JNSYAccountMessageViewController.m in Sources */,
+				CC8F8B481F8DAE9E00C914F1 /* JNSHUsageDetailViewController.m in Sources */,
 				CC5D85301F42A51400C13022 /* JNSHSettleDetailController.m in Sources */,
 				CCFA50C61F5E79FA00492CB2 /* JNSHNoticeViewController.m in Sources */,
 				CCEE84281F4563AB00161397 /* JNSHOrderDetailController.m in Sources */,
@@ -1606,6 +1653,7 @@
 				CC64BB141F4FD49000A1B692 /* AFURLResponseSerialization.m in Sources */,
 				CC64BB261F4FD49700A1B692 /* SBJSON.m in Sources */,
 				CC95DD241F3163EA00539A03 /* JNSHMyViewController.m in Sources */,
+				CCDF6C8E1F9055D500D88841 /* JNSHAgentTypeCell.m in Sources */,
 				CC64BB291F4FD49700A1B692 /* SBJsonWriter.m in Sources */,
 				CC5D853B1F42CF1900C13022 /* JNSHOrderCell.m in Sources */,
 				CC1406551F3BEC0400675AA7 /* JNSHTitleCell.m in Sources */,
@@ -1638,6 +1686,7 @@
 				CC23AC941F73A748009F0B6C /* NSTimer+JNSHAddition.m in Sources */,
 				CCF83D531F6A352500121B89 /* JNSHServiceCell.m in Sources */,
 				CCB7D4671F3986D000132C59 /* JNSHSettingViewController.m in Sources */,
+				CC6CFEF41F8CACA80020C342 /* JNSHMessageDetailViewController.m in Sources */,
 				CCA591651F749EAD00EE4648 /* JNSHRightIntroduceViewController.m in Sources */,
 				CC983CB61F4C02B800249B2C /* JNSHGetCodeCell.m in Sources */,
 				CC14065F1F3C0E2100675AA7 /* JNSHBankSelectCell.m in Sources */,

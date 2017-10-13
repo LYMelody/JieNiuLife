@@ -25,6 +25,10 @@
 #import "JNSHTicketFailView.h"
 #import "JNSHVipViewController.h"
 #import "JNSHWebViewController.h"
+#import "PgyUpdateManager.h"
+#import "JNSHUpdateView.h"
+
+#define PgyAPPID @"f496f2435afee567bd3a11bd633b19de"
 
 @interface JNSHHomeViewController ()<SDCycleScrollViewDelegate>
 
@@ -210,6 +214,11 @@
     CardBackImg.userInteractionEnabled = YES;
     [self.view addSubview:CardBackImg];
     
+    UITapGestureRecognizer *CardTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(CardTapAction)];
+    CardTap.numberOfTapsRequired = 1;
+    [CardBackImg addGestureRecognizer:CardTap];
+    
+    
     [CardBackImg mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.view);
         make.top.equalTo(CashBackImg.mas_bottom).offset(2);
@@ -243,6 +252,12 @@
     ExpressBackImg.backgroundColor = [UIColor whiteColor];
     ExpressBackImg.userInteractionEnabled = YES;
     [self.view addSubview:ExpressBackImg];
+    
+    UITapGestureRecognizer *ExpresstAP = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(daiKuan)];
+    ExpresstAP.numberOfTapsRequired = 1;
+    [ExpressBackImg addGestureRecognizer:ExpresstAP];
+    
+    
     
     [ExpressBackImg mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(CardBackImg);
@@ -315,7 +330,7 @@
     ConutDownView = [[JNSHTimeCountDownView alloc] initWithFrame:CGRectMake(KscreenWidth - [JNSHAutoSize width:80], [JNSHAutoSize height:10], [JNSHAutoSize width:65], [JNSHAutoSize height:20])];
     //ConutDownView.time = 1000;
    
-    NSLog(@"%ld",ConutDownView.time);
+    NSLog(@"%ld",(long)ConutDownView.time);
     
     [titleBackImg addSubview:ConutDownView];
     
@@ -432,12 +447,19 @@
     
    // dispatch_queue_t queue = dispatch_queue_create(@"com.getad.queue", NULL);
     
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0 ), ^{
-        [self getAdvertisingImage];
-    });
+//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0 ), ^{
+//
+//    });
+    
+    [self getAdvertisingImage];
     
     //注册通知 (当应用从后台到前台重新获取当时时间计时)
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(startTimer) name:UIApplicationWillEnterForegroundNotification object:nil];
+    //检测更新
+    //[self VersionUpdate];
+    
+    //获取基本信息
+    [self initUserInfo];
     
 }
 
@@ -497,8 +519,13 @@
         ConutDownView.time = ((18 - [hour integerValue] - 1)*60+(60-[min integerValue]) - 1)*60+(60 - [second integerValue]);
         timeLab.text = @"距本场结束";
         
-    }else {
+    }else {   //晚上6点之后
+        
         ConutDownView.time = 0;
+        [_TestBtn setTitle:@"已结束" forState:UIControlStateNormal];
+        [_TestBtn setBackgroundColor:LightGrayColor];
+        _TestBtn.enabled = NO;
+        
     }
     
     //关闭之前的定时器
@@ -511,8 +538,6 @@
     }
     
     timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(countDown) userInfo:nil repeats:YES];
-    
-    
     
 }
 
@@ -674,7 +699,7 @@
     
     NSDictionary *dic = @{
                           @"adArea":@"A1002",
-                          @"adSize":@"1"
+                          @"adSize":@"5"
                           };
     NSString *action = @"AdInfoState";
     NSDictionary *requestDic = @{
@@ -686,9 +711,14 @@
     
     [IBHttpTool postWithURL:JNSHTestUrl params:params success:^(id result) {
         NSDictionary *resultDic = [result JSONValue];
-        NSLog(@"%@",resultDic);
+        //NSLog(@"%@",resultDic);
         
         if ([resultDic[@"adInfoList"] isKindOfClass:[NSArray class]]) {
+            
+            NSArray *imageList = resultDic[@"adInfoList"];
+            if (imageList.count == 0) {
+                return ;
+            }
             
             NSArray *adUrlList =resultDic[@"adInfoList"];
             NSMutableArray *imageUrlList = [[NSMutableArray alloc] init];
@@ -794,11 +824,29 @@
         JNSHLoginController *LogInVc = [[JNSHLoginController alloc] init];
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:LogInVc];
         [self presentViewController:nav animated:YES completion:nil];
-        
     }
-    
 
 }
+//办信用卡
+- (void)CardTapAction {
+    
+    JNSHWebViewController *WEBvc = [[JNSHWebViewController alloc] init];
+    WEBvc.url = @"http://www.hiima.cn/promot/product/index/scene_id/2";
+    WEBvc.Navtitle = @"办信用卡";
+    WEBvc.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:WEBvc animated:YES];
+    
+}
+//贷款
+- (void)daiKuan {
+    
+    JNSHWebViewController *webVc = [[JNSHWebViewController alloc] init];
+    webVc.url = @"http://www.hiima.cn/promot/product/index/scene_id/3";
+    webVc.hidesBottomBarWhenPushed = YES;
+    webVc.Navtitle = @"我要贷款";
+    [self.navigationController pushViewController:webVc animated:YES];
+}
+
 //跳转广告
 - (void)pushToAD {
     
@@ -809,8 +857,60 @@
         webVc.url = url;
         [self.navigationController pushViewController:webVc animated:YES];
     }
-    
 }
+
+//版本检测
+- (void)VersionUpdate {
+    
+    NSDictionary *dic = @{
+                          @"os":@"IOS"
+                          };
+    NSString *action = @"AppVersionState";
+    
+    NSDictionary *requestDic = @{
+                                 @"action":action,
+                                 @"token":TOKEN,
+                                 @"data":dic
+                                 };
+    NSString *params = [requestDic JSONFragment];
+    [IBHttpTool postWithURL:JNSHTestUrl params:params success:^(id result) {
+        NSDictionary *resultDic = [params JSONValue];
+        NSLog(@"%@",resultDic);
+        
+        JNSHUpdateView *updateView = [[JNSHUpdateView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight + self.tabBarController.tabBar.frame.size.height)];
+        [updateView show:@"" message:@"" inView:self.view.window];
+        
+        
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
+}
+
+//商户初始化信息
+- (void)initUserInfo {
+    
+    NSDictionary *dic = @{
+                          @"timestamp":[JNSHAutoSize getTimeNow]
+                          };
+    NSString *action = @"AppInitState";
+    NSDictionary *requestDic = @{
+                                 @"action":action,
+                                 @"token":[JNSYUserInfo getUserInfo].userToken,
+                                 @"data":dic
+                                 };
+    NSString *params = [requestDic JSONFragment];
+    
+    [IBHttpTool postWithURL:JNSHTestUrl params:params success:^(id result) {
+        NSDictionary *resultDic = [result JSONValue];
+        [JNSYUserInfo getUserInfo].phone = resultDic[@"phone"];
+        [JNSYUserInfo getUserInfo].viedoUrl = resultDic[@"videoUrl"];
+        
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
+}
+
+
 
 - (void)dealloc {
     

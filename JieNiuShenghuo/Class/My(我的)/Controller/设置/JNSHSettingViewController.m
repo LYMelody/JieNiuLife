@@ -179,7 +179,7 @@
         }else if (indexPath.row == 4) {
             JNSHAccountInfoCell *Cell = [[JNSHAccountInfoCell alloc] init];
             Cell.leftLab.text = @"当前版本";
-            Cell.rightLab.text = @"1.0.0";
+            Cell.rightLab.text = AppVersion;
             Cell.isLast = YES;
             cell = Cell;
             cell.accessoryType = UITableViewCellAccessoryNone;

@@ -214,30 +214,31 @@
 - (void)Share:(UIButton *)btn {
     
     SSDKPlatformType type;
-    
+    NSString *shareContent = @"";
     if (btn.tag == 100) {
         
         type = SSDKPlatformSubTypeWechatSession;
-        
+        shareContent = @"捷牛生活App是一款提供金融、小额贷款、保险等服务的综合类生活服务平台，安全、便捷，值得信赖";
         NSLog(@"分享给微信好友");
     }else if (btn.tag == 101) {
         type = SSDKPlatformSubTypeWechatTimeline;
         NSLog(@"分享到朋友圈");
     }else {
         type = SSDKPlatformTypeSinaWeibo;
+        shareContent = @"捷牛生活App是一款提供金融、小额贷款、保险等服务的综合类生活服务平台，安全、便捷，值得信赖。";
         NSLog(@"分享到新浪微博");
     }
     
     //1、创建分享参数
-    NSArray* imageArray = @[[UIImage imageNamed:@"捷牛生活-logo-"]];
+    NSArray* imageArray = @[[UIImage imageNamed:@"icon"]];
     //（注意：图片必须要在Xcode左边目录里面，名称必须要传正确，如果要分享网络图片，可以这样传iamge参数 images:@[@"http://mob.com/Assets/images/logo.png?v=20150320"]）
     if (imageArray) {
         
         NSMutableDictionary *shareParams = [NSMutableDictionary dictionary];
-        [shareParams SSDKSetupShareParamsByText:@"http://ktb.4006007909.com/down"
+        [shareParams SSDKSetupShareParamsByText:shareContent
                                          images:imageArray
-                                            url:[NSURL URLWithString:@"http://ktb.4006007909.com/down"]
-                                          title:@"卡捷通APP不止于收款，欢迎您下载使用"
+                                            url:[NSURL URLWithString:[JNSYUserInfo getUserInfo].invateUrl]
+                                          title:@"臻享指尖便利，还看捷牛生活"
                                            type:SSDKContentTypeAuto];
         //有的平台要客户端分享需要加此方法，例如微博
         [shareParams SSDKEnableUseClientShare];
@@ -276,7 +277,6 @@
     InvateHisVc.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:InvateHisVc animated:YES];
 }
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

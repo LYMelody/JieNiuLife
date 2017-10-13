@@ -16,6 +16,7 @@ target 'JieNiuShenghuo' do
   pod 'Pgyer'
   pod 'PgyUpdate'
   pod 'MJRefresh'
- 
+  pod 'UMengAnalytics'
+
 end 
 

@@ -244,7 +244,7 @@
         
         NSDictionary *resultdic = [result JSONValue];
         NSString *code = resultdic[@"code"];
-        NSLog(@"%@",resultdic);
+        //NSLog(@"%@",resultdic);
         NSString *msg = resultdic[@"msg"];
         if ([code isEqualToString:@"000000"]) {
             

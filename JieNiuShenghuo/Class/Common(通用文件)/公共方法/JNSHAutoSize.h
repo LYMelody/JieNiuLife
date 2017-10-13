@@ -20,7 +20,7 @@
 
 + (NSString *)getDiviceIMEI;
 
-+ (NSString*)rePlaceString:(NSString*)string;
+//+ (NSString*)rePlaceString:(NSString*)string;
 
 + (NSString *)getTimeNow;
 

@@ -14,14 +14,10 @@
 
 - (id)initWithFrame:(CGRect)frame cancle:(NSString *)cancletext sure:(NSString *)suretext {
     
-     self =  [super initWithFrame:frame];
+    self =  [super initWithFrame:frame];
     
     if (self ) {
-        
-        
         [self setUpViews:cancletext suretext:suretext];
-        
-        
     }
     
     return self;

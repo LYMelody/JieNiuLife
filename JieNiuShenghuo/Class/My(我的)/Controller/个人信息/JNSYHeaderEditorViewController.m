@@ -52,7 +52,7 @@
     
     _HeaderImgView = [[UIImageView alloc] init];
     _HeaderImgView.backgroundColor = [UIColor clearColor];
-    _HeaderImgView.contentMode = UIViewContentModeScaleAspectFit;
+    _HeaderImgView.contentMode = UIViewContentModeScaleAspectFill;
     _HeaderImgView.clipsToBounds = YES;
     
     if (![[JNSYUserInfo getUserInfo].picHeader isEqualToString:@""]) {
@@ -114,9 +114,15 @@
         }
         
         UIImagePickerController *Picker = [[UIImagePickerController alloc] init];
+        //Picker.navigationController.navigationBar.translucent = YES;
         Picker.sourceType = sourcetype;
         Picker.delegate = self;
         //Picker.allowsEditing = YES;
+        if (@available(iOS 11.0, *)) {
+            UIScrollView.appearance.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentAutomatic;
+        } else {
+            // Fallback on earlier versions
+        }
         
         [self.navigationController presentViewController:Picker animated:YES completion:nil];
         
@@ -155,7 +161,11 @@
     [self upLoadHeaderImg:imageBase64];
     
     _HeaderImgView.image = image;
-    
+    if (@available(iOS 11.0, *)) {
+        UIScrollView.appearance.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+    } else {
+        // Fallback on earlier versions
+    }
     //pop
     [picker dismissViewControllerAnimated:YES completion:^{
         [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];

@@ -13,15 +13,16 @@
 #import "IBHttpTool.h"
 #import "UIImageView+WebCache.h"
 #import "JNSHWebViewController.h"
+#import "SDCycleScrollView.h"
 
-@interface JNSHServiceViewController ()<UITableViewDelegate,UITableViewDataSource>
+@interface JNSHServiceViewController ()<UITableViewDelegate,UITableViewDataSource,SDCycleScrollViewDelegate>
 
 @end
 
 @implementation JNSHServiceViewController {
     
     UITableView *table;
-    
+    SDCycleScrollView *ADScrollView;
     
 }
 
@@ -55,11 +56,21 @@
     table.backgroundColor = [UIColor whiteColor];
     table.showsVerticalScrollIndicator = NO;
     table.separatorStyle = UITableViewCellSeparatorStyleNone;
-    UIImageView *headerView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, [JNSHAutoSize height:189])];
+    UIImageView *headerView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, [JNSHAutoSize height:188])];
     headerView.backgroundColor = [UIColor grayColor];
     headerView.userInteractionEnabled = YES;
     table.tableHeaderView = headerView;
-    
+    NSArray *imgaeArray = [NSArray arrayWithObjects:[UIImage imageNamed:@"banner01"],[UIImage imageNamed:@"AD04.png"],[UIImage imageNamed:@"APP05.png"], nil];
+    imgaeArray = [[NSArray alloc]init];
+    ADScrollView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0, 0, KscreenWidth, [JNSHAutoSize height:188]) shouldInfiniteLoop:YES imageNamesGroup:imgaeArray];
+    ADScrollView.delegate = self;
+    ADScrollView.bannerImageViewContentMode = UIViewContentModeScaleAspectFill;
+    ADScrollView.clipsToBounds = YES;
+    ADScrollView.pageControlStyle = SDCycleScrollViewPageContolStyleAnimated;
+    [headerView addSubview:ADScrollView];
+    ADScrollView.scrollDirection = UICollectionViewScrollDirectionHorizontal;
+    ADScrollView.autoScrollTimeInterval = 5;
+
     [self.view addSubview:table];
     
     if(!self.serviceList) {
@@ -70,6 +81,11 @@
     
     //获取服务信息
     [self getserviceInfo];
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        //获取轮播图片
+        [self getAdvertisingImage];
+    });
     
 }
 
@@ -100,6 +116,69 @@
         NSLog(@"%@",error);
     }];
 }
+
+//获取广告轮播图片
+- (void)getAdvertisingImage {
+    
+    NSDictionary *dic = @{
+                          @"adArea":@"A1003",
+                          @"adSize":@"5"
+                          };
+    NSString *action = @"AdInfoState";
+    NSDictionary *requestDic = @{
+                                 @"action":action,
+                                 @"token":[JNSYUserInfo getUserInfo].userToken,
+                                 @"data":dic
+                                 };
+    NSString *params = [requestDic JSONFragment];
+    
+    [IBHttpTool postWithURL:JNSHTestUrl params:params success:^(id result) {
+        NSDictionary *resultDic = [result JSONValue];
+        NSLog(@"图片列表:%@",resultDic);
+        NSLog(@"图片列表数组:%@",resultDic[@"adInfoList"]);
+        if ([resultDic[@"adInfoList"] isKindOfClass:[NSArray class]]) {
+            
+            NSArray *imageList = resultDic[@"adInfoList"];
+            if (imageList.count == 0) {
+                return ;
+            }
+            
+            NSArray *adUrlList =resultDic[@"adInfoList"];
+            NSMutableArray *imageUrlList = [[NSMutableArray alloc] init];
+            NSMutableArray *hrefurlList = [[NSMutableArray alloc] init];
+            
+            for(NSInteger i = 0;i<adUrlList.count;i++){
+                NSString *areaPic = adUrlList[i][@"areaPic"];
+                NSString *areaHref = adUrlList[i][@"areaHref"];
+                [imageUrlList addObject:areaPic];
+                [hrefurlList addObject:areaHref];
+            }
+            
+            if (imageUrlList.count > 0) {
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    ADScrollView.imageURLStringsGroup = imageUrlList;
+                    ADScrollView.selectUrlList = hrefurlList;
+                });
+                
+            }
+        }
+        
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
+}
+
+//点击广告图方法
+- (void)cycleScrollView:(SDCycleScrollView *)cycleScrollView didSelectItemAtIndex:(NSInteger)index {
+    
+    JNSHWebViewController *WebVc = [[JNSHWebViewController alloc] init];
+    WebVc.url = cycleScrollView.selectUrlList[index];
+    WebVc.hidesBottomBarWhenPushed = YES;
+    [self.navigationController pushViewController:WebVc animated:YES];
+    
+}
+
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     

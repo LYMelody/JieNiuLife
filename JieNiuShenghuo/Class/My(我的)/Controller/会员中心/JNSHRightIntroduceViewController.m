@@ -50,10 +50,10 @@
     detailLab.numberOfLines = 0;
     if (self.typetag == 100){ //会员费率介绍
         self.title = @"会员费率介绍";
-        titleLab.text = @"费率一览（以交易额2万为例）";
-        img.image = [UIImage imageNamed:@"feilv"];
+        titleLab.text = @"费率一览（交易2万/笔对比）";
+        img.image = [UIImage imageNamed:@"rate"];
         
-        attr = [[NSMutableAttributedString alloc] initWithString:@"说明：\n用户月均交易额2万元，非会员可省20元，一年可省240元； 会员可省28元（48-20），一年可省336元。"];
+        attr = [[NSMutableAttributedString alloc] initWithString:@"说明：\n以交易2万/笔为例，捷牛生活App会员用户可节约48元/笔，非会员用户可节约20元/笔，费率优势巨大！"];
         [attr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15] range:NSMakeRange(0, 3)];
         [attr addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:NSMakeRange(0, 3)];
         [attr addAttribute:NSForegroundColorAttributeName value:ColorText range:NSMakeRange(3, attr.length- 3)];

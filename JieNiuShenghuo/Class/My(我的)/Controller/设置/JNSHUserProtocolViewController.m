@@ -33,11 +33,18 @@
         pathString = [NSString stringWithContentsOfFile:path encoding:4 error:nil];
     }
     
-    UILabel * label = [[UILabel alloc]initWithFrame:CGRectMake([JNSHAutoSize width:15], 0, KscreenWidth - [JNSHAutoSize width:32], 0)];
+    UILabel * label = [[UILabel alloc]initWithFrame:CGRectMake([JNSHAutoSize width:15], 0, KscreenWidth - [JNSHAutoSize width:30], 0)];
     self.automaticallyAdjustsScrollViewInsets = NO;
     
+    NSMutableAttributedString *mutableStr = [[NSMutableAttributedString alloc] initWithString:pathString];
+    NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+    style.firstLineHeadIndent = 10;
+    style.lineSpacing = 10;
+    style.alignment = NSTextAlignmentLeft;
+    [mutableStr addAttribute:NSParagraphStyleAttributeName value:style range:NSMakeRange(0, pathString.length)];
     //label.backgroundColor = [UIColor clearColor];
-    label.text = pathString;
+    //label.text = pathString;
+    label.attributedText = mutableStr;
     label.textColor = [UIColor blackColor];
     label.font = [UIFont systemFontOfSize:13.0f];
     label.lineBreakMode = NSLineBreakByWordWrapping;

@@ -66,6 +66,13 @@
 
 @property(nonatomic,copy)NSString *userQr;            //注册二维码
 
+@property(nonatomic,copy)NSString *invateUrl;         //分享链接
+
+@property(nonatomic,copy)NSString *phone;             //客服热线
+
+@property(nonatomic,copy)NSString *viedoUrl;          //视频
+
+
 + (JNSYUserInfo *)getUserInfo;
 
 @end

@@ -16,6 +16,7 @@
 #import "JNSHAutoSize.h"
 #import "MBProgressHUD.h"
 #import "JNSHUserProtocolViewController.h"
+#import "JNSYUserInfo.h"
 
 @interface JNSHResignViewController ()<UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate>
 
@@ -147,7 +148,11 @@
     lab.textAlignment = NSTextAlignmentCenter;
     lab.textColor = ColorTabBarBackColor;
     lab.userInteractionEnabled = YES;
-    NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithString:@"客服电话：400-101-8258"];
+    NSString *front = [[JNSYUserInfo getUserInfo].phone substringToIndex:3];
+    NSString *mid = [[JNSYUserInfo getUserInfo].phone substringWithRange:NSMakeRange(3, 3)];
+    NSString *last = [[JNSYUserInfo getUserInfo].phone substringFromIndex:6];
+    NSString *str = [NSString stringWithFormat:@"客服电话:%@-%@-%@",front,mid,last];
+    NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithString:str];
     [attr addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:NSMakeRange(0, 5)];
     
     lab.attributedText = attr;
@@ -168,7 +173,7 @@
 //打电话
 - (void)call {
     
-     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"telprompt://%@",@"400-101-8258"]]];
+     [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"telprompt://%@",[NSString stringWithFormat:@"%@",[JNSYUserInfo getUserInfo].phone]]]];
     
 }
 //协议

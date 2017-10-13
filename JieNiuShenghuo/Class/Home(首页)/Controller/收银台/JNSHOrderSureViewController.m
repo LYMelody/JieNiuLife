@@ -205,7 +205,7 @@
             [JNSYUserInfo getUserInfo].branderCardFlg = resultdic[@"branderCardFlg"];
             [JNSYUserInfo getUserInfo].branderCardNo = resultdic[@"branderCardNo"];
             [JNSYUserInfo getUserInfo].picHeader = resultdic[@"picHeader"];
-            [JNSYUserInfo getUserInfo].userVipFlag = [NSString stringWithFormat:@"%@",resultdic[@"vipFig"]];
+            [JNSYUserInfo getUserInfo].userVipFlag = [NSString stringWithFormat:@"%@",resultdic[@"vipFlg"]];
             //[JNSYUserInfo getUserInfo].userVipFlag = @"1";
             [JNSYUserInfo getUserInfo].SettleCard = resultdic[@"userBank"];
             

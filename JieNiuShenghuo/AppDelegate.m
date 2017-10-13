@@ -13,6 +13,7 @@
 #import "JNSHAdvertiseView.h"
 #import "SBJSON.h"
 #import "IBHttpTool.h"
+#import "JNSHUpdateView.h"
 
 //ShareSDK
 #import <ShareSDK/ShareSDK.h>
@@ -25,6 +26,8 @@
 //蒲公英
 #import <PgySDK/PgyManager.h>
 #import <PgyUpdate/PgyUpdateManager.h>
+//友盟
+#import "UMMobClick/MobClick.h"
 
 /*********************************第三方宏定义*********************************/
 
@@ -36,6 +39,8 @@
 #define ShareAPPSecet @"a561847dbe57010c896062d0730516a1"
 //蒲公英
 #define PgyAPPID @"f496f2435afee567bd3a11bd633b19de"
+//Umeng
+#define UmengAPPkey @"59daea31b27b0a2f6f00000c"
 
 @interface AppDelegate ()<JPUSHRegisterDelegate>
 
@@ -48,9 +53,16 @@
     //[NSThread sleepForTimeInterval:1];
     //蒲公英
     [[PgyManager sharedPgyManager] startManagerWithAppId:PgyAPPID];
-    [[PgyUpdateManager sharedPgyManager] startManagerWithAppId:PgyAPPID];
     [[PgyManager sharedPgyManager] setEnableFeedback:NO];
+    //检测更新
+    [[PgyUpdateManager sharedPgyManager] startManagerWithAppId:PgyAPPID];
     [[PgyUpdateManager sharedPgyManager] checkUpdate];
+   // [[PgyUpdateManager sharedPgyManager] checkUpdate];
+    
+    //友盟
+    UMConfigInstance.appKey = UmengAPPkey;
+    UMConfigInstance.channelId = @"Exterprise";
+    [MobClick startWithConfigure:UMConfigInstance];
     
     //适配tableView ios11
     if (@available(iOS 11.0, *)) {
@@ -179,7 +191,6 @@
     return YES;
 }
 
-
 - (void)showAdvertiseView{
     
     //启动广告
@@ -226,6 +237,9 @@
             }else {
                 
             };
+            //版本更新
+            //[self VersionUpdate];
+            
         }
     }
     
@@ -276,9 +290,13 @@
     
     [IBHttpTool postWithURL:JNSHTestUrl params:params success:^(id result) {
         NSDictionary *resultDic = [result JSONValue];
-        NSLog(@"%@",resultDic);
+        //NSLog(@"%@",resultDic);
         
         if ([resultDic[@"adInfoList"] isKindOfClass:[NSArray class]]) {
+            NSArray *imageList = resultDic[@"adInfoList"] ;
+            if (imageList.count == 0) {
+                return ;
+            }
             NSString *imageURL = resultDic[@"adInfoList"][0][@"areaPic"];
             NSString *linkURL = resultDic[@"adInfoList"][0][@"areaHref"];
             NSArray *imageNamearr = [imageURL componentsSeparatedByString:@"/"];
@@ -363,9 +381,35 @@
 }
 
 
+//版本检测
+- (void)VersionUpdate {
+    
+    NSDictionary *dic = @{
+                          @"os":@"IOS"
+                          };
+    NSString *action = @"AppVersionState";
+    
+    NSDictionary *requestDic = @{
+                                 @"action":action,
+                                 @"token":TOKEN,
+                                 @"data":dic
+                                 };
+    NSString *params = [requestDic JSONFragment];
+    [IBHttpTool postWithURL:JNSHTestUrl params:params success:^(id result) {
+        NSDictionary *resultDic = [params JSONValue];
+        NSLog(@"%@",resultDic);
+        
+        JNSHUpdateView *updateView = [[JNSHUpdateView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight)];
+        [updateView show:@"" message:@"" inView:[UIApplication sharedApplication].keyWindow];
+        
+        
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
+}
 
 
-#define mark - apns
+//#define mark - apns
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     

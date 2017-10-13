@@ -54,7 +54,6 @@
     lightBackImg.userInteractionEnabled = YES;
     [backImg addSubview:lightBackImg];
     
-    
     UIImageView *modelBackImg = [[UIImageView alloc] init];
     modelBackImg.backgroundColor = lightYellow;
     
@@ -86,10 +85,6 @@
         make.left.right.equalTo(modelBackImg);
         make.height.mas_equalTo([JNSHAutoSize height:20]);
     }];
-    
-    //type = @"1";
-    
-    
     
     if ([self.orgType isEqualToString:@"L32"]) { //特约代理
         [modelBackImg addSubview:ModelOneImg];

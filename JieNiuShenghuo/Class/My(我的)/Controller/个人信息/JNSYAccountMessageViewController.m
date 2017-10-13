@@ -192,7 +192,10 @@
             }else {
                 Cell.rightLab.text = @"";
             }
-            Cell.rightLab.text = [JNSYUserInfo getUserInfo].birthday;
+            NSString *front = [[JNSYUserInfo getUserInfo].birthday substringToIndex:4];
+            NSString *mid = [[JNSYUserInfo getUserInfo].birthday substringWithRange:NSMakeRange(4, 2)];
+            NSString *last = [[JNSYUserInfo getUserInfo].birthday substringWithRange:NSMakeRange(6, 2)];
+            Cell.rightLab.text = [NSString stringWithFormat:@"%@-%@-%@",front,mid,last];
             Cell.isLast = YES;
             cell = Cell;
             cell.accessoryType = UITableViewCellAccessoryNone;

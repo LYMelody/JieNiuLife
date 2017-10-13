@@ -55,11 +55,6 @@
     [self.navigationController.navigationBar setTitleTextAttributes:@{
                                                                       NSForegroundColorAttributeName:[UIColor whiteColor]
                                                                       }];
-
-//    //设置导航栏背景色为透明
-//    UIImageView *backImg = self.navigationController.navigationBar.subviews.firstObject;
-//    backImg.alpha = 0;
-    
     self.navBarBgAlpha = @"1.0";
     //隐藏黑线
     self.navigationController.navigationBar.subviews[0].subviews[0].hidden = YES;
@@ -197,14 +192,14 @@
     ratingSubLab.font = [UIFont systemFontOfSize:11];
     ratingSubLab.textColor = ColorLightText;
     ratingSubLab.textAlignment = NSTextAlignmentLeft;
-    ratingSubLab.text = @"0.39%+3";
+    ratingSubLab.text = @"0.39%+3带积分";
     
     [ratingBackImg addSubview:ratingSubLab];
     
     [ratingSubLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(ratingLab.mas_bottom).offset([JNSHAutoSize height:2]);
         make.left.equalTo(ratingLab);
-        make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:60], [JNSHAutoSize height:15]));
+        make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:100], [JNSHAutoSize height:15]));
     }];
     
     //安全保险
@@ -216,7 +211,6 @@
     UITapGestureRecognizer *PiccTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(TapForPICC)];
     PiccTap.numberOfTapsRequired = 1;
     [safeBackImg addGestureRecognizer:PiccTap];
-    
     
     [safeBackImg mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(ratingBackImg);
@@ -252,7 +246,7 @@
     safeSubLab.font = [UIFont systemFontOfSize:11];
     safeSubLab.textColor = ColorLightText;
     safeSubLab.textAlignment = NSTextAlignmentLeft;
-    safeSubLab.text = @"赠人身意外险";
+    safeSubLab.text = @"赠交通意外险";
     
     [safeBackImg addSubview:safeSubLab];
     
@@ -326,7 +320,6 @@
     
     UIImageView *cerImg = [[UIImageView alloc] init];
     cerImg.image = [UIImage imageNamed:@"vip_vip"];
-    
     [cerfityBackImg addSubview:cerImg];
     
     [cerImg mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -405,7 +398,7 @@
     }];
     
     NityrightLab = [[UILabel alloc] init];
-    NityrightLab.text = @"￥55";
+    NityrightLab.text = @"";
     NityrightLab.textColor = [UIColor redColor];
     NityrightLab.font = [UIFont systemFontOfSize:14];
     NityrightLab.textAlignment = NSTextAlignmentRight;
@@ -461,7 +454,7 @@
     halfLab.font = [UIFont systemFontOfSize:14];
     halfLab.textAlignment = NSTextAlignmentRight;
     halfLab.textColor = [UIColor redColor];
-    halfLab.text = @"￥105";
+    halfLab.text = @"";
     
     [halfYearImg addSubview:halfLab];
     
@@ -497,7 +490,7 @@
     totalPriceLab = [[UILabel alloc] init];
     totalPriceLab.font = [UIFont systemFontOfSize:15];
     totalPriceLab.textAlignment = NSTextAlignmentLeft;
-    NSString *str = @"总价：￥55";
+    NSString *str = @"总价：￥";
     NSMutableAttributedString *attri = [[NSMutableAttributedString alloc] initWithString:str];
     [attri addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:NSMakeRange(3, (str.length - 3))];
     totalPriceLab.attributedText = attri;
@@ -539,17 +532,6 @@
     scrollView.delaysContentTouches = NO;
     
 }
-
-//- (BOOL)touchesShouldCancelInContentView:(UIView *)view
-//{
-//    if ([view isKindOfClass:[UIImageView class]])
-//    {
-//        return YES;
-//    }
-//    return [super touchesShouldCancelInContentView:view];
-//
-//}
-
 
 //跳转订单
 - (void)beVip {
@@ -664,7 +646,7 @@
         //NSLog(@"%@",resultdic);
         NSString *msg = resultdic[@"msg"];
         if ([code isEqualToString:@"000000"]) {
-            NSString *rate = resultdic[@"vipRate"];
+            //NSString *rate = resultdic[@"vipRate"];
             NSString *birthdayCount = resultdic[@"birthdayCount"];
             NSString *Vip = [NSString stringWithFormat:@"%@",resultdic[@"isVip"]];
             if ([Vip isEqualToString:@"1"]) {
@@ -687,9 +669,13 @@
                 NityrightLab.text = [NSString stringWithFormat:@"￥%ld",[mealDic[0][@"price"] integerValue]/100];
                 halfYearLab.text = mealDic[1][@"title"];
                 halfLab.text = [NSString stringWithFormat:@"￥%ld",[mealDic[1][@"price"] integerValue]/100];
+                NSString *strr = [NSString stringWithFormat:@"总价：%ld",[mealDic[0][@"price"] integerValue]/100];
+                NSMutableAttributedString *attri = [[NSMutableAttributedString alloc] initWithString:strr];
+                [attri addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:NSMakeRange(3, (strr.length - 3))];
+                totalPriceLab.attributedText = attri;
             }
             
-            ratingSubLab.text = rate;
+            //ratingSubLab.text = rate;
             birthSubLab.text = [NSString stringWithFormat:@"送%@张抵用券",birthdayCount];
             
         }else {
@@ -735,7 +721,7 @@
             [JNSYUserInfo getUserInfo].userPoints = resultdic[@"userPoints"];
             [JNSYUserInfo getUserInfo].userSex = [NSString stringWithFormat:@"%@",resultdic[@"sex"]];
             [JNSYUserInfo getUserInfo].picHeader = resultdic[@"picHeader"];
-            [JNSYUserInfo getUserInfo].userVipFlag = [NSString stringWithFormat:@"%@",resultdic[@"vipFig"]];
+            [JNSYUserInfo getUserInfo].userVipFlag = [NSString stringWithFormat:@"%@",resultdic[@"vipFlg"]];
             [JNSYUserInfo getUserInfo].userQr = resultdic[@"picQr"];
             [JNSYUserInfo getUserInfo].birthday = resultdic[@"birthday"];
             [JNSYUserInfo getUserInfo].SettleCard = resultdic[@"userBank"];

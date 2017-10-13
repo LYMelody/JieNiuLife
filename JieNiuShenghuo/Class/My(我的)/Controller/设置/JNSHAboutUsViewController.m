@@ -50,7 +50,7 @@
                            NSFontAttributeName:[UIFont systemFontOfSize:15],
                            NSParagraphStyleAttributeName:paragraphStyle
                            };
-    textView.attributedText = [[NSAttributedString alloc] initWithString:@"【捷牛生活】app是一款集综合性、实用性 为一体的领先的移动便民生活服务类平台，致 力于提供“简单”、“安全”、“快捷”的支 付解决方案；提供信用卡办理、信用卡优惠、 贷款、保险、投资理财等金融服务；以及缴费 充值、医疗挂号、彩票购买、打折票务等便民 服务，覆盖生活方方面面，真正做到“尽享指 尖臻至生活”。" attributes:attr];
+    textView.attributedText = [[NSAttributedString alloc] initWithString:@"捷牛生活app是一款提供PICC保险产品，小额贷款，信用卡办理与消费，特色商城，投资理财和移动收银台为一体的综合性生活服务平台，为中国广大消费者提供安全稳定的便民消费和优质可靠的金融服务；" attributes:attr];
     textView.userInteractionEnabled = NO;
     [self.view addSubview:textView];
     

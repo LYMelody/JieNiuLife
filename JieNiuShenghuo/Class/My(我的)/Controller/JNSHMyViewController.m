@@ -31,6 +31,7 @@
 #import "JNSHCommitEmailViewController.h"
 #import "JNSHAgentPayViewController.h"
 #import "JNSHAgentDetailViewController.h"
+#import "JNSHUsageViewController.h"
 
 @interface JNSHMyViewController ()<UITableViewDelegate,UITableViewDataSource,UIGestureRecognizerDelegate,UINavigationControllerDelegate>
 
@@ -88,7 +89,6 @@
     return YES;
 }
 
-
 - (void)viewDidLoad {
     
     [super viewDidLoad];
@@ -141,13 +141,10 @@
         
         JNSHLoginController *LoginVc = [[JNSHLoginController alloc] init];
         LoginVc.hidesBottomBarWhenPushed = YES;
-        [self.navigationController pushViewController:LoginVc animated:YES];
+        UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:LoginVc];
+        [self presentViewController:nav animated:YES completion:nil];
         
     }
-    
-    
-    
-    
 }
 
 //获取用户基本信息
@@ -182,12 +179,13 @@
             [JNSYUserInfo getUserInfo].userPoints = resultdic[@"userPoints"];
             [JNSYUserInfo getUserInfo].userSex = [NSString stringWithFormat:@"%@",resultdic[@"sex"]];
             [JNSYUserInfo getUserInfo].picHeader = resultdic[@"picHeader"];
-            [JNSYUserInfo getUserInfo].userVipFlag = [NSString stringWithFormat:@"%@",resultdic[@"vipFig"]];
+            [JNSYUserInfo getUserInfo].userVipFlag = [NSString stringWithFormat:@"%@",resultdic[@"vipFlg"]];
             [JNSYUserInfo getUserInfo].userQr = resultdic[@"picQr"];
             [JNSYUserInfo getUserInfo].birthday = resultdic[@"birthday"];
             [JNSYUserInfo getUserInfo].SettleCard = resultdic[@"userBank"];
             [JNSYUserInfo getUserInfo].vipExpireDay = [NSString stringWithFormat:@"%@",resultdic[@"vipExpireDay"]];
             [JNSYUserInfo getUserInfo].userNick = resultdic[@"userNick"];
+            [JNSYUserInfo getUserInfo].invateUrl = [NSString stringWithFormat:@"%@",resultdic[@"inviteUrl"]];
             //实名认证状态
             NSString *userStatus = resultdic[@"userStatus"];
             if ([userStatus isEqualToString:@"11"]) {
@@ -210,6 +208,8 @@
                 
                 isVip = YES;
                 
+            }else {
+                isVip = NO;
             }
             //刷新视图
             [table reloadData];
@@ -266,7 +266,6 @@
                 Cell.isLogoedIn = YES;
                 Cell.nickNameLab.text = [JNSYUserInfo getUserInfo].userNick;
             }else {
-                
                 Cell.isLogoedIn = NO;
             }
             
@@ -287,7 +286,7 @@
             }else {
                 Cell.rightLab.text = @"立即开通";
             }
-            
+            Cell.rightLab.textColor = [UIColor redColor];
             Cell.showBottomLine = YES;
             Cell.showTopLine = YES;
             cell = Cell;
@@ -298,6 +297,9 @@
             Cell.titleLab.text = @"实名认证";
             if ([JNSYUserInfo getUserInfo].isLoggedIn) {
                 Cell.rightLab.text = [JNSYUserInfo getUserInfo].userStatus;
+                if ([[JNSYUserInfo getUserInfo].userStatus isEqualToString:@"审核通过"]) {
+                    Cell.rightLab.textColor = GreenColor;
+                }
             }else {
                 
             }
@@ -346,12 +348,15 @@
             JNSHMyCommonCell *Cell = [[JNSHMyCommonCell alloc] init];
             Cell.titleImage.image = [UIImage imageNamed:@"my_phone"];
             Cell.titleLab.text = @"客服电话";
-            Cell.rightLab.text = @"400-101-8258";
+            NSString *front = [[JNSYUserInfo getUserInfo].phone substringToIndex:3];
+            NSString *mid = [[JNSYUserInfo getUserInfo].phone substringWithRange:NSMakeRange(3, 3)];
+            NSString *last = [[JNSYUserInfo getUserInfo].phone substringFromIndex:6];
+            Cell.rightLab.text = [NSString stringWithFormat:@"%@-%@-%@",front,mid,last];
             cell = Cell;
         }else if (indexPath.row == 13) {
             JNSHMyCommonCell *Cell = [[JNSHMyCommonCell alloc] init];
             Cell.titleImage.image = [UIImage imageNamed:@"my_instructions"];
-            Cell.titleLab.text = @"使用说明";
+            Cell.titleLab.text = @"操作说明";
             Cell.rightLab.text = @"";
             Cell.showBottomLine = YES;
             cell = Cell;
@@ -520,8 +525,12 @@
         JNSHMyCommonCell *cell = [table cellForRowAtIndexPath:indexPath];
         cell.selected = NO;
         
-        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"telprompt://%@",@"400-101-8258"]]];
+        [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"telprompt://%@",[NSString stringWithFormat:@"%@",[JNSYUserInfo getUserInfo].phone]]]];
         
+    }else if (indexPath.row == 13) { //使用说明
+        JNSHUsageViewController *usagevC = [[JNSHUsageViewController alloc] init];
+        usagevC.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:usagevC animated:YES];
     }
     else if (indexPath.row == 15) {     //代理商
         if (islogoedIn) {

@@ -78,6 +78,7 @@
 		CC6CFEEE1F8C93CC0020C342 /* JNSHAgentMessageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CC6CFEED1F8C93CC0020C342 /* JNSHAgentMessageViewController.m */; };
 		CC6CFEF11F8C957F0020C342 /* JNSHAgentmsgCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CC6CFEF01F8C957F0020C342 /* JNSHAgentmsgCell.m */; };
 		CC6CFEF41F8CACA80020C342 /* JNSHMessageDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CC6CFEF31F8CACA80020C342 /* JNSHMessageDetailViewController.m */; };
+		CC704EEB1F95D71100144D68 /* back@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CC704EEA1F95D71100144D68 /* back@2x.png */; };
 		CC7D61171F6778B200F2BE88 /* JNSHGuidViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CC7D61161F6778B200F2BE88 /* JNSHGuidViewController.m */; };
 		CC7D611B1F677F1400F2BE88 /* 引导页1.png in Resources */ = {isa = PBXBuildFile; fileRef = CC7D61181F677F1400F2BE88 /* 引导页1.png */; };
 		CC7D611C1F677F1400F2BE88 /* 引导页2.png in Resources */ = {isa = PBXBuildFile; fileRef = CC7D61191F677F1400F2BE88 /* 引导页2.png */; };
@@ -306,6 +307,7 @@
 		CC6CFEF01F8C957F0020C342 /* JNSHAgentmsgCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JNSHAgentmsgCell.m; sourceTree = "<group>"; };
 		CC6CFEF21F8CACA80020C342 /* JNSHMessageDetailViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JNSHMessageDetailViewController.h; sourceTree = "<group>"; };
 		CC6CFEF31F8CACA80020C342 /* JNSHMessageDetailViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JNSHMessageDetailViewController.m; sourceTree = "<group>"; };
+		CC704EEA1F95D71100144D68 /* back@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "back@2x.png"; sourceTree = "<group>"; };
 		CC7D61151F6778B200F2BE88 /* JNSHGuidViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JNSHGuidViewController.h; sourceTree = "<group>"; };
 		CC7D61161F6778B200F2BE88 /* JNSHGuidViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNSHGuidViewController.m; sourceTree = "<group>"; };
 		CC7D61181F677F1400F2BE88 /* 引导页1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "引导页1.png"; sourceTree = "<group>"; };
@@ -1081,6 +1083,7 @@
 		CC95DD161F31629800539A03 /* 商城 */ = {
 			isa = PBXGroup;
 			children = (
+				CC704EEA1F95D71100144D68 /* back@2x.png */,
 			);
 			path = "商城";
 			sourceTree = "<group>";
@@ -1458,7 +1461,7 @@
 				TargetAttributes = {
 					CC95DCDC1F315F4500539A03 = {
 						CreatedOnToolsVersion = 8.3.3;
-						DevelopmentTeam = X8CH365KCN;
+						DevelopmentTeam = ZP26G972X9;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.Push = {
@@ -1494,6 +1497,7 @@
 				CC10BE361F663382006B9640 /* AD04.png in Resources */,
 				CCA5916B1F74C4B100EE4648 /* launchback.png in Resources */,
 				CC23AC961F73BC5E009F0B6C /* jnsh.txt in Resources */,
+				CC704EEB1F95D71100144D68 /* back@2x.png in Resources */,
 				CC7D611C1F677F1400F2BE88 /* 引导页2.png in Resources */,
 				CC95DCF01F315F4500539A03 /* LaunchScreen.storyboard in Resources */,
 				CC7D611D1F677F1400F2BE88 /* 引导页3.png in Resources */,
@@ -1824,14 +1828,14 @@
 				CODE_SIGN_ENTITLEMENTS = JieNiuShenghuo/JieNiuShenghuo.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = X8CH365KCN;
+				DEVELOPMENT_TEAM = ZP26G972X9;
 				ENABLE_BITCODE = NO;
 				GCC_PREFIX_HEADER = /Users/rongfeng/Desktop/JieNiuShenghuo/JieNiuShenghuo/JNSHPreFixHeader.h;
 				INFOPLIST_FILE = JieNiuShenghuo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.jieniujnsh;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jieniu.jieniushenghuo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/**";
@@ -1847,14 +1851,14 @@
 				CODE_SIGN_ENTITLEMENTS = JieNiuShenghuo/JieNiuShenghuo.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Huiping Zhou (LDRA57SQ58)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = X8CH365KCN;
+				DEVELOPMENT_TEAM = ZP26G972X9;
 				ENABLE_BITCODE = NO;
 				GCC_PREFIX_HEADER = /Users/rongfeng/Desktop/JieNiuShenghuo/JieNiuShenghuo/JNSHPreFixHeader.h;
 				INFOPLIST_FILE = JieNiuShenghuo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				ONLY_ACTIVE_ARCH = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = com.jieniujnsh;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jieniu.jieniushenghuo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				USER_HEADER_SEARCH_PATHS = "${SRCROOT}/**";

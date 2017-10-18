@@ -25,7 +25,7 @@
 #import "JNSHTicketFailView.h"
 #import "JNSHVipViewController.h"
 #import "JNSHWebViewController.h"
-#import "PgyUpdateManager.h"
+//#import "PgyUpdateManager.h"
 #import "JNSHUpdateView.h"
 
 #define PgyAPPID @"f496f2435afee567bd3a11bd633b19de"
@@ -226,7 +226,7 @@
     }];
     
     UIImageView *CardLogoImg = [[UIImageView alloc] init];
-    CardLogoImg.image = [UIImage imageNamed:@"home_grid_2_1"];
+    CardLogoImg.image = [UIImage imageNamed:@"home_grid_2_1-1"];
     [CardBackImg addSubview:CardLogoImg];
     
     [CardLogoImg mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -236,7 +236,7 @@
     }];
     
     UILabel *CardLab = [[UILabel alloc] init];
-    CardLab.text = @"办信用卡";
+    CardLab.text = @"银联快捷";
     CardLab.textColor = ColorText;
     CardLab.textAlignment = NSTextAlignmentLeft;
     CardLab.font = [UIFont systemFontOfSize:15];
@@ -398,7 +398,7 @@
     _TestBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [_TestBtn setTitle:@"试手气" forState:UIControlStateNormal];
     [_TestBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [_TestBtn setBackgroundColor:LightGrayColor];
+    [_TestBtn setBackgroundColor:[UIColor redColor]];
     _TestBtn.titleLabel.font = [UIFont systemFontOfSize:11];
     _TestBtn.layer.cornerRadius = 3;
     [_TestBtn addTarget:self action:@selector(test) forControlEvents:UIControlEventTouchUpInside];
@@ -576,10 +576,16 @@
             timetag = @"TheirLuckAm";
             //抢券信息
             [self requestForTicketStatus:timetag];
-        }else {                        //14-16点获取下午场
+        }else if( ([hour integerValue] >= 14) && ([hour integerValue] < 18)){                        //14-18点获取下午场
             timetag = @"TheirLuckPm";
             //抢券信息
             [self requestForTicketStatus:timetag];
+        }else {
+            
+            [_TestBtn setTitle:@"已结束" forState:UIControlStateNormal];
+            [_TestBtn setBackgroundColor:LightGrayColor];
+            _TestBtn.enabled = NO;
+            
         }
     }
     
@@ -830,11 +836,16 @@
 //办信用卡
 - (void)CardTapAction {
     
-    JNSHWebViewController *WEBvc = [[JNSHWebViewController alloc] init];
-    WEBvc.url = @"http://www.hiima.cn/promot/product/index/scene_id/2";
-    WEBvc.Navtitle = @"办信用卡";
-    WEBvc.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:WEBvc animated:YES];
+    JNSHCashDeskViewController *CashDeskVc = [[JNSHCashDeskViewController alloc] init];
+    CashDeskVc.hidesBottomBarWhenPushed = YES;
+    CashDeskVc.tag = 2;
+    [self.navigationController pushViewController:CashDeskVc animated:YES];
+    
+//    JNSHWebViewController *WEBvc = [[JNSHWebViewController alloc] init];
+//    WEBvc.url = @"http://www.hiima.cn/promot/product/index/scene_id/2";
+//    WEBvc.Navtitle = @"办信用卡";
+//    WEBvc.hidesBottomBarWhenPushed = YES;
+//    [self.navigationController pushViewController:WEBvc animated:YES];
     
 }
 //贷款

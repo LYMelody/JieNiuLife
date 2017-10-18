@@ -40,12 +40,23 @@ static NSTimeInterval const KtimeInterval = 0.03;
     [super viewDidLoad];
     self.navigationItem.title = @"商城";
     self.view.backgroundColor = [UIColor whiteColor];
-    
-    UIBarButtonItem *left = [[UIBarButtonItem alloc] initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:self action:@selector(back)];
-    //UIBarButtonItem *Left = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@""] style:UIBarButtonItemStylePlain target:self action:@selector(back)];
-    left.tintColor = [UIColor whiteColor];
-    self.navigationItem.hidesBackButton = YES;
-    self.navigationItem.leftBarButtonItem = left;
+   //自定义返回按钮
+    UIButton *backBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [backBtn setImage:[[UIImage imageNamed:@"back"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 0, 5, 0)] forState:UIControlStateNormal];
+    backBtn.frame = CGRectMake(-15, 0, 35, 44);
+    [backBtn addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
+   
+    if(IS_IOS11) {
+        UIView *leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
+        [leftView addSubview:backBtn];
+        UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithCustomView:leftView];
+        self.navigationItem.leftBarButtonItem = backItem;
+    }else {
+        UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithCustomView:backBtn];
+        UIBarButtonItem *fixBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+        fixBtn.width = -20;
+        self.navigationItem.leftBarButtonItems = [NSArray arrayWithObjects:fixBtn,backItem, nil];
+    }
     
     //加载进度
     _progressLayer = [[CAShapeLayer alloc] init];

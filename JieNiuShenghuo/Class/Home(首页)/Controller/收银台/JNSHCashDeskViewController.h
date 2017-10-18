@@ -10,4 +10,6 @@
 
 @interface JNSHCashDeskViewController : UIViewController
 
+@property(nonatomic,assign)NSInteger tag;   //2:银联通道,其他:正常通道
+
 @end

@@ -19,6 +19,7 @@
 #import "JNSYUserInfo.h"
 #import "SBJSON.h"
 #import "IBHttpTool.h"
+#import "JNSHWebViewController.h"
 
 @interface JNSHOrderSureViewController ()<UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate>
 
@@ -119,8 +120,14 @@
                           @"orderNo":self.orderNo,
                           @"cardNo":BankNo
                           };
+    
+    
     NSString *action = @"PayOrderNocardBank";
 
+    if (self.typeTag == 2) {
+        action = @"PayOrderUnionH5Bank";
+    }
+    
     NSDictionary *requestDic = @{
                                  @"action":action,
                                  @"data":dic,
@@ -132,37 +139,49 @@
         NSDictionary *resultdic = [result JSONValue];
         NSString *code = resultdic[@"code"];
         NSString *msg = resultdic[@"msg"];
-        
+        NSLog(@"%@",resultdic);
         if ([code isEqualToString:@"000000"]) {
-          
+            //订单
             self.orderNo = resultdic[@"orderNo"];
-            NSString *isBind = [NSString stringWithFormat:@"%@",resultdic[@"isBind"]];
-            BankNo = resultdic[@"cardNo"];
-            BankName = resultdic[@"cardBank"];
-            NSString *cardPhone = resultdic[@"cardPhone"];
-            if ([isBind isEqualToString:@"1"]) {  //已绑信用卡
-                JNSHOrderCodeViewController *CodeVc = [[JNSHOrderCodeViewController alloc] init];
-                CodeVc.hidesBottomBarWhenPushed = YES;
-                CodeVc.payMoney = [NSString stringWithFormat:@"%@",_amount];
-                CodeVc.bankNo = BankNo;
-                CodeVc.bankName = BankName;
-                CodeVc.orderNo = self.orderNo;
-                CodeVc.cardPhone =  cardPhone;
-                [self.navigationController pushViewController:CodeVc animated:YES];
+            if (self.typeTag == 2) {  //银联支付
                 
-            }else {   // 新信用卡首次支付
+                NSString *H5Url = resultdic[@"h5Url"];
                 
-                JNSHPayOrderViewController *PayOrderVc = [[JNSHPayOrderViewController alloc] init];
-                PayOrderVc.payMoney = [NSString stringWithFormat:@"%@",_amount];
-                PayOrderVc.bankName = BankName;
-                PayOrderVc.bankNo = BankNo;
-                PayOrderVc.orderNo = self.orderNo;
-                PayOrderVc.cardPhone = cardPhone;
-                PayOrderVc.hidesBottomBarWhenPushed = YES;
-                [self.navigationController pushViewController:PayOrderVc animated:YES];
+                JNSHWebViewController *WebVc = [[JNSHWebViewController alloc] init];
+                WebVc.Navtitle = @"订单支付";
+                WebVc.url = H5Url;
+                WebVc.hidesBottomBarWhenPushed = YES;
+                [self.navigationController pushViewController:WebVc animated:YES];
                 
+            }else {                   //正常支付
+                
+                NSString *isBind = [NSString stringWithFormat:@"%@",resultdic[@"isBind"]];
+                BankNo = resultdic[@"cardNo"];
+                BankName = resultdic[@"cardBank"];
+                NSString *cardPhone = resultdic[@"cardPhone"];
+                if ([isBind isEqualToString:@"1"]) {  //已绑信用卡
+                    JNSHOrderCodeViewController *CodeVc = [[JNSHOrderCodeViewController alloc] init];
+                    CodeVc.hidesBottomBarWhenPushed = YES;
+                    CodeVc.payMoney = [NSString stringWithFormat:@"%@",_amount];
+                    CodeVc.bankNo = BankNo;
+                    CodeVc.bankName = BankName;
+                    CodeVc.orderNo = self.orderNo;
+                    CodeVc.cardPhone =  cardPhone;
+                    [self.navigationController pushViewController:CodeVc animated:YES];
+                    
+                }else {   // 新信用卡首次支付
+                    
+                    JNSHPayOrderViewController *PayOrderVc = [[JNSHPayOrderViewController alloc] init];
+                    PayOrderVc.payMoney = [NSString stringWithFormat:@"%@",_amount];
+                    PayOrderVc.bankName = BankName;
+                    PayOrderVc.bankNo = BankNo;
+                    PayOrderVc.orderNo = self.orderNo;
+                    PayOrderVc.cardPhone = cardPhone;
+                    PayOrderVc.hidesBottomBarWhenPushed = YES;
+                    [self.navigationController pushViewController:PayOrderVc animated:YES];
+                    
+                }
             }
-            
         }else {
             [JNSHAutoSize showMsg:msg];
         }
@@ -298,7 +317,9 @@
             
             Cell.rightLab.text = [NSString stringWithFormat:@"￥%.2f",[self.vipDiscount integerValue]/100.0];
             Cell.rightLab.textColor = BlueColor;
-            
+            if (self.typeTag == 2) {
+                Cell.isShowBottomLine = YES;
+            }
             __weak typeof(self) weakSelf = self;
             Cell.continueVipBlock = ^{
                 __strong typeof(self) strongSelf = weakSelf;
@@ -308,6 +329,8 @@
             };
             cell = Cell;
         }else if (indexPath.row == 5) {
+            
+           
             JNSHOrderDisCountCell *Cell = [[JNSHOrderDisCountCell alloc] init];
             Cell.leftLab.text = @"卡券抵扣";
             if([self.voucheersFlag isEqualToString:@"1"]) {  //有抵扣券
@@ -321,6 +344,7 @@
             
             Cell.isShowBottomLine = YES;
             cell = Cell;
+            
         }
         else if (indexPath.row == 6) {
             JNSHTitleCell *finalCashCell = [[JNSHTitleCell alloc] init];
@@ -368,6 +392,9 @@
     if (indexPath.row == 0 || indexPath.row == 7) {
         return 45;
     }else if (indexPath.row == 3||indexPath.row == 4||indexPath.row == 5){
+        if ((indexPath.row == 5) && (self.typeTag == 2)) {
+            return 0;
+        }
         return 30;
     }
     

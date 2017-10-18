@@ -38,4 +38,7 @@
 
 @property(nonatomic,copy)NSString *vipFlag;                 //会员状态
 
+@property(nonatomic,assign)NSInteger typeTag;               //区别银联支付（2：银联通道；其他：正常通道）
+
+
 @end

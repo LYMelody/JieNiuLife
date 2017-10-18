@@ -38,7 +38,7 @@
                                                                       }];
     
     self.navigationController.navigationBar.translucent = NO;
-    self.view.backgroundColor = [UIColor redColor];
+    self.view.backgroundColor = [UIColor whiteColor];
     
     [table reloadData];
 }
@@ -50,12 +50,13 @@
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:self action:nil];
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     
-    table = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight) style:UITableViewStylePlain];
+    table = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight - (IS_IOS11?110:64)) style:UITableViewStylePlain];
     table.delegate = self;
     table.dataSource = self;
     table.backgroundColor = [UIColor whiteColor];
     table.showsVerticalScrollIndicator = NO;
     table.separatorStyle = UITableViewCellSeparatorStyleNone;
+    
     UIImageView *headerView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, [JNSHAutoSize height:188])];
     headerView.backgroundColor = [UIColor grayColor];
     headerView.userInteractionEnabled = YES;
@@ -196,7 +197,7 @@
         
         if (indexPath.row == 0) {
             cell = [[UITableViewCell alloc] init];
-            
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }else if (indexPath.row > 0) {
             JNSHServiceCell *Cell = [[JNSHServiceCell alloc] init];
             [Cell.leftImg sd_setImageWithURL:[NSURL URLWithString:self.serviceList[indexPath.row - 1][@"icon"]]];
@@ -225,6 +226,9 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
+    if (indexPath.row == 0) {
+        return;
+    }
     
     JNSHWebViewController *webVc = [[JNSHWebViewController alloc] init];
     webVc.hidesBottomBarWhenPushed = YES;

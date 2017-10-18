@@ -21,7 +21,7 @@ static NSTimeInterval const KtimeInterval = 0.03;
 @implementation JNSHWebViewController {
     
     CGFloat _plusWidth;    //增长点
-    
+    UIWebView *web;
     
 }
 
@@ -30,6 +30,23 @@ static NSTimeInterval const KtimeInterval = 0.03;
     
     self.title = self.Navtitle;
     self.view.backgroundColor = [UIColor whiteColor];
+    
+    UIButton *backBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    [backBtn setImage:[[UIImage imageNamed:@"back"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 0, 5, 0)] forState:UIControlStateNormal];
+    backBtn.frame = CGRectMake(-15, 0, 35, 44);
+    [backBtn addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
+    
+    if(IS_IOS11) {
+        UIView *leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
+        [leftView addSubview:backBtn];
+        UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithCustomView:leftView];
+        self.navigationItem.leftBarButtonItem = backItem;
+    }else {
+        UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithCustomView:backBtn];
+        UIBarButtonItem *fixBtn = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFixedSpace target:nil action:nil];
+        fixBtn.width = -20;
+        self.navigationItem.leftBarButtonItems = [NSArray arrayWithObjects:fixBtn,backItem, nil];
+    }
     
     //加载进度
     _progressLayer = [[CAShapeLayer alloc] init];
@@ -47,7 +64,7 @@ static NSTimeInterval const KtimeInterval = 0.03;
     _plusWidth = 0.01;
     [self.navigationController.navigationBar.layer addSublayer:_progressLayer];
     //webView
-    UIWebView *web = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight - 64)];
+    web = [[UIWebView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight - ([self.Navtitle isEqualToString:@"订单支付"]?0:64))];
     web.delegate = self;
     NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:self.url]];
     [request setHTTPMethod:@"GET"];
@@ -56,6 +73,22 @@ static NSTimeInterval const KtimeInterval = 0.03;
     [self.view addSubview:web];
     
 }
+
+//返回
+- (void)back {
+    
+    if ([self.Navtitle isEqualToString:@"订单支付"]) {
+        [self.navigationController popToRootViewControllerAnimated:YES];
+    }else if (web.canGoBack) {
+        [web goBack];
+    }else {
+        
+        [self.navigationController popViewControllerAnimated:YES];
+        
+    }
+}
+
+
 #define mark - webViewDelegate
 - (void)webViewDidStartLoad:(UIWebView *)webView {
     

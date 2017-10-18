@@ -66,6 +66,11 @@
         make.height.mas_equalTo([JNSHAutoSize height:101]);
     }];
     
+    
+    UIImageView *logoImg = [[UIImageView alloc] init];
+    logoImg.image  = [UIImage imageNamed:@"online-payment"];
+    [cashBackImg addSubview:logoImg];
+    
     UILabel *titleLab = [[UILabel alloc] init];
     titleLab.text = @"金额";
     titleLab.textColor = ColorText;
@@ -74,11 +79,25 @@
     
     [cashBackImg addSubview:titleLab];
     
-    [titleLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(cashBackImg).offset([JNSHAutoSize height:16]);
-        make.left.equalTo(cashBackImg).offset([JNSHAutoSize width:15]);
-        make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:60], [JNSHAutoSize height:15]));
-    }];
+    if (self.tag == 2) {
+        [logoImg mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(cashBackImg).offset([JNSHAutoSize height:13]);
+            make.left.equalTo(cashBackImg).offset([JNSHAutoSize width:15]);
+            make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:80], [JNSHAutoSize height:24]));
+        }];
+        [titleLab mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(cashBackImg).offset([JNSHAutoSize height:16]);
+            make.left.equalTo(logoImg.mas_right).offset([JNSHAutoSize width:10]);
+            make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:60], [JNSHAutoSize height:15]));
+        }];
+    }else {
+        
+        [titleLab mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(cashBackImg).offset([JNSHAutoSize height:16]);
+            make.left.equalTo(cashBackImg).offset([JNSHAutoSize width:15]);
+            make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:60], [JNSHAutoSize height:15]));
+        }];
+    }
     
     UILabel *leftLab = [[UILabel alloc] init];
     leftLab.textAlignment = NSTextAlignmentLeft;
@@ -89,7 +108,7 @@
     
     
     [leftLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(titleLab);
+        make.left.equalTo(cashBackImg).offset([JNSHAutoSize width:15]);
         make.bottom.equalTo(cashBackImg).offset(-[JNSHAutoSize width:25]);
         make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:20], [JNSHAutoSize height:18]));
     }];
@@ -118,9 +137,15 @@
     NSMutableAttributedString *attrStr = [[NSMutableAttributedString alloc] initWithString:@"温馨提示：\n1、费率(带积分):会员0.39%+3，非会员0.53%+3；\n2、单笔2万，单卡5万；\n3、实时到账时间09:00-21:00。"];
     [attrStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:14] range:NSMakeRange(0, 5)];
     [attrStr addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:NSMakeRange(8, 7)];
+    
+    if(self.tag == 2) {
+        attrStr = [[NSMutableAttributedString alloc] initWithString:@"温馨提示：\n1、费率(不带积分):会员0.27%+3，非会员0.39%+3；\n2、单笔2万，单卡5万；\n3、实时到账时间09:00-21:00。"];
+        [attrStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:14] range:NSMakeRange(0, 5)];
+        [attrStr addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:NSMakeRange(8, 8)];
+    }
+    
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
     paragraphStyle.lineSpacing = 10;
-    
     [attrStr addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, attrStr.length)];
     textView.attributedText = attrStr;
     
@@ -224,9 +249,8 @@
             
         }else {
             
-           
-            
             moneyLab.text = [NSString stringWithFormat:@"%@",sender.titleLabel.text];
+            
         }
     }else if (sender.tag == 9) {   //.
         
@@ -298,10 +322,11 @@
         
     }else if (sender.tag == 13) {  //确定
         
-        NSLog(@"确定");
+        if ([moneyLab.text floatValue] < 5) {
+            [self show:@"单笔交易不能低于5元" cancle:nil sureStr:@"确定"];
+            return;
+        }
         
-        //[self show:@"请进行实名认证" cancle:@"取消" sureStr:@"去认证"];
-       
         if (![JNSYUserInfo getUserInfo].isLoggedIn) {
             JNSHLoginController *LogInVc = [[JNSHLoginController alloc] init];
             
@@ -327,8 +352,13 @@
     //元转分
     NSString *Minmoney = [NSString stringWithFormat:@"%ld",[moneyLab.text integerValue]*100];
     
+    //区分paytype,2:传@“11”，银联支付；其他：@“1”，快捷支付
+    NSString *paytype = @"1";
+    if (self.tag == 2) {
+        paytype = @"11";
+    }
     NSDictionary *dic = @{
-                          @"payType":@"1",
+                          @"payType":paytype,
                           @"orderType":@"10",
                           @"amount":Minmoney,
                           @"goodsName":[goodsName stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding],
@@ -354,6 +384,9 @@
         if ([code isEqualToString:@"000000"]) {
             
             JNSHOrderSureViewController *OrderSureVc = [[JNSHOrderSureViewController alloc] init];
+            if (self.tag == 2) {                                          //区别银联通道
+                OrderSureVc.typeTag = 2;
+            }
             OrderSureVc.hidesBottomBarWhenPushed = YES;
             OrderSureVc.amount = moneyLab.text;
             OrderSureVc.orderNo = resultdic[@"orderNo"];

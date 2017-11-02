@@ -179,7 +179,7 @@
         NSDictionary *dic = [result JSONValue];
         NSString *code = dic[@"code"];
         NSString *msg = dic[@"msg"];
-        NSLog(@"%@",dic);
+        //NSLog(@"%@",dic);
         if (![code isEqualToString:@"000000"]) {
             [JNSHAutoSize showMsg:msg];
             [HUD hide:YES];
@@ -241,10 +241,7 @@
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
     }];
-    
 }
-
-
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     

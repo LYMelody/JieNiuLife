@@ -112,7 +112,7 @@
         return 20;
     }
     
-    return 270;
+    return [JNSHAutoSize height:270];
     
 }
 

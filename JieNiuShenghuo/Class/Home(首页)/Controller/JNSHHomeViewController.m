@@ -218,7 +218,6 @@
     CardTap.numberOfTapsRequired = 1;
     [CardBackImg addGestureRecognizer:CardTap];
     
-    
     [CardBackImg mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(self.view);
         make.top.equalTo(CashBackImg.mas_bottom).offset(2);
@@ -256,8 +255,6 @@
     UITapGestureRecognizer *ExpresstAP = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(daiKuan)];
     ExpresstAP.numberOfTapsRequired = 1;
     [ExpressBackImg addGestureRecognizer:ExpresstAP];
-    
-    
     
     [ExpressBackImg mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(CardBackImg);
@@ -717,7 +714,7 @@
     
     [IBHttpTool postWithURL:JNSHTestUrl params:params success:^(id result) {
         NSDictionary *resultDic = [result JSONValue];
-        //NSLog(@"%@",resultDic);
+        NSLog(@"%@",resultDic);
         
         if ([resultDic[@"adInfoList"] isKindOfClass:[NSArray class]]) {
             
@@ -752,10 +749,17 @@
 //点击广告图方法
 - (void)cycleScrollView:(SDCycleScrollView *)cycleScrollView didSelectItemAtIndex:(NSInteger)index {
     
-    JNSHWebViewController *WebVc = [[JNSHWebViewController alloc] init];
-    WebVc.url = cycleScrollView.selectUrlList[index];
-    WebVc.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:WebVc animated:YES];
+    if (cycleScrollView.selectUrlList.count > 0) {
+        
+        if (![cycleScrollView.selectUrlList[index] isEqualToString:@""]) {
+            JNSHWebViewController *WebVc = [[JNSHWebViewController alloc] init];
+            WebVc.url = cycleScrollView.selectUrlList[index];
+            WebVc.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:WebVc animated:YES];
+        }
+    
+    }
+    
     
 }
 

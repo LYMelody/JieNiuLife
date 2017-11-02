@@ -334,8 +334,11 @@
             JNSHOrderDisCountCell *Cell = [[JNSHOrderDisCountCell alloc] init];
             Cell.leftLab.text = @"卡券抵扣";
             if([self.voucheersFlag isEqualToString:@"1"]) {  //有抵扣券
-                Cell.rightLab.text = [NSString stringWithFormat:@"￥%.2f",[self.vouchersPrice integerValue]/100.0];
-                
+                NSString *str= [NSString stringWithFormat:@"￥%.2f 【已选用】",[self.vouchersPrice integerValue]/100.0];
+                NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithString:str];
+                [attr addAttribute:NSForegroundColorAttributeName value:ColorTabBarBackColor range:NSMakeRange(str.length - 5, 5)];
+                Cell.rightLab.attributedText = attr;
+                //Cell.rightLab.text = [NSString stringWithFormat:@"￥%.2f",[self.vouchersPrice integerValue]/100.0];
             }else {
                 NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithString:@"￥0.00 【无可用】"];
                 [attr addAttribute:NSForegroundColorAttributeName value:ColorTabBarBackColor range:NSMakeRange(attr.length - 5, 5)];
@@ -344,12 +347,10 @@
             
             Cell.isShowBottomLine = YES;
             cell = Cell;
-            
         }
         else if (indexPath.row == 6) {
             JNSHTitleCell *finalCashCell = [[JNSHTitleCell alloc] init];
             finalCashCell.leftLab.text = @"到账金额";
-            
             finalCashCell.rightLab.text = [NSString stringWithFormat:@"￥%.2f",[self.settleReal integerValue]/100.0];
             finalCashCell.rightLab.textColor = [UIColor redColor];
             cell = finalCashCell;

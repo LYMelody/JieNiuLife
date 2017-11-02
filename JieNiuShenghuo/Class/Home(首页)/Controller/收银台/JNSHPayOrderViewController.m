@@ -28,7 +28,7 @@
     NSTimer *timer;
     NSTimer *anthorTimer;
     NSInteger index;
-    NSInteger anthorIndex;
+    NSInteger anthorIndex;             //订单查询
     NSString *name;
     NSString *cert;
     JNSHGetCodeCell *CodeCell;
@@ -123,6 +123,42 @@
         [JNSHAutoSize showMsg:@"验证码格式不正确"];
         CommitBtn.enabled = YES;
         return;
+    }else if ([name isEqualToString:@""]) {
+        [JNSHAutoSize showMsg:@"姓名为空!"];
+        CodeCell.codeBtn.enabled = YES;
+         CommitBtn.enabled = YES;
+        return;
+    }else if ([cert isEqualToString:@""]) {
+        [JNSHAutoSize showMsg:@"身份证为空"];
+        CodeCell.codeBtn.enabled = YES;
+         CommitBtn.enabled = YES;
+        return;
+    }else if ([YxqCell.textFiled.text isEqualToString:@""]) {
+        [JNSHAutoSize showMsg:@"有效期为空!"];
+        CodeCell.codeBtn.enabled = YES;
+         CommitBtn.enabled = YES;
+        return;
+    }else if([CVVCell.textFiled.text isEqualToString:@""]) {
+        [JNSHAutoSize showMsg:@"CVV为空!"];
+        CodeCell.codeBtn.enabled = YES;
+         CommitBtn.enabled = YES;
+        return;
+    }else if (CVVCell.textFiled.text.length < 3) {
+        [JNSHAutoSize showMsg:@"CVV格式不正确"];
+        CodeCell.codeBtn.enabled = YES;
+         CommitBtn.enabled = YES;
+        return;
+    }
+    else if ([PhoneCell.textFiled.text isEqualToString:@""]){
+        [JNSHAutoSize showMsg:@"手机号为空!"];
+        CodeCell.codeBtn.enabled = YES;
+         CommitBtn.enabled = YES;
+        return;
+    }else if (PhoneCell.textFiled.text.length != 11) {
+        [JNSHAutoSize showMsg:@"手机号格式不正确"];
+        CodeCell.codeBtn.enabled = YES;
+         CommitBtn.enabled = YES;
+        return;
     }
     
     HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
@@ -144,7 +180,7 @@
         NSDictionary *resultdic = [result JSONValue];
         NSString *code = resultdic[@"code"];
         NSString *msg = resultdic[@"msg"];
-        NSLog(@"%@",resultdic);
+        //NSLog(@"%@",resultdic);
         if([code isEqualToString:@"000000"]) {
             
             //订单查询
@@ -163,7 +199,6 @@
         CommitBtn.enabled = YES;
         [HUD hide:YES];
     }];
-    
 }
 
 //订单查询
@@ -202,7 +237,7 @@
             JNSHPayResultViewController *PayResultVc = [[JNSHPayResultViewController alloc] init];
             PayResultVc.hidesBottomBarWhenPushed = YES;
             
-            if ([status isEqualToString:@"12"] || [status isEqualToString:@"20"] || [status isEqualToString:@"30"]) {
+            if ([status isEqualToString:@"20"] || [status isEqualToString:@"30"]) { //支付成功
                 NSLog(@"%@",orderMemo);
                 [HUD hide:YES];
                 anthorIndex = 0;
@@ -216,7 +251,7 @@
                 PayResultVc.bankAccount = self.bankNo;
                 PayResultVc.product = product;
                 [self.navigationController pushViewController:PayResultVc animated:YES];
-            }else if ((anthorIndex == 0) && ([status isEqualToString:@"11"] || [status isEqualToString:@"13"])) {
+            }else if ((anthorIndex == 0) && ([status isEqualToString:@"11"] || [status isEqualToString:@"13"] || [status isEqualToString:@"12"])) {  //查询中
                 NSLog(@"%@",orderMemo);
                 [HUD hide:YES];
                 anthorIndex = 0;
@@ -230,7 +265,7 @@
                 PayResultVc.bankAccount = self.bankNo;
                 PayResultVc.product = product;
                 [self.navigationController pushViewController:PayResultVc animated:YES];
-            }else if ([status isEqualToString:@"21"]) {
+            }else if ([status isEqualToString:@"21"]) {        //失败
                 [HUD hide:YES];
                 NSLog(@"%@",orderMemo);
                 anthorIndex = 0;

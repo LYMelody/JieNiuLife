@@ -225,7 +225,7 @@
         NSLog(@"分享到朋友圈");
     }else {
         type = SSDKPlatformTypeSinaWeibo;
-        shareContent = @"捷牛生活App是一款提供金融、小额贷款、保险等服务的综合类生活服务平台，安全、便捷，值得信赖。";
+        shareContent = [NSString stringWithFormat:@"捷牛生活App是一款提供金融、小额贷款、保险等服务的综合类生活服务平台，安全、便捷，值得信赖。%@",[NSURL URLWithString:[JNSYUserInfo getUserInfo].invateUrl]];
         NSLog(@"分享到新浪微博");
     }
     

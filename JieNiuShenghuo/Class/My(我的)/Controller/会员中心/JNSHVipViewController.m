@@ -192,7 +192,7 @@
     ratingSubLab.font = [UIFont systemFontOfSize:11];
     ratingSubLab.textColor = ColorLightText;
     ratingSubLab.textAlignment = NSTextAlignmentLeft;
-    ratingSubLab.text = @"0.39%+3带积分";
+    ratingSubLab.text = @"0.25+3/笔";
     
     [ratingBackImg addSubview:ratingSubLab];
     

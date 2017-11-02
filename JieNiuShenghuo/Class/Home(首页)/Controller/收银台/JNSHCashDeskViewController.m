@@ -139,7 +139,7 @@
     [attrStr addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:NSMakeRange(8, 7)];
     
     if(self.tag == 2) {
-        attrStr = [[NSMutableAttributedString alloc] initWithString:@"温馨提示：\n1、费率(不带积分):会员0.27%+3，非会员0.39%+3；\n2、单笔2万，单卡5万；\n3、实时到账时间09:00-21:00。"];
+        attrStr = [[NSMutableAttributedString alloc] initWithString:@"温馨提示：\n1、费率(不带积分):会员0.25%+3，非会员0.39%+3；\n2、单笔1万，单卡不限；\n3、实时到账时间09:00-21:00。"];
         [attrStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:14] range:NSMakeRange(0, 5)];
         [attrStr addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:NSMakeRange(8, 8)];
     }
@@ -337,6 +337,8 @@
         }else {
             
             [self SetOrder];
+            
+            
         }
     }
     

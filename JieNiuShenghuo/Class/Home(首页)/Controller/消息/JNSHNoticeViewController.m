@@ -30,6 +30,7 @@
     NSString *systemLastMSG;
     NSString *systemLastMsgTime;
     NSString *systemUnRead;
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -154,9 +155,29 @@
         NSDictionary *resultDic = [result JSONValue];
         NSString *code = resultDic[@"code"];
         NSString *msg = resultDic[@"msg"];
+        NSString *allCount = [NSString stringWithFormat:@"%@",resultDic[@"allCount"]];
+        
+        
         if ([code isEqualToString:@"000000"]) {
-            NSLog(@"消息:%@",resultDic);
-            if([resultDic[@"records"] isKindOfClass:[NSArray class]]) {
+            //NSLog(@"消息:%@",resultDic);
+            //没有消息
+            if ([allCount isEqualToString:@"0"]) {
+                if ([type isEqualToString:@"1"]) {   //系统通知
+                    
+                    JNSHSystemViewController *Systemvc = [[JNSHSystemViewController alloc] init];
+                    Systemvc.messageList = [NSArray array];
+                    Systemvc.hidesBottomBarWhenPushed = YES;
+                    [self.navigationController pushViewController:Systemvc animated:YES];
+                    
+                }else {   //活动通知
+                    
+                    JNSHActiveMessageController *ActiveVc = [[JNSHActiveMessageController alloc] init];
+                    ActiveVc.messageList = [NSArray array];
+                    ActiveVc.hidesBottomBarWhenPushed = YES;
+                    [self.navigationController pushViewController:ActiveVc animated:YES];
+                    
+                }
+            }else if([resultDic[@"records"] isKindOfClass:[NSArray class]]) {     //有消息
                 if ([type isEqualToString:@"1"]) {   //系统通知
                     
                     JNSHSystemViewController *Systemvc = [[JNSHSystemViewController alloc] init];
@@ -173,10 +194,6 @@
                     
                 }
             }
-            
-            
-            
-            
         }else {
             
             [JNSHAutoSize showMsg:msg];
@@ -185,10 +202,7 @@
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
     }];
-    
-    
 }
-
 
 //获取消息
 - (void)requestForAllMessage {
@@ -224,7 +238,6 @@
             
             [JNSHAutoSize showMsg:msg];
         }
-        
         
     } failure:^(NSError *error) {
         NSLog(@"%@",error);

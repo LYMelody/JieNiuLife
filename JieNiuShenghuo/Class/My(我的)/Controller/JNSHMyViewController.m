@@ -572,7 +572,7 @@
         NSDictionary *resultDic = [result JSONValue];
         NSString *code = resultDic[@"code"];
         NSString *msg = resultDic[@"msg"];
-        NSLog(@"%@",resultDic);
+        //NSLog(@"%@",resultDic);
         if ([code isEqualToString:@"000000"]) {
             //代理商状态
             NSString *orgStatus = [NSString stringWithFormat:@"%@",resultDic[@"orgStatus"]];

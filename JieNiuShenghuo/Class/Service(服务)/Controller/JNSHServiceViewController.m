@@ -107,7 +107,7 @@
     
     [IBHttpTool postWithURL:JNSHTestUrl params:params success:^(id result) {
         NSDictionary *resultDic = [result JSONValue];
-        NSLog(@"%@",resultDic);
+        //NSLog(@"%@",resultDic);
         if ([resultDic[@"serviceInfos"] isKindOfClass:[NSArray class]]) {
             self.serviceList = resultDic[@"serviceInfos"];
             [table reloadData];
@@ -173,13 +173,18 @@
 //点击广告图方法
 - (void)cycleScrollView:(SDCycleScrollView *)cycleScrollView didSelectItemAtIndex:(NSInteger)index {
     
-    JNSHWebViewController *WebVc = [[JNSHWebViewController alloc] init];
-    WebVc.url = cycleScrollView.selectUrlList[index];
-    WebVc.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:WebVc animated:YES];
+    if (cycleScrollView.selectUrlList.count > 0) {
+        
+        if (![cycleScrollView.selectUrlList[index] isEqualToString:@""]) {
+            JNSHWebViewController *WebVc = [[JNSHWebViewController alloc] init];
+            WebVc.url = cycleScrollView.selectUrlList[index];
+            WebVc.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:WebVc animated:YES];
+        }
+        
+    }
     
 }
-
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     

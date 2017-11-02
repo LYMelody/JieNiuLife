@@ -142,7 +142,7 @@
             hud.mode = MBProgressHUDModeText;
             hud.labelText = @"修改成功";
             [hud hide:YES afterDelay:1];
-            
+            [self performSelector:@selector(back) withObject:nil afterDelay:1];
             [JNSYUserInfo getUserInfo].userName = Text.text;
             
             if (_changeNickBlock) {

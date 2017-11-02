@@ -181,27 +181,27 @@
                 Cell.rightLab.text = @"保密";
             }
             cell = Cell;
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }else if (indexPath.row == 3) {
             JNSHAccountInfoCell *Cell = [[JNSHAccountInfoCell alloc] init];
             Cell.leftLab.text = @"出生年月";
-            NSString *birthDay = [User objectForKey:@"BirthDay"];
+            NSString *birthDay = [JNSYUserInfo getUserInfo].birthday;
             if (birthDay) {
-                Cell.rightLab.text = birthDay;
+                //Cell.rightLab.text = birthDay;
+                NSString *front = [[JNSYUserInfo getUserInfo].birthday substringToIndex:4];
+                NSString *mid = [[JNSYUserInfo getUserInfo].birthday substringWithRange:NSMakeRange(4, 2)];
+                NSString *last = [[JNSYUserInfo getUserInfo].birthday substringWithRange:NSMakeRange(6, 2)];
+                Cell.rightLab.text = [NSString stringWithFormat:@"%@-%@-%@",front,mid,last];
             }else {
                 Cell.rightLab.text = @"";
             }
-            NSString *front = [[JNSYUserInfo getUserInfo].birthday substringToIndex:4];
-            NSString *mid = [[JNSYUserInfo getUserInfo].birthday substringWithRange:NSMakeRange(4, 2)];
-            NSString *last = [[JNSYUserInfo getUserInfo].birthday substringWithRange:NSMakeRange(6, 2)];
-            Cell.rightLab.text = [NSString stringWithFormat:@"%@-%@-%@",front,mid,last];
+            
             Cell.isLast = YES;
             cell = Cell;
             cell.accessoryType = UITableViewCellAccessoryNone;
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
-        
+
     }
     
     return cell;

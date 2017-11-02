@@ -15,7 +15,11 @@
 
 @end
 
-@implementation JNSHMessageDetailViewController
+@implementation JNSHMessageDetailViewController {
+    
+    NSString *phone;
+    
+}
 
 - (void)viewDidLoad {
     
@@ -47,6 +51,11 @@
     titleLab.numberOfLines = 0;
     titleLab.font = [UIFont systemFontOfSize:16];
     titleLab.textColor = ColorText;
+    titleLab.userInteractionEnabled = YES;
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapPhone)];
+    tap.numberOfTapsRequired = 1;
+    
+    [titleLab addGestureRecognizer:tap];
     
     if([self.AgentType isEqualToString:@"2"]) { //签约
         
@@ -57,7 +66,7 @@
             NSArray *datePhoneArray = [array[1] componentsSeparatedByString:@","];
             NSString *date = [datePhoneArray[0] substringToIndex:11];
             NSString *agent = [datePhoneArray[0] substringFromIndex:13];
-            NSString *phone = datePhoneArray[1];
+            phone = datePhoneArray[1];
             NSString *finalStr = [NSString stringWithFormat:@"恭喜您名下的%@在%@\n成为%@,\n%@",name,date,agent,phone];
             //NSLog(@"name:%@,date:%@,agent:%@,phone:%@,final:%@",name,date,agent,phone,finalStr);
             
@@ -86,7 +95,7 @@
             NSString *name = [nameArray[0] substringFromIndex:6];
             NSString *agent =nameArray[1];
             NSString *str = array[1];
-            NSString *phone = array[2];
+            phone = array[2];
             NSString *finalStr = [NSString stringWithFormat:@"恭喜您名下的%@正在申请%@,\n%@,\n%@",name,agent,str,phone];
             
             NSMutableAttributedString *attrStr = [[NSMutableAttributedString alloc] initWithString:finalStr];
@@ -98,12 +107,11 @@
             [attrStr addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInteger:NSUnderlineStyleSingle] range:NSMakeRange(10+name.length, agent.length)];
             titleLab.attributedText = attrStr;
         }else {
-            
+    
             titleLab.text = self.AgentName;
+            
         }
-        
-        
-        
+
     }
     
     [backImg addSubview:titleLab];
@@ -114,6 +122,16 @@
         make.height.mas_equalTo([JNSHAutoSize height:68]);
     }];
     
+    
+}
+
+//打电话
+- (void)tapPhone {
+    
+    NSString *telphone = [phone substringFromIndex:5];
+    
+    NSLog(@"72384729347");
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"telprompt://%@",[NSString stringWithFormat:@"%@",telphone]]]];
     
 }
 

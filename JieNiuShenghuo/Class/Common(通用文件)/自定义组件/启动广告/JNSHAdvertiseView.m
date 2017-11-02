@@ -11,7 +11,7 @@
 #import "JNSHUpdateView.h"
 #import "SBJSON.h"
 #import "IBHttpTool.h"
-
+#import "PgyUpdateManager.h"
 @interface JNSHAdvertiseView()
 
 @property(nonatomic,strong)UIImageView *adView;
@@ -25,12 +25,18 @@
 @property(nonatomic,strong)UILabel *leftLab;
 
 
+
 @end
 
 //static int const showtime = 5;
 
 
-@implementation JNSHAdvertiseView
+@implementation JNSHAdvertiseView {
+    
+    UITapGestureRecognizer *slipTap;
+    
+    
+}
 
 - (instancetype)initWithFrame:(CGRect)frame {
     
@@ -53,7 +59,7 @@
         backBtnImg.userInteractionEnabled = YES;
         backBtnImg.layer.masksToBounds = YES;
         
-        UITapGestureRecognizer *slipTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismiss)];
+        slipTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismiss)];
         slipTap.numberOfTouchesRequired = 1;
         [backBtnImg addGestureRecognizer:slipTap];
         [self addSubview:backBtnImg];
@@ -159,6 +165,9 @@
         [self removeFromSuperview];
         //检测更新
         //[self VersionUpdate];
+        
+        [[PgyUpdateManager sharedPgyManager] checkUpdate];
+        
     }];
     
 }
@@ -216,6 +225,19 @@
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
     }];
+}
+
+- (void)setJumpflag:(NSString *)jumpflag {
+    
+    _jumpflag = jumpflag;
+    //判断手势
+    if ([jumpflag isEqualToString:@"0"]) {
+        slipTap.enabled = NO;
+    }else {
+        slipTap.enabled = YES;
+    }
+    
+    
 }
 
 

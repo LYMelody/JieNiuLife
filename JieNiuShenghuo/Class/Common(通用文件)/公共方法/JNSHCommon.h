@@ -9,10 +9,20 @@
 #ifndef JNSHCommon_h
 #define JNSHCommon_h
 
-#define JNSHTestUrl @"http://api.test.life.hzjieniu.com/app/action"
-#define TOKEN @"63b407c3d510bf14851ce46df94662b5"
-#define KEY @"UBKKWNA216MXCGVJWG5W69VOORNWKV82"
+/*
+ 测试环境URL(JNSHTestUrl)：http://api.test.life.hzjieniu.com/app/action
+ TOKEN:63b407c3d510bf14851ce46df94662b5
+ KEY:UBKKWNA216MXCGVJWG5W69VOORNWKV82
+ 
+ 生产环境（JNSHProUrl）：http://api.life.hzjieniu.com/app/action
+ TOKEN:IatWXu8DhM3bIsB6MnnHCEHu6CDEnYIu
+ KEY : NLMIU6LKM2VE51311F2VPMGXA8HOLAS7
+ 
+ */
 
+#define JNSHTestUrl @"http://api.life.hzjieniu.com/app/action"
+#define TOKEN @"IatWXu8DhM3bIsB6MnnHCEHu6CDEnYIu"
+#define KEY @"NLMIU6LKM2VE51311F2VPMGXA8HOLAS7"
 
 #define BundleID [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString *)kCFBundleVersionKey]
 #define AppVersion [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]

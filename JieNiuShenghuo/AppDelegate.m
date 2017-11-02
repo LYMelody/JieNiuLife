@@ -16,16 +16,18 @@
 #import "JNSHUpdateView.h"
 
 //ShareSDK
-#import <ShareSDK/ShareSDK.h>
-#import <ShareSDKConnector/ShareSDKConnector.h>
+#import "ShareSDK/ShareSDK.h"
+#import "ShareSDKConnector/ShareSDKConnector.h"
+
+
 #import "WXApi.h"
 #import "WeiboSDK.h"
 //JPush
 #import "JPUSHService.h"
 #import <UserNotifications/UserNotifications.h>
 //蒲公英
-//#import <PgySDK/PgyManager.h>
-//#import <PgyUpdate/PgyUpdateManager.h>
+#import "PgySDK/PgyManager.h"
+#import "PgyUpdate/PgyUpdateManager.h"
 //友盟
 #import "UMMobClick/MobClick.h"
 
@@ -52,13 +54,12 @@
     
     //[NSThread sleepForTimeInterval:1];
     //蒲公英
-//    [[PgyManager sharedPgyManager] startManagerWithAppId:PgyAPPID];
-//    [[PgyManager sharedPgyManager] setEnableFeedback:NO];
-//    //检测更新
-//    [[PgyUpdateManager sharedPgyManager] startManagerWithAppId:PgyAPPID];
-//    [[PgyUpdateManager sharedPgyManager] checkUpdate];
-   // [[PgyUpdateManager sharedPgyManager] checkUpdate];
-    
+    [[PgyManager sharedPgyManager] startManagerWithAppId:PgyAPPID];
+    [[PgyManager sharedPgyManager] setEnableFeedback:NO];
+    //检测更新
+    [[PgyUpdateManager sharedPgyManager] startManagerWithAppId:PgyAPPID];
+    //[[PgyUpdateManager sharedPgyManager] checkUpdate];
+
     //友盟
     UMConfigInstance.appKey = UmengAPPkey;
     UMConfigInstance.channelId = @"Exterprise";
@@ -91,6 +92,7 @@
         
         JNSHMainBarController *barVc = [[JNSHMainBarController alloc] init];
         self.window.rootViewController = barVc;
+        
     }
     [self.window makeKeyAndVisible];
     
@@ -207,6 +209,7 @@
         
         advertiseView.filePath = filePath;
         advertiseView.timeduration = [kUserDefaults objectForKey:@"ADDuration"];
+        advertiseView.jumpflag = [kUserDefaults objectForKey:@"Jumpflag"];
         //NSLog(@"%@",);
         [advertiseView show];
         
@@ -214,37 +217,44 @@
         
         //下载默认广告图片
         
-        NSString *defaultFilePath = [self getFilePathWithImageName:@"20122220201612322865.png"];
+//        NSString *defaultFilePath = [self getFilePathWithImageName:@"20122220201612322865.png"];
+//
+//        BOOL exist = [self isFileExistWithFilePath:defaultFilePath];
         
-        BOOL exist = [self isFileExistWithFilePath:defaultFilePath];
+//        if (exist) {
+//
+//            advertiseView.filePath = defaultFilePath;
+//            [advertiseView show];
+//
+//        }else {
+//
+//            //显示状态栏
+//            [[UIApplication sharedApplication] setStatusBarHidden:NO];
+//
+//            NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:@"http://pic.paopaoche.net/up/2012-2/20122220201612322865.png"]];
+//            UIImage *image = [UIImage imageWithData:data];
+//
+//            if ([UIImagePNGRepresentation(image) writeToFile:defaultFilePath atomically:YES]) {
+//
+//            }else {
+//
+//            };
+//            //版本更新
+//            //[self VersionUpdate];
+//            [[PgyUpdateManager sharedPgyManager] checkUpdate];
+//        }
         
-        if (exist) {
-            
-            advertiseView.filePath = defaultFilePath;
-            [advertiseView show];
-            
-        }else {
-            
-            //显示状态栏
-            [[UIApplication sharedApplication] setStatusBarHidden:NO];
-            
-            NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:@"http://pic.paopaoche.net/up/2012-2/20122220201612322865.png"]];
-            UIImage *image = [UIImage imageWithData:data];
-            
-            if ([UIImagePNGRepresentation(image) writeToFile:defaultFilePath atomically:YES]) {
-                
-                
-            }else {
-                
-            };
-            //版本更新
-            //[self VersionUpdate];
-            
-        }
+        //显示状态栏
+        [[UIApplication sharedApplication] setStatusBarHidden:NO];
+        //版本更新
+        //[self VersionUpdate];
+        [[PgyUpdateManager sharedPgyManager] checkUpdate];
     }
     
-    //下载广告图片并缓存
-    [self getAdvertisingImage];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        //下载广告图片并缓存
+        [self getAdvertisingImage];
+    }) ;
     
 }
 #define mark 广告文件管理
@@ -257,18 +267,17 @@
         
         return filePath;
     }
-    
     return nil;
-    
 }
 
 /*     判断文件是否存在 */
 -(BOOL)isFileExistWithFilePath:(NSString *)filePath {
     
     NSFileManager *fileManager = [NSFileManager defaultManager];
-    BOOL isDirectory = FALSE;
+   // BOOL isDirectory = FALSE;
     
-    return [fileManager fileExistsAtPath:filePath isDirectory:&isDirectory];
+    return [fileManager fileExistsAtPath:filePath];
+    //return [fileManager fileExistsAtPath:filePath isDirectory:&isDirectory];
     
 }
 
@@ -290,11 +299,11 @@
     
     [IBHttpTool postWithURL:JNSHTestUrl params:params success:^(id result) {
         NSDictionary *resultDic = [result JSONValue];
-        //NSLog(@"%@",resultDic);
-        
+        NSLog(@"%@",resultDic);
         if ([resultDic[@"adInfoList"] isKindOfClass:[NSArray class]]) {
             NSArray *imageList = resultDic[@"adInfoList"] ;
             if (imageList.count == 0) {
+                [self deleteOldImage];
                 return ;
             }
             NSString *imageURL = resultDic[@"adInfoList"][0][@"areaPic"];
@@ -302,18 +311,21 @@
             NSArray *imageNamearr = [imageURL componentsSeparatedByString:@"/"];
             NSString *imageName = [imageNamearr lastObject];
             NSString *duration = [NSString stringWithFormat:@"%@",resultDic[@"adInfoList"][0][@"duration"]];
+            NSString *jumpflag = [NSString stringWithFormat:@"%@",resultDic[@"adInfoList"][0][@"jumpFlg"]];
             // 拼接沙盒路径
             NSString *filePath = [self getFilePathWithImageName:imageName];
             BOOL isExist = [self isFileExistWithFilePath:filePath];
             if (!isExist){// 如果该图片不存在，则删除老图片，下载新图片
-                [self downloadAdImageWithUrl:imageURL imageName:imageName];
-                
+                //[self downloadAdImageWithUrl:imageURL imageName:imageName];
+                [self downloadAdImageWithUrl:imageURL imageName:imageName imageLink:linkURL imageDuration:duration jumpFlag:jumpflag];
             }
-            //存储广告链接
-            [kUserDefaults setObject:linkURL forKey:@"ADURL"];
-            //存储展示时间
-            [kUserDefaults setObject:duration forKey:@"ADDuration"];
-            [kUserDefaults synchronize];
+//            //存储广告链接
+//            [kUserDefaults setObject:linkURL forKey:@"ADURL"];
+//            //存储展示时间
+//            [kUserDefaults setObject:duration forKey:@"ADDuration"];
+//            //存储是否可跳转
+//
+//            [kUserDefaults synchronize];
             
         }
         
@@ -342,7 +354,7 @@
 /**
  *  下载新图片
  */
-- (void)downloadAdImageWithUrl:(NSString *)imageUrl imageName:(NSString *)imageName
+- (void)downloadAdImageWithUrl:(NSString *)imageUrl imageName:(NSString *)imageName imageLink:(NSString *)imagelink imageDuration:(NSString *)duration jumpFlag:(NSString *)jumpflag
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
@@ -350,16 +362,19 @@
         UIImage *image = [UIImage imageWithData:data];
         
         NSString *filePath = [self getFilePathWithImageName:imageName]; // 保存文件的名称
-        
+        NSLog(@"文件路径:%@",filePath);
         if ([UIImagePNGRepresentation(image) writeToFile:filePath atomically:YES]) {// 保存成功
             NSLog(@"保存成功");
             [self deleteOldImage];
             [kUserDefaults setValue:imageName forKey:adImageName];
+            //存储广告链接
+            [kUserDefaults setObject:imagelink forKey:@"ADURL"];
+            //存储展示时间
+            [kUserDefaults setObject:duration forKey:@"ADDuration"];
+            //存储是否可跳转
+            [kUserDefaults setObject:jumpflag forKey:@"Jumpflag"];
             [kUserDefaults synchronize];
             // 如果有广告链接，将广告链接也保存下来
-            
-            
-            
         }else{
             NSLog(@"保存失败");
         }
@@ -379,7 +394,6 @@
         [fileManager removeItemAtPath:filePath error:nil];
     }
 }
-
 
 //版本检测
 - (void)VersionUpdate {

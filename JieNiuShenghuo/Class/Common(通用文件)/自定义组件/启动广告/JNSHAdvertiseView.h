@@ -14,6 +14,8 @@
 
 @property(nonatomic,copy)NSString *timeduration;
 
+@property(nonatomic,copy)NSString *jumpflag;
+
 - (void)show;
 
 @end

@@ -71,6 +71,18 @@
     
 }
 
+- (void)setShowBottomLine:(BOOL)ShowBottomLine {
+    
+    _ShowBottomLine = ShowBottomLine;
+    
+    if (ShowBottomLine) {
+        _bottomLine.hidden = NO;
+    }else {
+        _bottomLine.hidden = YES;
+    }
+    
+}
+
 
 - (void)layoutSubviews {
     

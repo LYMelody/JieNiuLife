@@ -7,7 +7,7 @@
 //
 
 #import "JNSHNoticeViewController.h"
-#import "JPUSHService.h"
+//#import "JPUSHService.h"
 #import "AppDelegate.h"
 #import "JNSHMessageListCell.h"
 #import "JNSHSystemViewController.h"

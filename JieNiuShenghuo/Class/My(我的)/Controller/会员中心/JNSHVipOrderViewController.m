@@ -167,6 +167,7 @@
         }
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
+        [JNSHAutoSize showMsg:NetInAvaiable];
     }];
 
 }

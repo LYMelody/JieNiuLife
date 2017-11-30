@@ -28,50 +28,52 @@
     self.title = @"操作说明";
     self.view.backgroundColor = [UIColor whiteColor];
     
-    UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight)];
-    scrollView.contentSize = CGSizeMake(KscreenWidth, KscreenHeight+50);
+//    UIScrollView *scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth,KscreenHeight)];
+//    scrollView.contentSize = CGSizeMake(KscreenWidth, KscreenHeight + [JNSHAutoSize height:50]);
     
-    [self.view addSubview:scrollView];
+    //[self.view addSubview:scrollView];
     
     UILabel *titleLab = [[UILabel alloc] init];
     titleLab.textColor = ColorText;
     titleLab.font = [UIFont systemFontOfSize:15];
     titleLab.text = @"一、实名认证";
     titleLab.textAlignment = NSTextAlignmentLeft;
-    [scrollView addSubview:titleLab];
+    [self.view addSubview:titleLab];
     
     [titleLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(scrollView).offset([JNSHAutoSize height:18]);
-        make.left.equalTo(scrollView).offset([JNSHAutoSize width:15]);
+        make.top.equalTo(self.view).offset([JNSHAutoSize height:18]);
+        make.left.equalTo(self.view).offset([JNSHAutoSize width:15]);
         make.size.mas_equalTo(CGSizeMake(KscreenWidth - 15, [JNSHAutoSize height:15]));
     }];
     
     UIImageView *ImageOne = [[UIImageView alloc] init];
     ImageOne.image = [UIImage imageNamed:@"Certification_1"];
-    [scrollView addSubview:ImageOne];
+    [self.view addSubview:ImageOne];
     
     [ImageOne mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(scrollView).offset([JNSHAutoSize width:15]);
+        make.left.equalTo(self.view).offset([JNSHAutoSize width:15]);
         make.top.equalTo(titleLab.mas_bottom).offset([JNSHAutoSize height:10]);
-        make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:159], [JNSHAutoSize height:284]));
+        make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:159], [JNSHAutoSize height:274]));
     }];
     
     UIImageView *ImageTwo = [[UIImageView alloc] init];
     ImageTwo.image = [UIImage imageNamed:@"Certification_2"];
-    [scrollView addSubview:ImageTwo];
+    
+    [self.view addSubview:ImageTwo];
     
     [ImageTwo mas_makeConstraints:^(MASConstraintMaker *make) {
         make.right.equalTo(self.view).offset(-[JNSHAutoSize width:15]);
-        make.top.equalTo(ImageOne);
-        make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:159], [JNSHAutoSize height:284]));
+        make.top.equalTo(titleLab.mas_bottom).offset([JNSHAutoSize height:10]);
+        make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:159], [JNSHAutoSize height:274]));
     }];
     
+
     UILabel *labeOne = [[UILabel alloc] init];
     labeOne.font = [UIFont systemFontOfSize:13];
     labeOne.textAlignment = NSTextAlignmentLeft;
     labeOne.textColor = ColorText;
     labeOne.text = @"1.进行实名认证";
-    [scrollView addSubview:labeOne];
+    [self.view addSubview:labeOne];
     
     [labeOne mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(ImageOne.mas_bottom).offset([JNSHAutoSize height:17]);
@@ -84,7 +86,7 @@
     labeTwo.textAlignment = NSTextAlignmentLeft;
     labeTwo.textColor = ColorText;
     labeTwo.text = @"2.按要求提交信息";
-    [scrollView addSubview:labeTwo];
+    [self.view addSubview:labeTwo];
     
     [labeTwo mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(labeOne);
@@ -94,7 +96,7 @@
     
     UIImageView *ImageThree = [[UIImageView alloc] init];
     ImageThree.image = [UIImage imageNamed:@"Certification_3"];
-    [scrollView addSubview:ImageThree];
+    [self.view addSubview:ImageThree];
     
     [ImageThree mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(labeOne.mas_bottom).offset([JNSHAutoSize height:10]);
@@ -104,12 +106,12 @@
     
     UIImageView *ImageFour = [[UIImageView alloc] init];
     ImageFour.image = [UIImage imageNamed:@"Certification_4"];
-    [scrollView addSubview:ImageFour];
+    [self.view addSubview:ImageFour];
     
     [ImageFour mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(ImageThree);
         make.left.equalTo(ImageTwo);
-        make.right.equalTo(scrollView).offset(-[JNSHAutoSize width:15]);
+        make.right.equalTo(self.view).offset(-[JNSHAutoSize width:15]);
         make.height.equalTo(ImageThree);
     }];
     
@@ -119,7 +121,7 @@
     labFour.textAlignment = NSTextAlignmentLeft;
     labFour.textColor = ColorText;
     labFour.numberOfLines = 0;
-    [scrollView addSubview:labFour];
+    [self.view addSubview:labFour];
     
     [labFour mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.equalTo(labeOne);
@@ -133,7 +135,7 @@
     labFive.textColor = ColorText;
     labFive.textAlignment = NSTextAlignmentLeft;
     
-    [scrollView addSubview:labFive];
+    [self.view addSubview:labFive];
     
     [labFive mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(labFour);

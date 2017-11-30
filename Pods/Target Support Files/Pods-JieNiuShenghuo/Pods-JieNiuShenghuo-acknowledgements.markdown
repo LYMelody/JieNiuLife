@@ -29,14 +29,6 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 
-## JCore
-
-Copyright jpush.cn
-
-## JPush
-
-Copyright jpush.cn
-
 ## MBProgressHUD
 
 Copyright (c) 2009-2015 Matej Bukovinski
@@ -107,16 +99,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-
-## PgyUpdate
-
-Copyright 2015 pgyer.com. All rights reserved.
-
-
-## Pgyer
-
-Copyright 2015 pgyer.com. All rights reserved.
-
 
 ## SBJson
 

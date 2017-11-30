@@ -59,10 +59,6 @@
     
     [self.contentView addSubview:self.bottomLine];
     
-    
-    
-    
-    
 }
 
 //获取验证码
@@ -103,6 +99,7 @@
         make.left.equalTo(self).offset([JNSHAutoSize width:16]);
         make.height.mas_equalTo(SeperateLineWidth);
     }];
+    
 }
 
 - (void)setShowBottom:(BOOL)showBottom {

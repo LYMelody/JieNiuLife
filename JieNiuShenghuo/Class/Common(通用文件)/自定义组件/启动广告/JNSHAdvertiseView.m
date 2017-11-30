@@ -11,7 +11,7 @@
 #import "JNSHUpdateView.h"
 #import "SBJSON.h"
 #import "IBHttpTool.h"
-#import "PgyUpdateManager.h"
+//#import "PgyUpdateManager.h"
 @interface JNSHAdvertiseView()
 
 @property(nonatomic,strong)UIImageView *adView;
@@ -24,17 +24,13 @@
 
 @property(nonatomic,strong)UILabel *leftLab;
 
-
-
 @end
 
 //static int const showtime = 5;
 
-
 @implementation JNSHAdvertiseView {
     
     UITapGestureRecognizer *slipTap;
-    
     
 }
 
@@ -150,6 +146,7 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:@"pushtoAd" object:nil];
     
 }
+
 //点击跳过按钮
 - (void)dismiss {
     
@@ -166,7 +163,7 @@
         //检测更新
         //[self VersionUpdate];
         
-        [[PgyUpdateManager sharedPgyManager] checkUpdate];
+        //[[PgyUpdateManager sharedPgyManager] checkUpdate];
         
     }];
     

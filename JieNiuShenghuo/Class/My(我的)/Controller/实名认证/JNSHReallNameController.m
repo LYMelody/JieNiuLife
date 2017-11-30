@@ -215,6 +215,7 @@
         
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
+        //[JNSHAutoSize showMsg:NetInAvaiable];
     }];
 }
 
@@ -273,7 +274,7 @@
     NSString *paramas = [requestDic JSONFragment];
     
     [IBHttpTool postWithURL:JNSHTestUrl params:paramas success:^(id result) {
-        NSLog(@"%@",result);
+        //NSLog(@"%@",result);
         NSDictionary *dic = [result JSONValue];
         NSString *code = dic[@"code"];
         
@@ -293,7 +294,7 @@
         
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
-      
+        [JNSHAutoSize showMsg:NetInAvaiable];
     }];
 }
 
@@ -432,7 +433,6 @@
     }
     
     return 41;
-    
 }
 
 //打开照相机或者相册
@@ -547,7 +547,7 @@
     NSString *paramas = [requestDic JSONFragment];
     
     [IBHttpTool postWithURL:JNSHTestUrl params:paramas success:^(id result) {
-        NSLog(@"%@",result);
+        //NSLog(@"%@",result);
         NSDictionary *dic = [result JSONValue];
         NSString *code = dic[@"code"];
         
@@ -581,6 +581,7 @@
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
         [HUD hide:YES];
+        [JNSHAutoSize showMsg:NetInAvaiable];
     }];
 }
 

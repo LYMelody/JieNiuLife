@@ -20,6 +20,7 @@
 #import "SBJSON.h"
 #import "IBHttpTool.h"
 #import "JNSHWebViewController.h"
+#import "MBProgressHUD.h"
 
 @interface JNSHOrderSureViewController ()<UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate>
 
@@ -115,12 +116,16 @@
         BankNo = CardCell.textFiled.text;
     }
     
+    //转菊花
+    
+    MBProgressHUD *HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    
+    
     //快捷支付绑卡
     NSDictionary *dic = @{
                           @"orderNo":self.orderNo,
                           @"cardNo":BankNo
                           };
-    
     
     NSString *action = @"PayOrderNocardBank";
 
@@ -139,7 +144,7 @@
         NSDictionary *resultdic = [result JSONValue];
         NSString *code = resultdic[@"code"];
         NSString *msg = resultdic[@"msg"];
-        NSLog(@"%@",resultdic);
+        //NSLog(@"%@",resultdic);
         if ([code isEqualToString:@"000000"]) {
             //订单
             self.orderNo = resultdic[@"orderNo"];
@@ -152,7 +157,7 @@
                 WebVc.url = H5Url;
                 WebVc.hidesBottomBarWhenPushed = YES;
                 [self.navigationController pushViewController:WebVc animated:YES];
-                
+                [HUD hide:YES];
             }else {                   //正常支付
                 
                 NSString *isBind = [NSString stringWithFormat:@"%@",resultdic[@"isBind"]];
@@ -168,7 +173,7 @@
                     CodeVc.orderNo = self.orderNo;
                     CodeVc.cardPhone =  cardPhone;
                     [self.navigationController pushViewController:CodeVc animated:YES];
-                    
+                    [HUD hide:YES];
                 }else {   // 新信用卡首次支付
                     
                     JNSHPayOrderViewController *PayOrderVc = [[JNSHPayOrderViewController alloc] init];
@@ -179,14 +184,17 @@
                     PayOrderVc.cardPhone = cardPhone;
                     PayOrderVc.hidesBottomBarWhenPushed = YES;
                     [self.navigationController pushViewController:PayOrderVc animated:YES];
-                    
+                    [HUD hide:YES];
                 }
             }
         }else {
             [JNSHAutoSize showMsg:msg];
+            [HUD hide:YES];
         }
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
+        [JNSHAutoSize showMsg:NetInAvaiable];
+        [HUD hide:YES];
     }];
 }
 
@@ -300,6 +308,7 @@
             Cell.rightLab.text = [NSString stringWithFormat:@"-￥%.2f【%@】",[self.rateNormalFee integerValue]/100.0,self.rateNormalFeeValue];
             cell = Cell;
         }else if (indexPath.row == 4) {
+            
             JNSHOrderDisCountCell *Cell = [[JNSHOrderDisCountCell alloc] init];
             
             if ([self.vipFlag isEqualToString:@"0"]) {
@@ -330,7 +339,6 @@
             cell = Cell;
         }else if (indexPath.row == 5) {
             
-           
             JNSHOrderDisCountCell *Cell = [[JNSHOrderDisCountCell alloc] init];
             Cell.leftLab.text = @"卡券抵扣";
             if([self.voucheersFlag isEqualToString:@"1"]) {  //有抵扣券

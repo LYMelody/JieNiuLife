@@ -19,15 +19,14 @@
 #import "ShareSDK/ShareSDK.h"
 #import "ShareSDKConnector/ShareSDKConnector.h"
 
-
 #import "WXApi.h"
 #import "WeiboSDK.h"
-//JPush
-#import "JPUSHService.h"
-#import <UserNotifications/UserNotifications.h>
+//JPush (11.3注释掉)
+//#import "JPUSHService.h"
+//#import <UserNotifications/UserNotifications.h>
 //蒲公英
-#import "PgySDK/PgyManager.h"
-#import "PgyUpdate/PgyUpdateManager.h"
+//#import "PgySDK/PgyManager.h"
+//#import "PgyUpdate/PgyUpdateManager.h"
 //友盟
 #import "UMMobClick/MobClick.h"
 
@@ -44,7 +43,7 @@
 //Umeng
 #define UmengAPPkey @"59daea31b27b0a2f6f00000c"
 
-@interface AppDelegate ()<JPUSHRegisterDelegate>
+@interface AppDelegate ()
 
 @end
 
@@ -54,12 +53,11 @@
     
     //[NSThread sleepForTimeInterval:1];
     //蒲公英
-    [[PgyManager sharedPgyManager] startManagerWithAppId:PgyAPPID];
-    [[PgyManager sharedPgyManager] setEnableFeedback:NO];
-    //检测更新
-    [[PgyUpdateManager sharedPgyManager] startManagerWithAppId:PgyAPPID];
-    //[[PgyUpdateManager sharedPgyManager] checkUpdate];
-
+//    [[PgyManager sharedPgyManager] startManagerWithAppId:PgyAPPID];
+//    [[PgyManager sharedPgyManager] setEnableFeedback:NO];
+//    //检测更新
+//    [[PgyUpdateManager sharedPgyManager] startManagerWithAppId:PgyAPPID];
+    
     //友盟
     UMConfigInstance.appKey = UmengAPPkey;
     UMConfigInstance.channelId = @"Exterprise";
@@ -179,15 +177,15 @@
     
     /*************************  JPush ******************************/
     //注册APNS
-    JPUSHRegisterEntity *entity = [[JPUSHRegisterEntity alloc] init];
-    entity.types = JPAuthorizationOptionAlert|JPAuthorizationOptionBadge|JPAuthorizationOptionSound;
-    if ([[UIDevice currentDevice].systemVersion floatValue] >= 8.0) {
-        
-        
-    }
-    [JPUSHService registerForRemoteNotificationConfig:entity delegate:self];
-    //初始化JPush
-    [JPUSHService setupWithOption:launchOptions appKey:JPushAPPKey channel:@"APP Store" apsForProduction:NO];
+//    JPUSHRegisterEntity *entity = [[JPUSHRegisterEntity alloc] init];
+//    entity.types = JPAuthorizationOptionAlert|JPAuthorizationOptionBadge|JPAuthorizationOptionSound;
+//    if ([[UIDevice currentDevice].systemVersion floatValue] >= 8.0) {
+//
+//
+//    }
+//    [JPUSHService registerForRemoteNotificationConfig:entity delegate:self];
+//    //初始化JPush
+//    [JPUSHService setupWithOption:launchOptions appKey:JPushAPPKey channel:@"APP Store" apsForProduction:NO];
     //设置APP角标
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber:0];
     return YES;
@@ -248,7 +246,7 @@
         [[UIApplication sharedApplication] setStatusBarHidden:NO];
         //版本更新
         //[self VersionUpdate];
-        [[PgyUpdateManager sharedPgyManager] checkUpdate];
+        //[[PgyUpdateManager sharedPgyManager] checkUpdate];
     }
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -416,7 +414,6 @@
         JNSHUpdateView *updateView = [[JNSHUpdateView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight)];
         [updateView show:@"" message:@"" inView:[UIApplication sharedApplication].keyWindow];
         
-        
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
     }];
@@ -427,7 +424,7 @@
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
     
-    [JPUSHService registerDeviceToken:deviceToken];
+    //[JPUSHService registerDeviceToken:deviceToken];
     
 }
 
@@ -439,34 +436,34 @@
 
 #define  JPUSHRegisterDelegate
 
-- (void)jpushNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(NSInteger))completionHandler {
-    
-    NSDictionary *userInfo = notification.request.content.userInfo;
-    completionHandler(UNNotificationPresentationOptionAlert);
-    
-    NSLog(@"content:%@userinfo:%@",notification.request.content,userInfo);
-    
-}
+//- (void)jpushNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(NSInteger))completionHandler {
+//
+//    NSDictionary *userInfo = notification.request.content.userInfo;
+//    completionHandler(UNNotificationPresentationOptionAlert);
+//
+//    NSLog(@"content:%@userinfo:%@",notification.request.content,userInfo);
+//
+//}
+//
+//- (void)jpushNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)())completionHandler {
+//
+//    completionHandler(UNNotificationPresentationOptionAlert);
+//
+//}
 
-- (void)jpushNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)())completionHandler {
-    
-    completionHandler(UNNotificationPresentationOptionAlert);
-    
-}
-
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
-    
-    [JPUSHService handleRemoteNotification:userInfo];
-    
-    completionHandler(UIBackgroundFetchResultNewData);
-    
-}
-
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
-    
-    [JPUSHService handleRemoteNotification:userInfo];
-    
-}
+//- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo fetchCompletionHandler:(void (^)(UIBackgroundFetchResult))completionHandler {
+//
+//    [JPUSHService handleRemoteNotification:userInfo];
+//
+//    completionHandler(UIBackgroundFetchResultNewData);
+//
+//}
+//
+//- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
+//
+//    [JPUSHService handleRemoteNotification:userInfo];
+//
+//}
 
 
 - (void)applicationWillResignActive:(UIApplication *)application {

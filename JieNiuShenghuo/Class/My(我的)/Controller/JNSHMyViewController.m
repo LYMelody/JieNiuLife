@@ -33,6 +33,10 @@
 #import "JNSHAgentDetailViewController.h"
 #import "JNSHUsageViewController.h"
 
+
+
+
+
 @interface JNSHMyViewController ()<UITableViewDelegate,UITableViewDataSource,UIGestureRecognizerDelegate,UINavigationControllerDelegate>
 
 @end
@@ -75,6 +79,25 @@
     
     self.navigationController.delegate = self;
     
+    
+    __block  int a = 10;
+    
+    int (^blk)(int) = ^(int count) {
+        a = 20;
+        return count + a;
+    };
+    
+    void (^blcok)(NSString *,int) = ^(NSString *name,int index) {
+        NSLog(@"name is %@,age is %d",name,index);
+    };
+    
+    a = 20;
+    
+    NSLog(@"%d",blk(10));
+    
+    blcok(@"tom",20);
+    
+
 }
 
 -(BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
@@ -111,7 +134,7 @@
     //取消tableView自动布局
     //self.automaticallyAdjustsScrollViewInsets = NO;
     
-    table = [[UITableView alloc] initWithFrame:CGRectMake(0, -64, KscreenWidth, KscreenHeight) style:UITableViewStylePlain];
+    table = [[UITableView alloc] initWithFrame:CGRectMake(0, -64, KscreenWidth, KscreenHeight-(IS_IOS11?48:0)) style:UITableViewStylePlain];
     table.delegate = self;
     table.dataSource = self;
     table.backgroundColor = ColorTableBackColor;
@@ -348,6 +371,9 @@
             JNSHMyCommonCell *Cell = [[JNSHMyCommonCell alloc] init];
             Cell.titleImage.image = [UIImage imageNamed:@"my_phone"];
             Cell.titleLab.text = @"客服电话";
+            if ([JNSYUserInfo getUserInfo].phone == nil) {   //如果没有网络的话 设置默认客服电话
+                [JNSYUserInfo getUserInfo].phone = @"4001018258";
+            }
             NSString *front = [[JNSYUserInfo getUserInfo].phone substringToIndex:3];
             NSString *mid = [[JNSYUserInfo getUserInfo].phone substringWithRange:NSMakeRange(3, 3)];
             NSString *last = [[JNSYUserInfo getUserInfo].phone substringFromIndex:6];
@@ -371,7 +397,6 @@
             cell = Cell;
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
-        
     }
     
     return cell;

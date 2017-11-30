@@ -9,9 +9,7 @@
 #import "JNSHOrderDisCountCell.h"
 #import "Masonry.h"
 
-
 @implementation JNSHOrderDisCountCell
-
 
 - (instancetype)init {
     
@@ -22,7 +20,6 @@
     return self;
     
 }
-
 
 - (void)setUpViews{
     
@@ -68,9 +65,7 @@
         self.continueVipBlock();
     }
     
-    
 }
-
 
 - (void)layoutSubviews {
     
@@ -100,7 +95,6 @@
         make.left.equalTo(self).offset([JNSHAutoSize width:15]);
         make.height.mas_equalTo(SeperateLineWidth);
     }];
-    
     
 }
 

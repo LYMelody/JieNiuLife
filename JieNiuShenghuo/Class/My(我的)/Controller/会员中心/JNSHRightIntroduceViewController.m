@@ -8,13 +8,21 @@
 
 #import "JNSHRightIntroduceViewController.h"
 #import "Masonry.h"
-
+#import "UIViewController+Cloudox.h"
+#import "UINavigationController+Cloudox.h"
 @interface JNSHRightIntroduceViewController ()
 
 @end
 
 @implementation JNSHRightIntroduceViewController
 
+- (void)viewWillAppear:(BOOL)animated {
+    
+    [super viewWillAppear:animated];
+    
+    self.navBarBgAlpha = @"1.0";
+    
+}
 
 - (void)viewDidLoad {
     

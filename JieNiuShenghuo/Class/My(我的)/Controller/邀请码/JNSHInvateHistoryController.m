@@ -18,7 +18,8 @@
 #import "UINavigationController+Cloudox.h"
 #import "MBProgressHUD.h"
 #import "UIImageView+WebCache.h"
-@interface JNSHInvateHistoryController ()<UITableViewDelegate,UITableViewDataSource>
+#import "JNSHInvateController.h"
+@interface JNSHInvateHistoryController ()<UITableViewDelegate,UITableViewDataSource,UINavigationBarDelegate>
 
 @end
 
@@ -30,26 +31,33 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     
-    
     [super viewWillAppear:animated];
     
     self.title = @"邀请记录";
     
     self.view.backgroundColor = [UIColor whiteColor];
     
-   self.navBarBgAlpha = @"1.0";
+    self.navBarBgAlpha = @"1.0";
     
+    self.navigationController.navigationBar.barTintColor = ColorTabBarBackColor;
+
+    [self.navigationController.navigationBar setTitleTextAttributes:@{
+                                                                      NSForegroundColorAttributeName:[UIColor whiteColor]
+
+                                                                      }];
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:NO];
     
 }
 
-
 - (void)viewDidLoad {
+ 
     [super viewDidLoad];
     
     //返回按钮
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:self action:nil];
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
-    
     
     table = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight - 64)];
     table.delegate = self;
@@ -58,7 +66,6 @@
     
     table.tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, CGFLOAT_MIN)];
    
-    
     [self.view addSubview:table];
     
     //headerView
@@ -235,7 +242,7 @@
     }
     
     NSDictionary *dic = @{
-                          @"chargeUser":[NSString stringWithFormat:@"%ld",count],
+                          @"chargeUser":[NSString stringWithFormat:@"%ld",(long)count],
                           @"chargeDay":[NSString stringWithFormat:@"%ld",(long)count*10]
                           };
     NSString *action = @"UserInviteExchange";
@@ -371,11 +378,22 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    
 //    Controller *ctr = [[Controller alloc] init];
 //    ctr.hidesBottomBarWhenPushed = YES;
 //    [self.navigationController pushViewController:ctr animated:YES];
     
+}
+
+#pragma mark - UINavigationBar Delegate
+- (void)navigationBar:(UINavigationBar *)navigationBar didPopItem:(UINavigationItem *)item {
+    if (self.navigationController.viewControllers.count >= navigationBar.items.count) {// 点击返回按钮
+        
+        UIViewController *popToVC = self.navigationController.viewControllers[self.navigationController.viewControllers.count - 1];
+        if (popToVC.title) {
+            [self.navigationController setNeedsNavigationBackground:0];
+        }
+        //        [self popViewControllerAnimated:YES];
+    }
 }
 
 - (void)didReceiveMemoryWarning {

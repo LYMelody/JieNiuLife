@@ -14,6 +14,8 @@
 #import <AVKit/AVKit.h>
 #import "AFNetworkReachabilityManager.h"
 #import "JNSYUserInfo.h"
+#import "UIViewController+Cloudox.h"
+#import "UINavigationController+Cloudox.h"
 
 @interface JNSHUsageViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -29,10 +31,13 @@
 }
 - (void)viewWillAppear:(BOOL)animated {
     
-    [table reloadData];
+    [super viewWillAppear:animated];
+    
     [[UIApplication sharedApplication] setStatusBarHidden:NO];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    self.navBarBgAlpha = @"1.0";
     
+    [table reloadData];
 }
 
 
@@ -59,7 +64,7 @@
     footView.userInteractionEnabled = YES;
     
     UILabel *titleLab = [[UILabel alloc] init];
-    titleLab.font = [UIFont systemFontOfSize:15];
+    titleLab.font = [UIFont systemFontOfSize:14];
     titleLab.text = @"【视频教程】约20M，建议WiFi环境下观看，土豪随意！";
     titleLab.numberOfLines = 0;
     [footView addSubview:titleLab];
@@ -67,7 +72,7 @@
     [titleLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(footView).offset([JNSHAutoSize height:10]);
         make.left.equalTo(footView).offset([JNSHAutoSize width:15]);
-        make.size.mas_equalTo(CGSizeMake(KscreenWidth-40, [JNSHAutoSize height:38]));
+        make.size.mas_equalTo(CGSizeMake(KscreenWidth-40, [JNSHAutoSize height:40]));
     }];
     
     UIImageView *ViedoImgView = [[UIImageView alloc] init];
@@ -104,7 +109,6 @@
         make.center.equalTo(ViedoImgView);
         make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:80], [JNSHAutoSize height:30]));
     }];
-    
     
     tipsLab = [[UILabel alloc] init];
     tipsLab.font = [UIFont systemFontOfSize:15];
@@ -209,9 +213,9 @@
             cell.backgroundColor = ColorTableBackColor;
             cell.textLabel.text = @"【图片教程】 完成①、②两步即可正常收款。";
             cell.textLabel.textColor = ColorText;
-            cell.textLabel.font = [UIFont systemFontOfSize:15];
+            cell.textLabel.font = [UIFont systemFontOfSize:14];
             cell.textLabel.textAlignment = NSTextAlignmentLeft;
-            
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }else if (indexPath.row == 1) {
             JNSHMyCommonCell *Cell = [[JNSHMyCommonCell alloc] init];
             Cell.titleImage.image = [UIImage imageNamed:@"1"];
@@ -238,6 +242,7 @@
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }else {
             cell.backgroundColor = ColorTableBackColor;
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
         }
     }
     

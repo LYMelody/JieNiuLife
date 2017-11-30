@@ -48,26 +48,6 @@ SOFTWARE.
 		</dict>
 		<dict>
 			<key>FooterText</key>
-			<string>Copyright jpush.cn</string>
-			<key>License</key>
-			<string>Copyright</string>
-			<key>Title</key>
-			<string>JCore</string>
-			<key>Type</key>
-			<string>PSGroupSpecifier</string>
-		</dict>
-		<dict>
-			<key>FooterText</key>
-			<string>Copyright jpush.cn</string>
-			<key>License</key>
-			<string>Copyright</string>
-			<key>Title</key>
-			<string>JPush</string>
-			<key>Type</key>
-			<string>PSGroupSpecifier</string>
-		</dict>
-		<dict>
-			<key>FooterText</key>
 			<string>Copyright (c) 2009-2015 Matej Bukovinski
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -158,28 +138,6 @@ THE SOFTWARE.</string>
 			<string>MIT</string>
 			<key>Title</key>
 			<string>Masonry</string>
-			<key>Type</key>
-			<string>PSGroupSpecifier</string>
-		</dict>
-		<dict>
-			<key>FooterText</key>
-			<string>Copyright 2015 pgyer.com. All rights reserved.
-</string>
-			<key>License</key>
-			<string>Copyright</string>
-			<key>Title</key>
-			<string>PgyUpdate</string>
-			<key>Type</key>
-			<string>PSGroupSpecifier</string>
-		</dict>
-		<dict>
-			<key>FooterText</key>
-			<string>Copyright 2015 pgyer.com. All rights reserved.
-</string>
-			<key>License</key>
-			<string>Copyright</string>
-			<key>Title</key>
-			<string>Pgyer</string>
 			<key>Type</key>
 			<string>PSGroupSpecifier</string>
 		</dict>

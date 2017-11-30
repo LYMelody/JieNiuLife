@@ -50,7 +50,7 @@
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:self action:nil];
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     
-    table = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight - (IS_IOS11?110:64)) style:UITableViewStylePlain];
+    table = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight - (IS_IOS11?114:64)) style:UITableViewStylePlain];
     table.delegate = self;
     table.dataSource = self;
     table.backgroundColor = [UIColor whiteColor];
@@ -107,7 +107,7 @@
     
     [IBHttpTool postWithURL:JNSHTestUrl params:params success:^(id result) {
         NSDictionary *resultDic = [result JSONValue];
-        //NSLog(@"%@",resultDic);
+        NSLog(@"%@",resultDic);
         if ([resultDic[@"serviceInfos"] isKindOfClass:[NSArray class]]) {
             self.serviceList = resultDic[@"serviceInfos"];
             [table reloadData];
@@ -135,8 +135,8 @@
     
     [IBHttpTool postWithURL:JNSHTestUrl params:params success:^(id result) {
         NSDictionary *resultDic = [result JSONValue];
-        NSLog(@"图片列表:%@",resultDic);
-        NSLog(@"图片列表数组:%@",resultDic[@"adInfoList"]);
+        //NSLog(@"图片列表:%@",resultDic);
+        //NSLog(@"图片列表数组:%@",resultDic[@"adInfoList"]);
         if ([resultDic[@"adInfoList"] isKindOfClass:[NSArray class]]) {
             
             NSArray *imageList = resultDic[@"adInfoList"];

@@ -355,19 +355,27 @@
     
     NSLog(@"登录");
     
+    
+    HUD = [[MBProgressHUD alloc] initWithView:self.view];
+    [self.view addSubview:HUD];
+    HUD.labelText = @"登录中...";
+    [HUD show:YES];
+    
     if ([accountFiled.text isEqualToString:@""] ) {
+        [HUD hide:YES];
         [JNSHAutoSize showMsg:@"请输入手机号!"];
+        
         return;
     }else if (accountFiled.text.length < 11) {
+        [HUD hide:YES];
         [JNSHAutoSize showMsg:@"手机号不正确"];
         return;
     }
     if (pwdTextFiled.text.length < 6 || pwdTextFiled.text.length > 12) {
+        [HUD hide:YES];
         [JNSHAutoSize showMsg:@"请输入6-20位密码"];
-        
         return;
     }
-    
     
     NSDictionary *dic = @{
                           @"phone":accountFiled.text,
@@ -395,11 +403,6 @@
         if([code isEqualToString:@"000000"]) {
             
             //HUD
-            HUD = [[MBProgressHUD alloc] initWithView:self.view];
-            [self.view addSubview:HUD];
-            HUD.labelText = @"登录中...";
-            [HUD show:YES];
-            
             [HUD hide:YES afterDelay:1.5];
             
             [JNSYUserInfo getUserInfo].isLoggedIn = YES;
@@ -438,6 +441,8 @@
         
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
+        [HUD hide:YES];
+        [JNSHAutoSize showMsg:@"您好像没有连接网络，请连接网络重新登录。"];
     }];
 
 }

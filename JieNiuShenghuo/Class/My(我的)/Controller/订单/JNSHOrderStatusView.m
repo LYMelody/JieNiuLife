@@ -36,15 +36,16 @@
     table = [[UITableView alloc] initWithFrame:CGRectMake(0, [JNSHAutoSize height:46], KscreenWidth, [JNSHAutoSize height:164])];
     table.dataSource = self;
     table.delegate = self;
+    table.tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, CGFLOAT_MIN)];
     table.backgroundColor = [UIColor whiteColor];
     [self addSubview:table];
     
-   
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    return 4;
+    
+    return self.array.count;
     
 }
 
@@ -54,11 +55,11 @@
     
     JNSHOrderStatusCell *cell = [tableView dequeueReusableCellWithIdentifier:identy];
     
-    NSArray *array = @[@"全部",@"收款",@"会员购买",@"后台管理费"];
+    //NSArray *array = @[@"全部",@"收款",@"会员购买",@"后台管理费"];
     
     if (cell == nil) {
         cell = [[JNSHOrderStatusCell alloc] init];
-        cell.centerLab.text = array[indexPath.row];
+        cell.centerLab.text = self.array[indexPath.row];
         if (indexPath.row == self.selectIndex) {
             cell.rightImg.hidden = NO;
         }

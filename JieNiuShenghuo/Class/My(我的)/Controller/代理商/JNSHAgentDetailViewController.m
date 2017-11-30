@@ -19,6 +19,14 @@
 #import "JNSHAgentMessageViewController.h"
 #import "Masonry.h"
 #import "JNSHAgentTypeCell.h"
+#import "JNSHGetCodeCell.h"
+#import "JNSHSaleStatisticViewController.h"
+#import "JNSHUserManagerViewController.h"
+#import "JNSHAgentManagerViewController.h"
+#import "JNSHOrderManagerViewController.h"
+#import "JNSHFenRunManagerViewController.h"
+
+
 @interface JNSHAgentDetailViewController ()<UITableViewDelegate,UITableViewDataSource>
 
 @end
@@ -39,7 +47,6 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    
     
     self.title = @"代理商";
     self.view.backgroundColor = ColorTabBarBackColor;
@@ -79,82 +86,6 @@
     
     table.tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, CGFLOAT_MIN)];
     
-//    UIImageView *modelBackImg = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, [JNSHAutoSize height:151])];
-//    modelBackImg.backgroundColor = lightYellow;
-//
-//    //[lightBackImg addSubview:modelBackImg];
-//
-//    UIImageView *ModelOneImg = [[UIImageView alloc] init];
-//    ModelOneImg.image = [UIImage imageNamed:@"medal"];
-//
-//    UIImageView *ModelTwoImg = [[UIImageView alloc] init];
-//    ModelTwoImg.image = [UIImage imageNamed:@"medal"];
-//
-//    UIImageView *ModelThreeImg = [[UIImageView alloc] init];
-//    ModelThreeImg.image = [UIImage imageNamed:@"medal"];
-//
-//    UILabel *bottomLab = [[UILabel alloc] init];
-//    bottomLab.textColor = ColorText;
-//    bottomLab.font = [UIFont systemFontOfSize:15];
-//    bottomLab.textAlignment = NSTextAlignmentCenter;
-//    [modelBackImg addSubview:bottomLab];
-//
-//    [bottomLab mas_makeConstraints:^(MASConstraintMaker *make) {
-//        make.top.equalTo(modelBackImg).offset([JNSHAutoSize height:110]);
-//        make.left.right.equalTo(modelBackImg);
-//        make.height.mas_equalTo([JNSHAutoSize height:20]);
-//    }];
-//
-//    if ([orgType isEqualToString:@"L32"]) { //特约代理
-//        [modelBackImg addSubview:ModelOneImg];
-//        [ModelOneImg mas_makeConstraints:^(MASConstraintMaker *make) {
-//            make.centerX.equalTo(modelBackImg);
-//            make.top.equalTo(modelBackImg).offset([JNSHAutoSize height:30]);
-//            make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:41], [JNSHAutoSize height:54]));
-//        }];
-//        bottomLab.text = @"恭喜您成为特约代理商!";
-//    }else if ([orgType isEqualToString:@"L31"]) { //一级代理
-//        [modelBackImg addSubview:ModelOneImg];
-//        [modelBackImg addSubview:ModelTwoImg];
-//
-//        [ModelOneImg mas_makeConstraints:^(MASConstraintMaker *make) {
-//            make.top.equalTo(modelBackImg).offset([JNSHAutoSize height:30]);
-//            make.centerX.equalTo(modelBackImg).offset(-[JNSHAutoSize width:29]);
-//            make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:41], [JNSHAutoSize height:54]));
-//        }];
-//
-//        [ModelTwoImg mas_makeConstraints:^(MASConstraintMaker *make) {
-//            make.top.equalTo(modelBackImg).offset([JNSHAutoSize height:30]);
-//            make.centerX.equalTo(modelBackImg).offset([JNSHAutoSize width:29]);
-//            make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:41], [JNSHAutoSize height:54]));
-//        }];
-//        bottomLab.text = @"恭喜您成为一级代理商!";
-//    }else if ([orgType isEqualToString:@"L30"]) { //办事处
-//        [modelBackImg addSubview:ModelOneImg];
-//        [modelBackImg addSubview:ModelTwoImg];
-//        [modelBackImg addSubview:ModelThreeImg];
-//        [ModelOneImg mas_makeConstraints:^(MASConstraintMaker *make) {
-//            make.centerX.equalTo(modelBackImg);
-//            make.top.equalTo(modelBackImg).offset([JNSHAutoSize height:30]);
-//            make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:41], [JNSHAutoSize height:54]));
-//        }];
-//
-//        [ModelTwoImg mas_makeConstraints:^(MASConstraintMaker *make) {
-//            make.top.equalTo(ModelOneImg);
-//            make.right.equalTo(ModelOneImg.mas_left).offset(-[JNSHAutoSize width:17]);
-//            make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:41], [JNSHAutoSize height:54]));
-//        }];
-//
-//        [ModelThreeImg mas_makeConstraints:^(MASConstraintMaker *make) {
-//            make.top.equalTo(ModelOneImg);
-//            make.left.equalTo(ModelOneImg.mas_right).offset([JNSHAutoSize width:17]);
-//            make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:41], [JNSHAutoSize height:54]));
-//        }];
-//        bottomLab.text = @"恭喜您成为办事处级别代理商!";
-//    }
-    
-    //table.tableHeaderView = modelBackImg;
-    
     [backImg addSubview:table];
     
     //获取代理商信息
@@ -173,7 +104,8 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    return 11;
+    return 12;
+    
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -192,11 +124,23 @@
             Cell.backgroundColor = ColorTableBackColor;
             cell = Cell;
             
-        }else if (indexPath.row == 3 || indexPath.row == 5) {
+        }else if (indexPath.row == 1) {
+            
+            JNSHGetCodeCell *Cell = [[JNSHGetCodeCell alloc] init];
+            Cell.textFiled.hidden = YES;
+            [Cell.codeBtn setTitle:@"提现" forState:UIControlStateNormal];
+            Cell.getcodeBlock = ^{
+                NSLog(@"提现啦!");
+            };
+            Cell.leftLab.text = @"分润";
+            Cell.leftLab.font = [UIFont systemFontOfSize:15];
+            cell = Cell;
+            
+        }else if (indexPath.row == 4 || indexPath.row == 6) {
             
             cell.backgroundColor = ColorTableBackColor;
             
-        }else if (indexPath.row == 1) {
+        }else if (indexPath.row == 2) {
             
             JNSHAccountInfoCell *Cell = [[JNSHAccountInfoCell alloc] init];
             Cell.leftLab.text = @"日分润";
@@ -204,13 +148,13 @@
             Cell.rightLab.textColor = ColorTabBarBackColor;
             cell = Cell;
             
-        }else if (indexPath.row == 2) {
+        }else if (indexPath.row == 3) {
             JNSHTradeNumCell *Cell = [[JNSHTradeNumCell alloc] init];
             Cell.numLab.text = [NSString stringWithFormat:@"共%@笔",payCount];
             Cell.dayNumLab.text = [NSString stringWithFormat:@"￥%.2f",[paySumPrice floatValue]/100];
             Cell.totalBenefitLab.text = [NSString stringWithFormat:@"￥%.2f",[allProfit floatValue]/100];
             cell = Cell;
-        }else if (indexPath.row == 4) {
+        }else if (indexPath.row == 5) {
             
             JNSHAgentCell *Cell = [[JNSHAgentCell alloc] init];
             Cell.addDalyLab.text = dayOrg;
@@ -220,34 +164,34 @@
             cell = Cell;
             
         }
-        else if (indexPath.row == 6) {
+        else if (indexPath.row == 7) {
             
             JNSHAccountInfoCell *Cell = [[JNSHAccountInfoCell alloc] init];
             Cell.leftLab.text = @"销售统计";
             cell = Cell;
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        }else if (indexPath.row == 7) {
+            
+        }else if (indexPath.row == 8) {
             JNSHAccountInfoCell *Cell = [[JNSHAccountInfoCell alloc] init];
             Cell.leftLab.text = @"商户管理";
             cell = Cell;
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        }else if (indexPath.row == 8) {
+        }else if (indexPath.row == 9) {
             JNSHAccountInfoCell *Cell = [[JNSHAccountInfoCell alloc] init];
             Cell.leftLab.text = @"代理管理";
             cell = Cell;
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        }else if (indexPath.row == 9) {
+        }else if (indexPath.row == 10) {
             JNSHAccountInfoCell *Cell = [[JNSHAccountInfoCell alloc] init];
             Cell.leftLab.text = @"订单管理";
             cell = Cell;
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        }else if (indexPath.row == 10) {
+        }else if (indexPath.row == 11) {
             JNSHAccountInfoCell *Cell = [[JNSHAccountInfoCell alloc] init];
             Cell.leftLab.text = @"分润管理";
             cell = Cell;
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         }
-        
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
@@ -258,11 +202,11 @@
     
     if (indexPath.row == 0) {
         return [JNSHAutoSize height:110];
-    }else if ( indexPath.row == 3 || indexPath.row == 5) {
+    }else if ( indexPath.row == 4 || indexPath.row == 6) {
         return [JNSHAutoSize height:15];
-    }else if (indexPath.row == 2) {
+    }else if (indexPath.row == 3) {
         return [JNSHAutoSize height:61];
-    }else if (indexPath.row == 4) {
+    }else if (indexPath.row == 5) {
         return [JNSHAutoSize height:76];
     }else {
         return [JNSHAutoSize height:41];
@@ -272,14 +216,31 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    if (indexPath.row > 5) {
-        MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-        hud.mode = MBProgressHUDModeText;
-        hud.labelText = @"功能开发中";
-        [hud hide:YES afterDelay:2];
+    
+    if (indexPath.row == 7) {
+        JNSHSaleStatisticViewController *SaleStatisVc = [[JNSHSaleStatisticViewController alloc] init];
+        SaleStatisVc.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:SaleStatisVc animated:YES];
+        
+    }else if (indexPath.row == 8) {
+        JNSHUserManagerViewController *UserManagerVc = [[JNSHUserManagerViewController alloc] init];
+        UserManagerVc.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:UserManagerVc animated:YES];
+    }else if (indexPath.row == 9) {
+        JNSHAgentManagerViewController *AgentManagerVc = [[JNSHAgentManagerViewController alloc] init];
+        AgentManagerVc.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:AgentManagerVc animated:YES];
+    }else if (indexPath.row == 10) {
+        JNSHOrderManagerViewController *OrderVc = [[JNSHOrderManagerViewController alloc] init];
+        OrderVc.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:OrderVc animated:YES];
+    }else if (indexPath.row == 11) {
+        JNSHFenRunManagerViewController *FenRunManagerVc = [[JNSHFenRunManagerViewController alloc] init];
+        FenRunManagerVc.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:FenRunManagerVc animated:YES];
+        
     }
-    
-    
+
 }
 
 - (void)requestForAgentInfo {
@@ -299,7 +260,7 @@
     [IBHttpTool postWithURL:JNSHTestUrl params:params success:^(id result) {
         NSDictionary *resultDic = [result JSONValue];
         NSString *code = resultDic[@"code"];
-        NSLog(@"%@",resultDic);
+        //NSLog(@"%@",resultDic);
         if ([code isEqualToString:@"000000"]) {
             
             dayProfit = [NSString stringWithFormat:@"%@",resultDic[@"dayProfit"]];
@@ -319,8 +280,7 @@
             [JNSHAutoSize showMsg:code];
             
         }
-        
-        
+    
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
     }];

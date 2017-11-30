@@ -19,6 +19,8 @@ typedef void(^dimissBlock)(void);
 
 @property(nonatomic,assign)NSInteger selectIndex;
 
+@property(nonatomic,strong)NSArray *array;
+
 @property(nonatomic,copy)selectBlock selectblock;
 
 @property(nonatomic,copy)dimissBlock dismissBlock;

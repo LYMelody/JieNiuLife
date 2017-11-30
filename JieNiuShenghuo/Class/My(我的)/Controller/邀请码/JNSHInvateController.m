@@ -46,33 +46,31 @@
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault animated:NO];
     
-    
     self.navBarBgAlpha = @"1.0";
     
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
     
+    [super viewWillDisappear:animated];
+    
     self.navigationController.navigationBar.barTintColor = ColorTabBarBackColor;
     
     [self.navigationController.navigationBar setTitleTextAttributes:@{
                                                                       NSForegroundColorAttributeName:[UIColor whiteColor]
-                                                                      
                                                                       }];
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent animated:NO];
     
-    
 }
 
 - (void)viewDidLoad {
+    
     [super viewDidLoad];
-   
     //返回按钮
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:self action:nil];
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
-    
     
     UIImageView *navImg = [[UIImageView alloc] initWithFrame:CGRectMake(0, -64, KscreenWidth, 64)];
     navImg.backgroundColor = [UIColor whiteColor];

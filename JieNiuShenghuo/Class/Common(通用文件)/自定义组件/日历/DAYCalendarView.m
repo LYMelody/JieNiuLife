@@ -310,8 +310,7 @@
         [componentView addTarget:self action:@selector(componentDidTap:) forControlEvents:UIControlEventTouchUpInside];
         submitCell(componentView);
     }
-    
-    
+
 }
 
 - (void)configureIndicatorViews {

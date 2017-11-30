@@ -60,19 +60,20 @@
     [self.navigationController.navigationBar setTitleTextAttributes:@{
                                                                       NSForegroundColorAttributeName:[UIColor whiteColor]
                                                                       }];
-    
     self.navigationController.navigationBar.translucent = NO;
     //获取卡券领取状态
     [self getTicketsStatus];
+    
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
 
+    //切换APPstore状态
+    [JNSYUserInfo getUserInfo].IS_APPSTORE = YES;
+    
     //接收通知
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pushToAD) name:@"pushtoAd" object:nil];
-    
     
     self.view.backgroundColor = ColorTableBackColor;
     
@@ -208,7 +209,7 @@
         make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:100], [JNSHAutoSize height:20]));
     }];
     
-     //办信用卡
+     //银联快捷
     JNSYHighLightImageView *CardBackImg = [[JNSYHighLightImageView alloc] init];
     CardBackImg.backgroundColor = [UIColor whiteColor];
     CardBackImg.userInteractionEnabled = YES;
@@ -246,7 +247,7 @@
         make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:100], [JNSHAutoSize height:20]));
     }];
     
-     //快递助手
+     //用卡百科
     JNSYHighLightImageView *ExpressBackImg = [[JNSYHighLightImageView alloc] init];
     ExpressBackImg.backgroundColor = [UIColor whiteColor];
     ExpressBackImg.userInteractionEnabled = YES;
@@ -275,6 +276,10 @@
     
     UILabel *ExpressLab = [[UILabel alloc] init];
     ExpressLab.text = @"我要贷款";
+    if([JNSYUserInfo getUserInfo].IS_APPSTORE) {
+        ExpressLab.text = @"用卡百科";
+        ExpressLogoImg.image = [UIImage imageNamed:@"home_grid_2_2-"];
+    }
     ExpressLab.textAlignment = NSTextAlignmentLeft;
     ExpressLab.font = [UIFont systemFontOfSize:15];
     ExpressLab.textColor = ColorText;
@@ -835,8 +840,8 @@
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:LogInVc];
         [self presentViewController:nav animated:YES completion:nil];
     }
-
 }
+
 //办信用卡
 - (void)CardTapAction {
     
@@ -852,13 +857,24 @@
 //    [self.navigationController pushViewController:WEBvc animated:YES];
     
 }
-//贷款
+//贷款、用卡百科
 - (void)daiKuan {
     
     JNSHWebViewController *webVc = [[JNSHWebViewController alloc] init];
-    webVc.url = @"http://www.hiima.cn/promot/product/index/scene_id/3";
+    webVc.url = @"http://wap.test.life.hzjieniu.com/service/delivery.htm";
+    /*
+     快递助手：http://wap.life.hzjieniu.com/service/baike.htm
+     我要贷款:http://www.hiima.cn/promot/product/index/scene_id/3
+     */
     webVc.hidesBottomBarWhenPushed = YES;
-    webVc.Navtitle = @"我要贷款";
+    if([JNSYUserInfo getUserInfo].IS_APPSTORE) {
+        webVc.Navtitle = @"用卡百科";
+        webVc.url = @"http://wap.life.hzjieniu.com/service/baike.htm";
+    }else {
+        webVc.Navtitle = @"我要贷款";
+        webVc.url = @"http://www.hiima.cn/promot/product/index/scene_id/3";
+    }
+    
     [self.navigationController pushViewController:webVc animated:YES];
 }
 
@@ -917,15 +933,13 @@
     
     [IBHttpTool postWithURL:JNSHTestUrl params:params success:^(id result) {
         NSDictionary *resultDic = [result JSONValue];
-        [JNSYUserInfo getUserInfo].phone = resultDic[@"phone"];
+        [JNSYUserInfo getUserInfo].phone = resultDic[@"phone"];     //客服电话
         [JNSYUserInfo getUserInfo].viedoUrl = resultDic[@"videoUrl"];
         
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
     }];
 }
-
-
 
 - (void)dealloc {
     

@@ -14,6 +14,8 @@
 #import "SBJSON.h"
 #import "IBHttpTool.h"
 #import "JNSHLoginController.h"
+#import "MBProgressHUD.h"
+
 @interface JNSHCashDeskViewController ()
 
 @end
@@ -21,7 +23,7 @@
 @implementation JNSHCashDeskViewController {
     
     UILabel *moneyLab;
-    
+    MBProgressHUD *HUD;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -65,7 +67,6 @@
         make.left.right.equalTo(backImg);
         make.height.mas_equalTo([JNSHAutoSize height:101]);
     }];
-    
     
     UIImageView *logoImg = [[UIImageView alloc] init];
     logoImg.image  = [UIImage imageNamed:@"online-payment"];
@@ -352,7 +353,9 @@
     NSString *goodsName = @"商户收款";
     
     //元转分
-    NSString *Minmoney = [NSString stringWithFormat:@"%ld",[moneyLab.text integerValue]*100];
+    NSString *Minmoney = [NSString stringWithFormat:@"%d",[moneyLab.text integerValue]*100];
+    
+    HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     
     //区分paytype,2:传@“11”，银联支付；其他：@“1”，快捷支付
     NSString *paytype = @"1";
@@ -381,7 +384,7 @@
         
         NSDictionary *resultdic = [result JSONValue];
         NSString *code = resultdic[@"code"];
-        NSLog(@"%@",resultdic);
+        //NSLog(@"%@",resultdic);
         NSString *msg = resultdic[@"msg"];
         if ([code isEqualToString:@"000000"]) {
             
@@ -411,18 +414,24 @@
             }else {
                 
             }
+            //隐藏HUD
+            [HUD hide:YES];
             
             OrderSureVc.bindCards = arrar;
             [self.navigationController pushViewController:OrderSureVc animated:YES];
             
         }else {
-            
+            //隐藏HUD
+            [HUD hide:YES];
             [JNSHAutoSize showMsg:msg];
             
         }
         
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
+        //隐藏HUD
+        [HUD hide:YES];
+        [JNSHAutoSize showMsg:@"您好像没有连接网络，请连接网络重试。"];
     }];
     
 }

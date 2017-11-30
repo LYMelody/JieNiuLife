@@ -253,7 +253,7 @@
         
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
-        
+        [JNSHAutoSize showMsg:@"您好像没有连接网络，请连接网络重试。"];
     }];
     
 }
@@ -368,7 +368,7 @@
                                  };
     NSString *params = [RequestDic JSONFragment];
     [IBHttpTool postWithURL:JNSHTestUrl params:params success:^(id result) {
-        NSLog(@"%@",result);
+        //NSLog(@"%@",result);
         
         NSDictionary *resultDic = [result JSONValue];
         NSString *code = resultDic[@"code"];
@@ -390,6 +390,8 @@
         CodeCell.codeBtn.enabled = YES;
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
+        CodeCell.codeBtn.enabled = YES;
+        [JNSHAutoSize showMsg:@"您好像没有连接网络，请连接网络重试。"];
     }];
     
 }

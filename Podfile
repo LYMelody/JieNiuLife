@@ -12,10 +12,8 @@ target 'JieNiuShenghuo' do
   pod 'ShareSDK3/ShareSDKUI'
   pod 'ShareSDK3/ShareSDKPlatforms/WeChat'
   pod 'ShareSDK3/ShareSDKPlatforms/SinaWeibo'
-  pod 'JPush'
   pod 'MJRefresh'
   pod 'UMengAnalytics'
-  pod 'Pgyer'
-  pod 'PgyUpdate'
+   
 end 
 

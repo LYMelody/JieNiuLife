@@ -57,7 +57,6 @@
     navBackImg.backgroundColor = ColorTabBarBackColor;
     [self.view addSubview:navBackImg];
     
-    
     //返回按钮
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:self action:nil];
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
@@ -154,6 +153,7 @@
         NSLog(@"%@",error);
         CommitBtn.enabled = YES;
         [HUD hide:YES];
+        [JNSHAutoSize showMsg:NetInAvaiable];
     }];
 }
 
@@ -193,8 +193,8 @@
             JNSHPayResultViewController *PayResultVc = [[JNSHPayResultViewController alloc] init];
             PayResultVc.hidesBottomBarWhenPushed = YES;
             
-            if ([status isEqualToString:@"12"] || [status isEqualToString:@"20"] || [status isEqualToString:@"30"]) {
-                NSLog(@"%@",orderMemo);
+            if ([status isEqualToString:@"20"] || [status isEqualToString:@"30"]) {
+                //NSLog(@"%@",orderMemo);
                 [HUD hide:YES];
                 anthorIndex = 0;
                 [anthorTimer invalidate];
@@ -207,8 +207,8 @@
                 PayResultVc.bankAccount = self.bankNo;
                 PayResultVc.product = product;
                 [self.navigationController pushViewController:PayResultVc animated:YES];
-            }else if ((anthorIndex == 0) && ([status isEqualToString:@"11"] || [status isEqualToString:@"13"])) {
-                NSLog(@"%@",orderMemo);
+            }else if ((anthorIndex == 0) && ([status isEqualToString:@"11"] || [status isEqualToString:@"13"] || [status isEqualToString:@"12"])) {
+                //NSLog(@"%@",orderMemo);
                 [HUD hide:YES];
                 anthorIndex = 0;
                 [anthorTimer invalidate];
@@ -223,7 +223,7 @@
                 [self.navigationController pushViewController:PayResultVc animated:YES];
             }else if ([status isEqualToString:@"21"]) {
                 [HUD hide:YES];
-                NSLog(@"%@",orderMemo);
+                //NSLog(@"%@",orderMemo);
                 anthorIndex = 0;
                 [anthorTimer invalidate];
                 PayResultVc.orderStatus = @"FAIL";
@@ -384,6 +384,7 @@
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
         CodeCell.codeBtn.enabled = YES;
+        [JNSHAutoSize showMsg:NetInAvaiable];
     }];
 }
 

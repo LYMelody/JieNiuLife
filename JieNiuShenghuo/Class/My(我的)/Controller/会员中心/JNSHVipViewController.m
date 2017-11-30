@@ -526,8 +526,6 @@
     if (!mealDic) {
         mealDic = [[NSArray alloc] init];
     }
-
-    //
     //禁止滑动延迟
     scrollView.delaysContentTouches = NO;
     
@@ -541,8 +539,7 @@
     NSString *time = [JNSHAutoSize getTimeNow];
     //NSString *goodsName = @"商户会员购买";
     
-    
-    NSString *MinMoney = [NSString stringWithFormat:@"%ld",[totalPrice integerValue]*100];
+    NSString *MinMoney = [NSString stringWithFormat:@"%d",[totalPrice integerValue]*100];
     
     NSDictionary *dic = @{
                           @"payType":@"1",
@@ -590,21 +587,21 @@
         
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
+        [JNSHAutoSize showMsg:NetInAvaiable];
     }];
 }
-
 
 - (void)select:(UITapGestureRecognizer *)sender {
     
     UIView *selectView = sender.view;
     
-    NSString *str = [NSString stringWithFormat:@"总价：￥%ld",[mealDic[0][@"price"] integerValue]/100];
+    NSString *str = [NSString stringWithFormat:@"总价：￥%d",[mealDic[0][@"price"] integerValue]/100];
     
     if (selectView == nityImg) {
         
         nityImg.backgroundColor = lightOrgeron;
         halfYearImg.backgroundColor = [UIColor whiteColor];
-        totalPrice = [NSString stringWithFormat:@"%ld",[mealDic[0][@"price"] integerValue]/100];
+        totalPrice = [NSString stringWithFormat:@"%d",[mealDic[0][@"price"] integerValue]/100];
         vipcode = mealDic[0][@"code"];
                    
     }else if (selectView == halfYearImg) {
@@ -612,8 +609,8 @@
         nityImg.backgroundColor = [UIColor whiteColor];
         halfYearImg.backgroundColor = lightOrgeron;
         //设置总价
-        str = [NSString stringWithFormat:@"总价：￥%ld",[mealDic[1][@"price"] integerValue]/100];
-        totalPrice = [NSString stringWithFormat:@"%ld",[mealDic[1][@"price"] integerValue]/100];
+        str = [NSString stringWithFormat:@"总价：￥%d",[mealDic[1][@"price"] integerValue]/100];
+        totalPrice = [NSString stringWithFormat:@"%d",[mealDic[1][@"price"] integerValue]/100];
         vipcode = mealDic[1][@"code"];
     }
     
@@ -663,13 +660,13 @@
             mealDic = resultdic[@"meal"];
             if([resultdic[@"meal"] isKindOfClass:[NSArray class]]) {
                 if((totalPrice == nil) || [totalPrice isEqualToString:@""]) {
-                    totalPrice = [NSString stringWithFormat:@"%ld",[mealDic[0][@"price"] integerValue]/100];
+                    totalPrice = [NSString stringWithFormat:@"%d",[mealDic[0][@"price"] integerValue]/100];
                 }
                 leftLab.text = mealDic[0][@"title"];
-                NityrightLab.text = [NSString stringWithFormat:@"￥%ld",[mealDic[0][@"price"] integerValue]/100];
+                NityrightLab.text = [NSString stringWithFormat:@"￥%d",[mealDic[0][@"price"] integerValue]/100];
                 halfYearLab.text = mealDic[1][@"title"];
-                halfLab.text = [NSString stringWithFormat:@"￥%ld",[mealDic[1][@"price"] integerValue]/100];
-                NSString *strr = [NSString stringWithFormat:@"总价：%ld",[mealDic[0][@"price"] integerValue]/100];
+                halfLab.text = [NSString stringWithFormat:@"￥%d",[mealDic[1][@"price"] integerValue]/100];
+                NSString *strr = [NSString stringWithFormat:@"总价：%d",[mealDic[0][@"price"] integerValue]/100];
                 NSMutableAttributedString *attri = [[NSMutableAttributedString alloc] initWithString:strr];
                 [attri addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:NSMakeRange(3, (strr.length - 3))];
                 totalPriceLab.attributedText = attri;

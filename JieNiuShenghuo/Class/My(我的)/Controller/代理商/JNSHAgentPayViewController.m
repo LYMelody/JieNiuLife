@@ -33,11 +33,12 @@
     self.view.backgroundColor = ColorTabBarBackColor;
     
     self.navBarBgAlpha = @"1.0";
+    
 }
 
 - (void)viewDidLoad {
-    [super viewDidLoad];
     
+    [super viewDidLoad];
     
     //返回按钮
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:self action:nil];
@@ -197,8 +198,6 @@
         make.height.mas_equalTo([JNSHAutoSize height:41]);
     }];
     
-    
-    
 }
 
 - (void)pay {
@@ -208,7 +207,6 @@
     [self beAgent];
     
 
-    
     
 }
 

@@ -170,7 +170,6 @@
                
            }];
             
-            
         }else if (btn.tag == 101) {
             self.leftBtn.selected = NO;
             _currentTag = 101;
@@ -184,24 +183,17 @@
                 
                 self.bottomLine.frame = frame;
                 
-                
-                
             }];
-            
-            
         }
-        
         btn.selected = ! btn.selected;
         
     }else {                 //已经选择
-        
         
     }
 }
 
 - (void)calendarViewDidChange:(id)sender {
     //self.datePicker.date = self.calendarView.selectedDate;
-    
     
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     formatter.dateFormat = @"YYYY-MM-dd";
@@ -214,6 +206,7 @@
     }else {                    //终止时间
         [self.rightBtn setTitle:time forState:UIControlStateNormal];
     }
+    
 }
 
 - (void)showInView:(UIView *)view {

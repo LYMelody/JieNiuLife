@@ -20,6 +20,8 @@ typedef void(^ChangeCardBlock)(void);
 
 @property(nonatomic,strong)UIButton *changeBtn;
 
+@property(nonatomic,assign)BOOL ShowBottomLine;
+
 @property(nonatomic,copy)ChangeCardBlock changeCardBlock;
 
 @end

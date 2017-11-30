@@ -136,7 +136,7 @@
     NSString *params = [requestDic JSONFragment];
     [IBHttpTool postWithURL:JNSHTestUrl params:params success:^(id result) {
         
-        NSLog(@"%@",result);
+        //NSLog(@"%@",result);
         
         NSDictionary *resultdic = [result JSONValue];
         NSString *code = resultdic[@"code"];
@@ -160,7 +160,7 @@
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
         
-        //[hud hide:YES];
+        [JNSHAutoSize showMsg:NetInAvaiable];
         
     }];
 }
@@ -170,7 +170,6 @@
     [self.navigationController popViewControllerAnimated:YES];
     
 }
-
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
@@ -269,7 +268,6 @@
             
             timer = [NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(countDown) userInfo:nil repeats:YES];
             
-            
         }else {
             
             [JNSHAutoSize showMsg:msg];
@@ -279,6 +277,7 @@
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
         CodeCell.codeBtn.enabled = YES;
+        [JNSHAutoSize showMsg:NetInAvaiable];
     }];
     
 }

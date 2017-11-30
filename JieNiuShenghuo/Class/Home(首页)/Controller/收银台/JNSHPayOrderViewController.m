@@ -198,6 +198,7 @@
         NSLog(@"%@",error);
         CommitBtn.enabled = YES;
         [HUD hide:YES];
+        [JNSHAutoSize showMsg:NetInAvaiable];
     }];
 }
 
@@ -223,7 +224,7 @@
         NSDictionary *dic = [result JSONValue];
         NSString *code = dic[@"code"];
         NSString *msg = dic[@"msg"];
-        NSLog(@"%@",dic);
+        //NSLog(@"%@",dic);
         if (![code isEqualToString:@"000000"]) {
             [JNSHAutoSize showMsg:msg];
             [HUD hide:YES];
@@ -238,7 +239,7 @@
             PayResultVc.hidesBottomBarWhenPushed = YES;
             
             if ([status isEqualToString:@"20"] || [status isEqualToString:@"30"]) { //支付成功
-                NSLog(@"%@",orderMemo);
+                //NSLog(@"%@",orderMemo);
                 [HUD hide:YES];
                 anthorIndex = 0;
                 [anthorTimer invalidate];
@@ -252,7 +253,7 @@
                 PayResultVc.product = product;
                 [self.navigationController pushViewController:PayResultVc animated:YES];
             }else if ((anthorIndex == 0) && ([status isEqualToString:@"11"] || [status isEqualToString:@"13"] || [status isEqualToString:@"12"])) {  //查询中
-                NSLog(@"%@",orderMemo);
+                //NSLog(@"%@",orderMemo);
                 [HUD hide:YES];
                 anthorIndex = 0;
                 [anthorTimer invalidate];
@@ -267,7 +268,7 @@
                 [self.navigationController pushViewController:PayResultVc animated:YES];
             }else if ([status isEqualToString:@"21"]) {        //失败
                 [HUD hide:YES];
-                NSLog(@"%@",orderMemo);
+                //NSLog(@"%@",orderMemo);
                 anthorIndex = 0;
                 [anthorTimer invalidate];
                 PayResultVc.orderStatus = @"FAIL";
@@ -503,7 +504,7 @@
         NSDictionary *resultdic = [result JSONValue];
         NSString *code = resultdic[@"code"];
         NSString *msg = resultdic[@"msg"];
-        NSLog(@"%@",resultdic);
+        //NSLog(@"%@",resultdic);
         if([code isEqualToString:@"000000"]) {
             
             index = 59;
@@ -521,6 +522,7 @@
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
         CodeCell.codeBtn.enabled = YES;
+        [JNSHAutoSize showMsg:NetInAvaiable];
     }];
 
 }
@@ -536,13 +538,10 @@
         CodeCell.codeBtn.enabled = YES;
         [timer invalidate];
     }else {
-        
         [CodeCell.codeBtn setTitle:[NSString stringWithFormat:@"重新获取%lds",(long)index] forState:UIControlStateNormal];
         [CodeCell.codeBtn setBackgroundColor:GrayColor];
         CodeCell.codeBtn.enabled = NO;
-        
     }
-
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {

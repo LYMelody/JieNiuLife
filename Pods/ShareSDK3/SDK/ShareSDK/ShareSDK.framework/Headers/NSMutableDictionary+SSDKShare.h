@@ -46,6 +46,15 @@
  */
 - (void)SSDKEnableSinaWeiboAPIShare;
 
+
+/**
+ 使用第三方应用插件进行分享 (暂只支持微信 QQ TIM) iOS11 不可用
+    微信   支持  本地图片(1-9张) 本地视频(SSDKContentTypeFile) 本地音频(SSDKContentTypeFile) 链接(只有链接有作用标题 说明设置无效)
+ QQ&TIM   支持  本地图片(1-9张) 本地视频(SSDKContentTypeFile) 本地音频(SSDKContentTypeFile) 链接(只有链接有作用标题 说明设置无效)
+    QQiPad版本不支持
+ */
+- (void)SSDKEnableExtensionShare;
+
 /**
  *  设置分享参数
  *
@@ -631,21 +640,6 @@
                          platformType:(SSDKPlatformType)platformType;
 
 /**
- *  设置支付宝好友分享参数
- *
- *  @param text  分享文本
- *  @param image 分享图片，可以为UIImage、NSString（图片路径）、NSURL（图片路径）、SSDKImage。
- *  @param title 标题
- *  @param url   分享链接
- *  @param type  分享类型，仅支持Text、Image、WebPage
- */
-- (void)SSDKSetupAliPaySocialParamsByText:(NSString *)text
-                                    image:(id)image
-                                    title:(NSString *)title
-                                      url:(NSURL *)url
-                                     type:(SSDKContentType)type __deprecated_msg("use [SSDKSetupAliPaySocialParamsByText:image:title:url:type:platformType:] method instead");
-
-/**
  *  设置支付宝分享参数
  *
  *  @param text  分享文本
@@ -653,18 +647,18 @@
  *  @param title 标题
  *  @param url   分享链接
  *  @param type  分享类型，仅支持Text、Image、WebPage
- *  @param platformType 分享平台类型，仅支持输入SSDKPlatformTypeAliPaySocial和SSDKPlatformTypeAliPaySocialTimeline
+ *  @param platformType 分享平台类型，仅支持输入SSDKPlatformTypeAliSocial和SSDKPlatformTypeAliSocialTimeline
  *  分享类型，平台支持情况如下：
- *  SSDKPlatformTypeAliPaySocial(支付宝好友):支持Text、Image、WebPage
- *  SSDKPlatformTypeAliPaySocialTimeline(支付宝朋友圈):支持Image、WebPage
+ *  SSDKPlatformTypeAliSocial(支付宝好友):支持Text、Image、WebPage
+ *  SSDKPlatformTypeAliSocialTimeline(支付宝朋友圈):支持Image、WebPage
  *
  */
-- (void)SSDKSetupAliPaySocialParamsByText:(NSString *)text
-                                    image:(id)image
-                                    title:(NSString *)title
-                                      url:(NSURL *)url
-                                     type:(SSDKContentType)type
-                             platformType:(SSDKPlatformType)platformType;
+- (void)SSDKSetupAliSocialParamsByText:(NSString *)text
+                                image:(id)image
+                                title:(NSString *)title
+                                  url:(NSURL *)url
+                                 type:(SSDKContentType)type
+                         platformType:(SSDKPlatformType)platformType;
 
 /**
  *  设置Pinterest分享参数

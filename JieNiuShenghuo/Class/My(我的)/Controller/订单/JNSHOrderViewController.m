@@ -145,7 +145,6 @@
         make.size.mas_equalTo(CGSizeMake((KscreenWidth - 1)/2.0, [JNSHAutoSize height:41]));
     }];
     
-    
     UITapGestureRecognizer *dateTap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dateTap)];
     dateTap.numberOfTapsRequired = 1;
     
@@ -220,7 +219,6 @@
 
 //获取订单数据
 - (void)requestForOrderList:(NSString *)startime endtime:(NSString *)endTime product:(NSString *)pro page:(NSInteger)page{
-    
     
     NSLog(@"#########当前页:%ld",page);
     
@@ -385,6 +383,7 @@
     } else {
         orderView = [[JNSHOrderStatusView alloc] initWithFrame:CGRectMake(0, [JNSHAutoSize height:46], KscreenWidth, KscreenHeight)];
         orderView.selectIndex = self.selectIndex;
+        orderView.array = array;
         __weak typeof(self) weakSelf = self;
         
         orderView.selectblock = ^(NSIndexPath *index) {  //类型选择
@@ -407,8 +406,6 @@
             strongSelf.currentPage = 0;
             //获取新的订单
             [strongSelf requestForOrderList:strongSelf.startTime endtime:strongSelf.endtime product:strongSelf.currentType page:strongSelf.currentPage];
-            
-            
         };
         
         orderView.dismissBlock = ^{
@@ -419,14 +416,12 @@
         self.rightArrow.image = [UIImage imageNamed:@"order_arror_up"];
         //orderView.selectIndex = 0;
         [orderView showinView:self.view];
+        
     }
-
 }
 
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    
-    
     
     return self.orderList.count;
     

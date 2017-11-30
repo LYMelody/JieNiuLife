@@ -70,8 +70,9 @@
 
 @property(nonatomic,copy)NSString *phone;             //客服热线
 
-@property(nonatomic,copy)NSString *viedoUrl;          //视频
+@property(nonatomic,copy)NSString *viedoUrl;          //视频链接
 
+@property(nonatomic,assign)BOOL IS_APPSTORE;            //AppStoreflag
 
 + (JNSYUserInfo *)getUserInfo;
 

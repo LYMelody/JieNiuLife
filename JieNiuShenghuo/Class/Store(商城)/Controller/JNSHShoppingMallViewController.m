@@ -40,6 +40,16 @@ static NSTimeInterval const KtimeInterval = 0.03;
     [super viewDidLoad];
     self.navigationItem.title = @"商城";
     self.view.backgroundColor = [UIColor whiteColor];
+    
+//    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+//    [button setTitle:@"用浏览器打开" forState:UIControlStateNormal];
+//    button.titleLabel.font = [UIFont systemFontOfSize:14];
+//    [button setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+//    [button addTarget:self action:@selector(openLink) forControlEvents:UIControlEventTouchUpInside];
+//    
+//    UIBarButtonItem *rightBtn = [[UIBarButtonItem alloc] initWithCustomView:button];
+//    self.navigationItem.rightBarButtonItem = rightBtn;
+    
    //自定义返回按钮
     UIButton *backBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     [backBtn setImage:[[UIImage imageNamed:@"back"] resizableImageWithCapInsets:UIEdgeInsetsMake(0, 0, 5, 0)] forState:UIControlStateNormal];
@@ -86,6 +96,15 @@ static NSTimeInterval const KtimeInterval = 0.03;
     [self.view addSubview:web];
     
 }
+
+- (void)openLink {
+    
+    NSLog(@"link");
+    
+    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"http://m.haidaowang.com/index.html#back_flag"]];
+    
+}
+
 
 #define mark - webViewDelegate
 - (void)webViewDidStartLoad:(UIWebView *)webView {

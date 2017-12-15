@@ -11,7 +11,9 @@
 
 @interface JNSHOrderSearchViewController : UIViewController
 
+@property(nonatomic,copy)NSString *startTime;
 
+@property(nonatomic,copy)NSString *endTime;
 
 
 @end

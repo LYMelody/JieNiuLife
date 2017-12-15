@@ -10,8 +10,13 @@
 #import "UIViewController+Cloudox.h"
 #import "Masonry.h"
 #import "JNSHTitleCell.h"
+#import "JNSYUserInfo.h"
+#import "SBJSON.h"
+#import "IBHttpTool.h"
 
 @interface JNSHAgentInfoViewController ()<UITableViewDelegate,UITableViewDataSource>
+
+@property(nonatomic,strong)NSArray *orderList;
 
 @end
 
@@ -21,6 +26,9 @@
     UIButton *btnTwo;
     UIButton *btnThree;
     NSInteger count;
+    NSString *type;
+    UITableView *table;
+    UILabel *numLab;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -140,7 +148,7 @@
         make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:80], [JNSHAutoSize height:15]));
     }];
     
-    UILabel *numLab = [[UILabel alloc] init];
+    numLab = [[UILabel alloc] init];
     numLab.font = [UIFont systemFontOfSize:13];
     numLab.textAlignment = NSTextAlignmentLeft;
     numLab.textColor = ColorText;
@@ -156,8 +164,10 @@
     
     count = 2;
     
+    //self.orderList = [[NSArray alloc] init];
+    
     //table
-    UITableView *table = [[UITableView alloc] initWithFrame:CGRectMake(0, [JNSHAutoSize height:68], KscreenWidth, self.view.bounds.size.height - [JNSHAutoSize height:(128+50)]) style:UITableViewStylePlain];
+    table = [[UITableView alloc] initWithFrame:CGRectMake(0, [JNSHAutoSize height:68], KscreenWidth, self.view.bounds.size.height - [JNSHAutoSize height:(128+50)]) style:UITableViewStylePlain];
     
     table.dataSource = self;
     table.delegate = self;
@@ -165,16 +175,17 @@
     table.backgroundColor = ColorTableBackColor;
     [self.view addSubview:table];
     
-    [table reloadData];
+    //[table reloadData];
+    type = @"L30";
+    //请求数据
+    [self requestForInfo:@"L30" page:0];
     
 }
 
-
 - (void)select:(UIButton *)sender {
     
-    
     if (sender.selected) {
-       
+        
         
     }else {
         
@@ -182,23 +193,70 @@
         if (sender.tag == 100) {
             btnTwo.selected = NO;
             btnThree.selected = NO;
+            type = @"L30";
         }else if (sender.tag == 101) {
             btnOne.selected = NO;
             btnThree.selected = NO;
+            type = @"L31";
         }else {
             btnOne.selected = NO;
             btnTwo.selected = NO;
+            type = @"L32";
         }
         
         //改变选择状态
         sender.selected = !sender.selected;
+        
+        [self requestForInfo:type page:0];
+        
     }
+}
+
+//获取数据
+- (void)requestForInfo:(NSString *)orgType page:(NSInteger)page {
+    
+    NSDictionary *dic = @{
+                          @"orgType":orgType,
+                          @"page":[NSString stringWithFormat:@"%ld",page],
+                          @"limit":[NSString stringWithFormat:@"%d",10]
+                          };
+    NSString *action = @"OrgChildInfo";
+    NSDictionary *requestDic =@{
+                                @"action":action,
+                                @"token":[JNSYUserInfo getUserInfo].userToken,
+                                @"data":dic
+                                };
+    NSString *params = [requestDic JSONFragment];
+    [IBHttpTool postWithURL:JNSHTestUrl params:params success:^(id result) {
+        NSDictionary *resultDic = [result JSONValue];
+        NSLog(@"%@",resultDic);
+        NSString *code = resultDic[@"code"];
+        if ([code isEqualToString:@"000000"]) {
+            if ([resultDic[@"records"] isKindOfClass:[NSArray class]]) {
+                
+                _orderList = resultDic[@"records"];
+                NSString *agent = nil;
+                if ([orgType isEqualToString:@"L30"]) {
+                    agent = @"办事处";
+                }else if ([orgType isEqualToString:@"L31"]) {
+                    agent = @"一级代理商";
+                }else if ([orgType isEqualToString:@"L32"]) {
+                    agent = @"特约代理商";
+                }
+                numLab.text = [NSString stringWithFormat:@"当前共有%ld个%@",_orderList.count,agent];
+                [table reloadData];
+            }
+        }
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    return (2*6 + 1);
+    NSLog(@"%@,%ld,%ld",_orderList,_orderList.count*6 + _orderList.count>0?(_orderList.count - 1):0,_orderList.count);
     
+    return (_orderList.count*6 + (_orderList.count>0?(_orderList.count - 1):0));
     
 }
 
@@ -216,22 +274,29 @@
         }else if (indexPath.row%7 == 5) {
             cell.ShowBottomLine = NO;
             cell.leftLab.text = @"名下总商户";
-            cell.rightLab.text = @"4521个";
+            cell.rightLab.text = [NSString stringWithFormat:@"%@",_orderList[indexPath.row/7][@"childUserCount"]];
         }else if (indexPath.row%7 == 4) {
             cell.leftLab.text = @"名下代理商";
-            cell.rightLab.text = @"1个";
+            cell.rightLab.text = [NSString stringWithFormat:@"%@",_orderList[indexPath.row/7][@"childOrgCount"]];
         }else if (indexPath.row%7 == 3) {
             cell.leftLab.text = @"开通时间";
-            cell.rightLab.text = @"2017-10-20";
+            cell.rightLab.text = _orderList[indexPath.row/7][@"openTime"];
         }else if (indexPath.row%7 == 2) {
             cell.leftLab.text = @"联系方式";
-            cell.rightLab.text = @"151****2344";
+            cell.rightLab.text = _orderList[indexPath.row/7][@"orgPhone"];
         }else if (indexPath.row%7 == 1) {
             cell.leftLab.text = @"代理级别";
-            cell.rightLab.text = @"一级代理商";
+            NSString *orgType = _orderList[indexPath.row/7][@"orgType"];
+            if ([orgType isEqualToString:@"L30"]) {
+                cell.rightLab.text = @"办事处";
+            }else if ([orgType isEqualToString:@"L31"]) {
+                cell.rightLab.text = @"一级代理";
+            }else if ([orgType isEqualToString:@"L32"]) {
+                cell.rightLab.text = @"特约代理";
+            }
         }else {
             cell.leftLab.text = @"代理名称";
-            cell.rightLab.text = @"张三丰/捷牛科技";
+            cell.rightLab.text = self.orderList[indexPath.row][@"orgName"];
         }
         
     }
@@ -248,10 +313,7 @@
         return 41;
     }
     
-    
 }
-
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

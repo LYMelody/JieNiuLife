@@ -13,6 +13,9 @@
 #import "JNSHSaleStatisticCell.h"
 #import "JNSHFenRunDetailCell.h"
 #import "JNSHFenRunDetailSearchViewController.h"
+#import "JNSYUserInfo.h"
+#import "SBJSON.h"
+#import "IBHttpTool.h"
 
 @interface JNSHFenRunDetailViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -22,7 +25,11 @@
 
 @property(nonatomic,strong)UIImageView *bottomLine;
 
+@property(nonatomic,copy)NSString *startTime;
 
+@property(nonatomic,copy)NSString *endTime;
+
+@property(nonatomic,strong)NSArray *orderList;
 
 @end
 
@@ -30,6 +37,7 @@
     
     NSInteger _currentTag;
     JNSHSingleCalendarView *SingleCader;
+    UITableView *table;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -151,8 +159,10 @@
         make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:51], [JNSHAutoSize height:21]));
     }];
     
+    self.orderList = [[NSArray alloc] init];
+    
     //tableview
-    UITableView *table = [[UITableView alloc] initWithFrame:CGRectMake(0, [JNSHAutoSize height:51], KscreenWidth, KscreenHeight - [JNSHAutoSize height:51+64+64-20]) style:UITableViewStylePlain];
+    table = [[UITableView alloc] initWithFrame:CGRectMake(0, [JNSHAutoSize height:51], KscreenWidth, KscreenHeight - [JNSHAutoSize height:51+64+64-20]) style:UITableViewStylePlain];
     table.delegate = self;
     table.dataSource = self;
     table.backgroundColor = ColorTableBackColor;
@@ -160,7 +170,23 @@
     table.tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, CGFLOAT_MIN)];
     [self.view addSubview:table];
     
+    //获取今天的订单
+    _startTime = [NSString stringWithFormat:@"%@ %@",[self getToday],@"00:00:00"];
+    _endTime = [NSString stringWithFormat:@"%@ %@",[self getToday],@"23:59:59"];
     
+    [self requestForOrderList:self.startTime endTime:self.endTime page:0];
+
+}
+
+//获取当时日期
+- (NSString*)getToday
+{
+    NSDate *today = [NSDate date];
+    NSDateFormatter *df = [[NSDateFormatter alloc] init];
+    [df setDateFormat:@"yyyy-MM-dd"];
+    NSString* dateString = [df stringFromDate:today];
+    //NSString *dateStr = [dateString stringByReplacingOccurrencesOfString:@"-" withString:@""];
+    return dateString;
 }
 
 - (void)dateSelect:(UIButton *)btn {
@@ -215,12 +241,13 @@
     }
 }
 
+//日历
 - (void)showCandle {
     
     if (SingleCader.alpha > 0) {
         [SingleCader dismiss];
     }
-    SingleCader = [[JNSHSingleCalendarView alloc] initWithFrame:CGRectMake(0, 52, KscreenWidth, 300)];
+    SingleCader = [[JNSHSingleCalendarView alloc] initWithFrame:CGRectMake(0, 52, KscreenWidth, KscreenHeight - 50)];
     
     __weak typeof(self) weakSelf = self;
     
@@ -228,8 +255,13 @@
         __strong typeof(self) strongSelf = weakSelf;
         if (_currentTag == 100) {
             [strongSelf.startBtn setTitle:date forState:UIControlStateNormal];
+            
+            strongSelf.startTime = date;
+            
+            
         }else {
             [strongSelf.EndBtn setTitle:date forState:UIControlStateNormal];
+            strongSelf.endTime = date;
         }
     };
     
@@ -239,19 +271,61 @@
 
 - (void)Search {
     
-    NSLog(@"search");
-    
     JNSHFenRunDetailSearchViewController *fenrunSearchVc = [[JNSHFenRunDetailSearchViewController alloc] init];
+    fenrunSearchVc.startTime = self.startTime;
+    fenrunSearchVc.endTime = self.endTime;
     fenrunSearchVc.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:fenrunSearchVc animated:YES];
+    
+    [self requestForOrderList:self.startTime endTime:self.endTime page:0];
     
     
 }
 
+- (void)requestForOrderList:(NSString *)startTime endTime:(NSString *)endTime page:(NSInteger)page {
+    
+    NSDictionary *dic = @{
+                          @"ts":startTime,
+                          @"te":endTime,
+                          @"page":[NSString stringWithFormat:@"%ld",page],
+                          @"limit":[NSString stringWithFormat:@"%d",10]
+                          };
+    
+    NSString *action = @"OrgProfitRecord";
+    
+    NSDictionary *requestDic = @{
+                                 @"action":action,
+                                 @"token":[JNSYUserInfo getUserInfo].userToken,
+                                 @"data":dic
+                                 };
+    
+    NSString *params = [requestDic JSONFragment];
+    
+    [IBHttpTool postWithURL:JNSHTestUrl params:params success:^(id result) {
+        NSDictionary *resultDic = [result JSONValue];
+        NSLog(@"%@",resultDic);
+        NSString *code = resultDic[@"code"];
+        if ([code isEqualToString:@"000000"]) {
+            if ([resultDic[@"records"] isKindOfClass:[NSArray class]]) {
+                self.orderList = resultDic[@"records"];
+                [table reloadData];
+            }
+        }else {
+            
+            NSString *msg = resultDic[@"msg"];
+            [JNSHAutoSize showMsg:msg];
+        }
+        
+        
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
+    
+}
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    return 10;
+    return self.orderList.count;
     
 }
 
@@ -262,11 +336,20 @@
     JNSHFenRunDetailCell *cell = [tableView dequeueReusableCellWithIdentifier:identy];
     if (cell == nil) {
         cell = [[JNSHFenRunDetailCell alloc] init];
-        cell.orderNumLab.text = @"￥20000.00";
-        cell.fenRunCashLab.text = @"￥200.00";
-        cell.saleTimeLab.text = @"2017-12-01 12:20:20";
-        cell.orderTypeLab.text = @"无卡快捷";
-        cell.orderNoLab.text = @"201711301220207897";
+        cell.orderNumLab.text = [NSString stringWithFormat:@"￥%.2f",[self.orderList[indexPath.row][@"profitPrice"] intValue]/100.0];
+        cell.fenRunCashLab.text = [NSString stringWithFormat:@"￥%.2f",[self.orderList[indexPath.row][@"amountPrice"] intValue]/100.0];
+        cell.saleTimeLab.text = [NSString stringWithFormat:@"%@",self.orderList[indexPath.row][@"orderTime"]];
+        NSString *payType = [NSString stringWithFormat:@"%@",self.orderList[indexPath.row][@"payType"]];
+        if ([payType isEqualToString:@"1"]) {
+            cell.orderTypeLab.text = @"无卡快捷";
+        }else if ([payType isEqualToString:@"11"]) {
+            cell.orderTypeLab.text = @"银联H5";
+        }else if ([payType isEqualToString:@"7"]) {
+            cell.orderTypeLab.text = @"银联扫码";
+        }else {
+            cell.orderTypeLab.text = @"蓝牙卡头";
+        }
+        cell.orderNoLab.text = [NSString stringWithFormat:@"%@",self.orderList[indexPath.row][@"orderNo"]];
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;

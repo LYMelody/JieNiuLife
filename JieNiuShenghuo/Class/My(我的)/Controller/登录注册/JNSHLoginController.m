@@ -424,11 +424,13 @@
             [User setObject:accountFiled.text forKey:@"UserAccount"];
             [User setObject:pwdTextFiled.text forKey:@"UserPwd"];
             [User synchronize];
-            //登录环信
             
-            //[self loginHXIM];
+            dispatch_time_t time = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1.5*NSEC_PER_SEC));
+            dispatch_after(time, dispatch_get_main_queue(), ^{
+                [self BackToLogin];
+            });
             
-            [self performSelector:@selector(BackToLogin) withObject:nil afterDelay:1.5];
+            //[self performSelector:@selector(BackToLogin) withObject:nil afterDelay:1.5];
             
         }else {
            

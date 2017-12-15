@@ -25,6 +25,7 @@
 #import "JNSHAgentManagerViewController.h"
 #import "JNSHOrderManagerViewController.h"
 #import "JNSHFenRunManagerViewController.h"
+#import "JNSHTiXianViewController.h"
 
 
 @interface JNSHAgentDetailViewController ()<UITableViewDelegate,UITableViewDataSource>
@@ -131,6 +132,11 @@
             [Cell.codeBtn setTitle:@"提现" forState:UIControlStateNormal];
             Cell.getcodeBlock = ^{
                 NSLog(@"提现啦!");
+                
+                JNSHTiXianViewController *TixianVc = [[JNSHTiXianViewController alloc] init];
+                TixianVc.hidesBottomBarWhenPushed = YES;
+                [self.navigationController pushViewController:TixianVc animated:YES];
+                
             };
             Cell.leftLab.text = @"分润";
             Cell.leftLab.font = [UIFont systemFontOfSize:15];

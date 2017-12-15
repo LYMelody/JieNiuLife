@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 
 static NSString *const adImageName = @"adImageName";
-#define kUserDefaults [NSUserDefaults standardUserDefaults]
+
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 

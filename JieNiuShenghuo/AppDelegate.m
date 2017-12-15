@@ -25,8 +25,8 @@
 //#import "JPUSHService.h"
 //#import <UserNotifications/UserNotifications.h>
 //蒲公英
-//#import "PgySDK/PgyManager.h"
-//#import "PgyUpdate/PgyUpdateManager.h"
+#import "PgySDK/PgyManager.h"
+#import "PgyUpdate/PgyUpdateManager.h"
 //友盟
 #import "UMMobClick/MobClick.h"
 
@@ -53,8 +53,8 @@
     
     //[NSThread sleepForTimeInterval:1];
     //蒲公英
-//    [[PgyManager sharedPgyManager] startManagerWithAppId:PgyAPPID];
-//    [[PgyManager sharedPgyManager] setEnableFeedback:NO];
+    [[PgyManager sharedPgyManager] startManagerWithAppId:PgyAPPID];
+    [[PgyManager sharedPgyManager] setEnableFeedback:NO];
 //    //检测更新
 //    [[PgyUpdateManager sharedPgyManager] startManagerWithAppId:PgyAPPID];
     
@@ -246,36 +246,38 @@
         [[UIApplication sharedApplication] setStatusBarHidden:NO];
         //版本更新
         //[self VersionUpdate];
-        //[[PgyUpdateManager sharedPgyManager] checkUpdate];
+        
+        [[PgyUpdateManager sharedPgyManager] checkUpdate];
     }
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         //下载广告图片并缓存
         [self getAdvertisingImage];
+        
     }) ;
     
 }
+
 #define mark 广告文件管理
 /*      根据图片名拼接文件路径  */
 - (NSString *)getFilePathWithImageName:(NSString *)imageName{
     
     if (imageName) {
+        
         NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
         NSString *filePath = [[paths objectAtIndex:0] stringByAppendingPathComponent:imageName];
         
         return filePath;
     }
     return nil;
+    
 }
 
 /*     判断文件是否存在 */
 -(BOOL)isFileExistWithFilePath:(NSString *)filePath {
     
     NSFileManager *fileManager = [NSFileManager defaultManager];
-   // BOOL isDirectory = FALSE;
-    
     return [fileManager fileExistsAtPath:filePath];
-    //return [fileManager fileExistsAtPath:filePath isDirectory:&isDirectory];
     
 }
 
@@ -297,7 +299,7 @@
     
     [IBHttpTool postWithURL:JNSHTestUrl params:params success:^(id result) {
         NSDictionary *resultDic = [result JSONValue];
-        NSLog(@"%@",resultDic);
+        //NSLog(@"%@",resultDic);
         if ([resultDic[@"adInfoList"] isKindOfClass:[NSArray class]]) {
             NSArray *imageList = resultDic[@"adInfoList"] ;
             if (imageList.count == 0) {
@@ -371,6 +373,7 @@
             [kUserDefaults setObject:duration forKey:@"ADDuration"];
             //存储是否可跳转
             [kUserDefaults setObject:jumpflag forKey:@"Jumpflag"];
+            
             [kUserDefaults synchronize];
             // 如果有广告链接，将广告链接也保存下来
         }else{
@@ -383,6 +386,7 @@
 /**
  *  删除旧图片
  */
+
 - (void)deleteOldImage
 {
     NSString *imageName = [kUserDefaults valueForKey:adImageName];
@@ -418,7 +422,6 @@
         NSLog(@"%@",error);
     }];
 }
-
 
 //#define mark - apns
 
@@ -465,28 +468,23 @@
 //
 //}
 
-
 - (void)applicationWillResignActive:(UIApplication *)application {
     // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
     // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
 }
-
 
 - (void)applicationDidEnterBackground:(UIApplication *)application {
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
 }
 
-
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
 }
 
-
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
 }
-
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.

@@ -186,7 +186,7 @@
             JNSHAccountInfoCell *Cell = [[JNSHAccountInfoCell alloc] init];
             Cell.leftLab.text = @"出生年月";
             NSString *birthDay = [JNSYUserInfo getUserInfo].birthday;
-            if (birthDay) {
+            if (birthDay &&![birthDay isEqualToString:@""]) {
                 //Cell.rightLab.text = birthDay;
                 NSString *front = [[JNSYUserInfo getUserInfo].birthday substringToIndex:4];
                 NSString *mid = [[JNSYUserInfo getUserInfo].birthday substringWithRange:NSMakeRange(4, 2)];

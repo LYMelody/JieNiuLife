@@ -27,12 +27,15 @@
 #import "JNSHWebViewController.h"
 //#import "PgyUpdateManager.h"
 #import "JNSHUpdateView.h"
+#import "UIImageView+WebCache.h"
 
 #define PgyAPPID @"f496f2435afee567bd3a11bd633b19de"
 
 @interface JNSHHomeViewController ()<SDCycleScrollViewDelegate>
 
 @property(nonatomic,strong)UIButton *TestBtn;
+
+@property(nonatomic,strong)NSArray *logoList;
 
 @end
 
@@ -48,6 +51,15 @@
     NSString *ticketExsist;
     NSString *timetag;
     SDCycleScrollView *ADScrollView;
+    UIImageView *CashLogo;
+    UILabel *CashLab;
+    UIImageView *VipLogoImg;
+    UILabel *VipLab;
+    UIImageView *CardLogoImg;
+    UILabel *CardLab;
+    UIImageView *ExpressLogoImg;
+    UILabel *ExpressLab;
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -70,7 +82,7 @@
     [super viewDidLoad];
 
     //切换APPstore状态
-    [JNSYUserInfo getUserInfo].IS_APPSTORE = YES;
+    [JNSYUserInfo getUserInfo].IS_APPSTORE = NO;
     
     //接收通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pushToAD) name:@"pushtoAd" object:nil];
@@ -144,10 +156,18 @@
     CashTap.numberOfTapsRequired = 1;
     [CashBackImg addGestureRecognizer:CashTap];
     
-    UIImageView *CashLogo = [[UIImageView alloc] init];
+    CashLogo = [[UIImageView alloc] init];
     CashLogo.image = [UIImage imageNamed:@"home_grid_1_1"];
     CashLogo.highlightedImage = [UIImage imageNamed:@"home_grid_1_1"];
     CashLogo.highlighted = YES;
+    
+    NSString *filePath = [JNSHAutoSize getFilePathWithImageName:[kUserDefaults objectForKey:@"HomeBtnImgOne"]];
+    BOOL isExit = [JNSHAutoSize isFileExistWithFilePath:filePath];
+    if (isExit) {
+        CashLogo.image = [UIImage imageWithContentsOfFile:filePath];
+        CashLogo.highlightedImage = [UIImage imageWithContentsOfFile:filePath];
+    }
+    
     [CashBackImg addSubview:CashLogo];
     
     [CashLogo mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -156,11 +176,17 @@
         make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:40], [JNSHAutoSize height:40]));
     }];
     
-    UILabel *CashLab = [[UILabel alloc] init];
+    CashLab = [[UILabel alloc] init];
     CashLab.font = [UIFont systemFontOfSize:15];
     CashLab.textColor = ColorText;
     CashLab.textAlignment = NSTextAlignmentLeft;
-    CashLab.text = @"收银台";
+    
+    if ([kUserDefaults objectForKey:@"HomeBtnTitleOne"]) {
+        CashLab.text = [kUserDefaults objectForKey:@"HomeBtnTitleOne"];
+    }else {
+        CashLab.text = @"收银台";
+    }
+    
     [CashBackImg addSubview:CashLab];
     [CashLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(CashBackImg);
@@ -186,8 +212,14 @@
     vipTap.numberOfTapsRequired = 1;
     [VipBackImg addGestureRecognizer:vipTap];
     
-    UIImageView *VipLogoImg = [[UIImageView alloc] init];
+    VipLogoImg = [[UIImageView alloc] init];
     VipLogoImg.image = [UIImage imageNamed:@"home_grid_1_2"];
+    filePath = [JNSHAutoSize getFilePathWithImageName:[kUserDefaults objectForKey:@"HomeBtnImgTwo"]];
+    isExit = [JNSHAutoSize isFileExistWithFilePath:filePath];
+    if(isExit) {
+        VipLogoImg.image = [UIImage imageWithContentsOfFile:filePath];
+        VipLogoImg.highlightedImage = [UIImage imageWithContentsOfFile:filePath];
+    }
     [VipBackImg addSubview:VipLogoImg];
     
     [VipLogoImg mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -196,8 +228,13 @@
         make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:40], [JNSHAutoSize height:40]));
     }];
     
-    UILabel *VipLab = [[UILabel alloc] init];
-    VipLab.text = @"开通会员";
+    VipLab = [[UILabel alloc] init];
+    if ([kUserDefaults objectForKey:@"HomeBtnTitleTwo"]) {
+        VipLab.text = [kUserDefaults objectForKey:@"HomeBtnTitleTwo"];
+    }else {
+        VipLab.text = @"开通会员";
+    }
+    
     VipLab.textColor = ColorText;
     VipLab.font = [UIFont systemFontOfSize:15];
     VipLab.textAlignment = NSTextAlignmentLeft;
@@ -225,8 +262,14 @@
         make.size.mas_equalTo(CGSizeMake((KscreenWidth - 2)/2.0, [JNSHAutoSize height:72]));
     }];
     
-    UIImageView *CardLogoImg = [[UIImageView alloc] init];
+    CardLogoImg = [[UIImageView alloc] init];
     CardLogoImg.image = [UIImage imageNamed:@"home_grid_2_1-1"];
+    filePath = [JNSHAutoSize getFilePathWithImageName:[kUserDefaults objectForKey:@"HomeBtnImgThree"]];
+    isExit = [JNSHAutoSize isFileExistWithFilePath:filePath];
+    if (isExit) {
+        CardLogoImg.image = [UIImage imageWithContentsOfFile:filePath];
+        CardLogoImg.highlightedImage = [UIImage imageWithContentsOfFile:filePath];
+    }
     [CardBackImg addSubview:CardLogoImg];
     
     [CardLogoImg mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -235,8 +278,12 @@
         make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:40], [JNSHAutoSize height:40]));
     }];
     
-    UILabel *CardLab = [[UILabel alloc] init];
-    CardLab.text = @"银联快捷";
+    CardLab = [[UILabel alloc] init];
+    if ([kUserDefaults objectForKey:@"HomeBtnTitleThree"]) {
+        CardLab.text = [kUserDefaults objectForKey:@"HomeBtnTitleThree"];
+    }else {
+        CardLab.text = @"银联快捷";
+    }
     CardLab.textColor = ColorText;
     CardLab.textAlignment = NSTextAlignmentLeft;
     CardLab.font = [UIFont systemFontOfSize:15];
@@ -264,8 +311,14 @@
         make.height.mas_equalTo([JNSHAutoSize height:72]);
     }];
     
-    UIImageView *ExpressLogoImg = [[UIImageView alloc] init];
+    ExpressLogoImg = [[UIImageView alloc] init];
     ExpressLogoImg.image = [UIImage imageNamed:@"home_grid_2_2-1"];
+    filePath = [JNSHAutoSize getFilePathWithImageName:[kUserDefaults objectForKey:@"HomeBtnImgFour"]];
+    isExit = [JNSHAutoSize isFileExistWithFilePath:filePath];
+    if (isExit) {
+        ExpressLogoImg.image = [UIImage imageWithContentsOfFile:filePath];
+        ExpressLogoImg.highlightedImage = [UIImage imageWithContentsOfFile:filePath];
+    }
     [ExpressBackImg addSubview:ExpressLogoImg];
     
     [ExpressLogoImg mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -274,8 +327,15 @@
         make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:43], [JNSHAutoSize height:43]));
     }];
     
-    UILabel *ExpressLab = [[UILabel alloc] init];
+    ExpressLab = [[UILabel alloc] init];
     ExpressLab.text = @"我要贷款";
+    
+    if ([kUserDefaults objectForKey:@"HomeBtnTitleFour"]) {
+        ExpressLab.text = [kUserDefaults objectForKey:@"HomeBtnTitleFour"];
+    }else {
+        ExpressLab.text = @"我要贷款";
+    }
+    
     if([JNSYUserInfo getUserInfo].IS_APPSTORE) {
         ExpressLab.text = @"用卡百科";
         ExpressLogoImg.image = [UIImage imageNamed:@"home_grid_2_2-"];
@@ -461,6 +521,9 @@
     //[self VersionUpdate];
     
     //获取基本信息
+    
+    self.logoList = [[NSArray alloc] init];
+    
     [self initUserInfo];
     
 }
@@ -592,7 +655,7 @@
     }
     
 }
-
+//领取奖券
 - (void)requestForTicketStatus:(NSString *)time{
     
     NSDictionary *dic = @{
@@ -719,7 +782,7 @@
     
     [IBHttpTool postWithURL:JNSHTestUrl params:params success:^(id result) {
         NSDictionary *resultDic = [result JSONValue];
-        NSLog(@"%@",resultDic);
+        //NSLog(@"%@",resultDic);
         
         if ([resultDic[@"adInfoList"] isKindOfClass:[NSArray class]]) {
             
@@ -826,6 +889,15 @@
     jnshCashDeskVc.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:jnshCashDeskVc animated:YES];
     
+//    if([self.logoList[0][@"url"] isEqualToString:@"jnlife://syt"]) {
+//        JNSHCashDeskViewController *jnshCashDeskVc = [[JNSHCashDeskViewController alloc] init];
+//        jnshCashDeskVc.hidesBottomBarWhenPushed = YES;
+//        [self.navigationController pushViewController:jnshCashDeskVc animated:YES];
+//    }else {
+//        [JNSHAutoSize showMsg:@"跳转参数出错"];
+//    }
+    
+    
 }
 //开通会员
 - (void)tapToVip {
@@ -836,13 +908,23 @@
         VipVc.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:VipVc animated:YES];
     }else {
+        
         JNSHLoginController *LogInVc = [[JNSHLoginController alloc] init];
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:LogInVc];
         [self presentViewController:nav animated:YES completion:nil];
+        
+//        if ([self.logoList[1][@"url"] isEqualToString:@"jnlife://openvip"]) {
+//            JNSHLoginController *LogInVc = [[JNSHLoginController alloc] init];
+//            UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:LogInVc];
+//            [self presentViewController:nav animated:YES completion:nil];
+//        }else {
+//            [JNSHAutoSize showMsg:@"跳转参数出错"];
+//        }
+        
     }
 }
 
-//办信用卡
+//银联快捷
 - (void)CardTapAction {
     
     JNSHCashDeskViewController *CashDeskVc = [[JNSHCashDeskViewController alloc] init];
@@ -850,12 +932,13 @@
     CashDeskVc.tag = 2;
     [self.navigationController pushViewController:CashDeskVc animated:YES];
     
-//    JNSHWebViewController *WEBvc = [[JNSHWebViewController alloc] init];
-//    WEBvc.url = @"http://www.hiima.cn/promot/product/index/scene_id/2";
-//    WEBvc.Navtitle = @"办信用卡";
-//    WEBvc.hidesBottomBarWhenPushed = YES;
-//    [self.navigationController pushViewController:WEBvc animated:YES];
-    
+//    if ([self.logoList[2][@"url"] isEqualToString:@"jnlife://unionh5"]) {
+//        JNSHCashDeskViewController *CashDeskVc = [[JNSHCashDeskViewController alloc] init];
+//        CashDeskVc.hidesBottomBarWhenPushed = YES;
+//        CashDeskVc.tag = 2;
+//        [self.navigationController pushViewController:CashDeskVc animated:YES];
+//    }
+
 }
 //贷款、用卡百科
 - (void)daiKuan {
@@ -875,6 +958,12 @@
         webVc.url = @"http://www.hiima.cn/promot/product/index/scene_id/3";
     }
     
+//    if (self.logoList[3][@"url"] != nil && ![self.logoList[3][@"url"] isEqualToString:@""]) {
+//        webVc.Navtitle = self.logoList[3][@"title"];
+//        webVc.url = self.logoList[3][@"url"];
+//    }
+
+    
     [self.navigationController pushViewController:webVc animated:YES];
 }
 
@@ -888,6 +977,7 @@
         webVc.url = url;
         [self.navigationController pushViewController:webVc animated:YES];
     }
+    
 }
 
 //版本检测
@@ -905,23 +995,24 @@
                                  };
     NSString *params = [requestDic JSONFragment];
     [IBHttpTool postWithURL:JNSHTestUrl params:params success:^(id result) {
-        NSDictionary *resultDic = [params JSONValue];
-        NSLog(@"%@",resultDic);
+        //NSDictionary *resultDic = [params JSONValue];
+        //NSLog(@"%@",resultDic);
         
         JNSHUpdateView *updateView = [[JNSHUpdateView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight + self.tabBarController.tabBar.frame.size.height)];
         [updateView show:@"" message:@"" inView:self.view.window];
         
-        
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
     }];
+    
 }
 
 //商户初始化信息
 - (void)initUserInfo {
     
     NSDictionary *dic = @{
-                          @"timestamp":[JNSHAutoSize getTimeNow]
+                          @"timestamp":[JNSHAutoSize getTimeNow],
+                          @"os":@"IOS"
                           };
     NSString *action = @"AppInitState";
     NSDictionary *requestDic = @{
@@ -932,13 +1023,89 @@
     NSString *params = [requestDic JSONFragment];
     
     [IBHttpTool postWithURL:JNSHTestUrl params:params success:^(id result) {
+        
         NSDictionary *resultDic = [result JSONValue];
+        
+        NSLog(@"dic : %@",resultDic);
         [JNSYUserInfo getUserInfo].phone = resultDic[@"phone"];     //客服电话
         [JNSYUserInfo getUserInfo].viedoUrl = resultDic[@"videoUrl"];
+        
+        NSArray *indexPageModel = resultDic[@"indexPageModel"];
+        self.logoList = indexPageModel;
+        
+        if (!indexPageModel.count) {
+            return ;
+        }
+        
+        if(indexPageModel[0][@"title"] != nil && !([indexPageModel[0][@"title"] isEqualToString:@""])) {
+            //CashLab.text = indexPageModel[0][@"title"];
+            [kUserDefaults setObject:indexPageModel[0][@"title"] forKey:@"HomeBtnTitleOne"];
+            NSString *imageurl = indexPageModel[0][@"pic"];
+            [self reSetImageCache:imageurl key:@"HomeBtnImgOne"];
+        }
+        if (indexPageModel[1][@"title"] != nil && !([indexPageModel[1][@"title"] isEqualToString:@""])) {
+            //VipLab.text = indexPageModel[1][@"title"];
+            [kUserDefaults setObject:indexPageModel[1][@"title"] forKey:@"HomeBtnTitleTwo"];
+            NSString *imageurl = indexPageModel[1][@"pic"];
+            [self reSetImageCache:imageurl key:@"HomeBtnImgTwo"];
+        }
+        if (indexPageModel[2][@"title"] != nil && !([indexPageModel[2][@"title"] isEqualToString:@""])) {
+            //CardLab.text = indexPageModel[2][@"title"];
+            [kUserDefaults setObject:indexPageModel[2][@"title"] forKey:@"HomeBtnTitleThree"];
+            NSString *imageUrl = indexPageModel[2][@"pic"];
+            [self reSetImageCache:imageUrl key:@"HomeBtnImgThree"];
+        }
+        if (indexPageModel[3][@"title"] != nil && !([indexPageModel[3][@"title"] isEqualToString:@""])) {
+            //ExpressLab.text = indexPageModel[3][@"title"];
+            [kUserDefaults setObject:indexPageModel[3][@"title"] forKey:@"HomeBtnTitleFour"];
+            NSString *imageUrl = indexPageModel[3][@"pic"];
+            [self reSetImageCache:imageUrl key:@"HomeBtnImgFour"];
+        }
         
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
     }];
+}
+
+//更新缓存
+- (void)reSetImageCache:(NSString *)imageUrl key:(NSString *)key {
+    
+    NSArray *iamgeUrlArr = [imageUrl componentsSeparatedByString:@"/"];
+    NSString *imageName = [iamgeUrlArr lastObject];
+    
+    NSString *filePath = [JNSHAutoSize getFilePathWithImageName:imageName];
+    BOOL isExit = [JNSHAutoSize isFileExistWithFilePath:filePath];
+    if (!isExit) {
+        
+        [self downLoadImageWithUrl:imageUrl imageName:imageName key:key];
+        
+    }
+}
+
+//下载图片
+- (void)downLoadImageWithUrl:(NSString *)imageUrl imageName:(NSString *)iamgeName key:(NSString *)key{
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:imageUrl]];
+        UIImage *image = [UIImage imageWithData:data];
+        NSString *filePath = [JNSHAutoSize getFilePathWithImageName:iamgeName];
+        NSLog(@"路径：%@",filePath);
+        if ([UIImagePNGRepresentation(image) writeToFile:filePath atomically:YES]) {
+            NSLog(@"保存成功");
+            
+            //删除老的图片
+            NSString *oldImageName = [kUserDefaults objectForKey:key];
+            if (oldImageName) {
+                filePath = [JNSHAutoSize getFilePathWithImageName:oldImageName];
+                NSFileManager *filemanage = [NSFileManager defaultManager];
+                [filemanage removeItemAtPath:filePath error:nil];
+            }
+            //保存新图片名字
+            [kUserDefaults setObject:iamgeName forKey:key];
+        }
+    
+    });
+
 }
 
 - (void)dealloc {

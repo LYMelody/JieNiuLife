@@ -11,7 +11,7 @@
 #import "JNSHUpdateView.h"
 #import "SBJSON.h"
 #import "IBHttpTool.h"
-//#import "PgyUpdateManager.h"
+#import "PgyUpdateManager.h"
 @interface JNSHAdvertiseView()
 
 @property(nonatomic,strong)UIImageView *adView;
@@ -163,7 +163,7 @@
         //检测更新
         //[self VersionUpdate];
         
-        //[[PgyUpdateManager sharedPgyManager] checkUpdate];
+        [[PgyUpdateManager sharedPgyManager] checkUpdate];
         
     }];
     

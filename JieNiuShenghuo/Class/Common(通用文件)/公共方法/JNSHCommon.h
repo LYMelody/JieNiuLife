@@ -27,6 +27,8 @@
 #define BundleID [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString *)kCFBundleVersionKey]
 #define AppVersion [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]
 #define SystemVersion [[UIDevice currentDevice] systemVersion]
+#define kUserDefaults [NSUserDefaults standardUserDefaults]
+
 
 #define KscreenWidth [UIScreen mainScreen].bounds.size.width
 #define KscreenHeight [UIScreen mainScreen].bounds.size.height

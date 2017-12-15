@@ -12,6 +12,10 @@
 #import "Masonry.h"
 #import "JNSHSingleCalendarView.h"
 #import "JNSHSaleStatisticCell.h"
+#import "IBHttpTool.h"
+#import "SBJSON.h"
+#import "JNSYUserInfo.h"
+
 @interface JNSHSaleStatisticViewController ()<UITableViewDelegate,UITableViewDataSource>
 
 @property(nonatomic,strong)UIImageView *bottomLine;
@@ -20,14 +24,29 @@
 
 @property(nonatomic,strong)UIButton *EndBtn;
 
+@property(nonatomic,strong)NSArray *orderList;
+
+@property(nonatomic,copy)NSString *startTime;
+
+@property(nonatomic,copy)NSString *endtime;
+
+@property(nonatomic,strong)UITextField *SearchFld;
+
 @end
 
 @implementation JNSHSaleStatisticViewController {
     
-//    UIButton *startBtn;
-//    UIButton *EndBtn;
     NSInteger _currentTag;
     JNSHSingleCalendarView *SingleCader;
+    UITableView *table;
+    NSString *allProfit;
+    NSString *payCount;
+    NSString *payPrice;
+    NSString *showTitle;
+    NSString *sumProfit;
+    NSInteger count;
+    UILabel *tipLab;
+    
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -37,6 +56,7 @@
     self.title = @"销售统计";
     self.navBarBgAlpha = @"1.0";
     self.view.backgroundColor = ColorTableBackColor;
+    
     
 }
 
@@ -149,13 +169,13 @@
     
     //搜索
     
-    UITextField *SearchFld = [[UITextField alloc] init];
-    SearchFld.placeholder = @"输入代理商名称";
-    SearchFld.font = [UIFont systemFontOfSize:14];
-    SearchFld.textAlignment = NSTextAlignmentLeft;
-    [dateImageView addSubview:SearchFld];
+    _SearchFld = [[UITextField alloc] init];
+    _SearchFld.placeholder = @"输入代理商名称";
+    _SearchFld.font = [UIFont systemFontOfSize:14];
+    _SearchFld.textAlignment = NSTextAlignmentLeft;
+    [dateImageView addSubview:_SearchFld];
     
-    [SearchFld mas_makeConstraints:^(MASConstraintMaker *make) {
+    [_SearchFld mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(LineOne).offset([JNSHAutoSize height:14]);
         make.bottom.equalTo(LineTwo).offset(-[JNSHAutoSize height:14]);
         make.left.equalTo(dateImageView).offset([JNSHAutoSize width:15]);
@@ -174,11 +194,10 @@
     [dateImageView addSubview:SearchBtn];
     
     [SearchBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.equalTo(SearchFld);
+        make.centerY.equalTo(_SearchFld);
         make.right.equalTo(dateImageView).offset(-[JNSHAutoSize width:15]);
         make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:51], [JNSHAutoSize height:21]));
     }];
-    
     
     //添加白色背景
     [self.view addSubview:dateImageView];
@@ -189,8 +208,27 @@
         make.height.mas_equalTo([JNSHAutoSize height:82]);
     }];
     
+    //uilable
+    
+    tipLab = [[UILabel alloc] init];
+    tipLab.text = @"找不到该代理商!";
+    tipLab.textColor = ColorText;
+    tipLab.textAlignment = NSTextAlignmentCenter;
+    tipLab.font = [UIFont systemFontOfSize:15];
+    tipLab.hidden = YES;
+    [self.view addSubview:tipLab];
+    
+    [tipLab mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(self.view);
+        make.top.equalTo(dateImageView.mas_bottom).offset([JNSHAutoSize height:80]);
+        make.left.right.equalTo(self.view);
+    }];
+    
+
+    count = 1;
+    
     //tableview
-    UITableView *table = [[UITableView alloc] initWithFrame:CGRectMake(0, [JNSHAutoSize height:97], KscreenWidth, KscreenHeight - [JNSHAutoSize height:97+64]) style:UITableViewStylePlain];
+    table = [[UITableView alloc] initWithFrame:CGRectMake(0, [JNSHAutoSize height:97], KscreenWidth, KscreenHeight - [JNSHAutoSize height:97+64]) style:UITableViewStylePlain];
     table.delegate = self;
     table.dataSource = self;
     table.backgroundColor = ColorTableBackColor;
@@ -200,8 +238,24 @@
     table.sectionFooterHeight = [JNSHAutoSize height:5];
     [self.view addSubview:table];
     
+    //获取今天的订单
+    _startTime = [NSString stringWithFormat:@"%@ %@",[self getToday],@"00:00:00"];
+    _endtime = [NSString stringWithFormat:@"%@ %@",[self getToday],@"23:59:59"];
+    
+    [self requestData:_startTime endTime:_endtime keyWord:@""];
+    
 }
 
+//获取当时日期
+- (NSString*)getToday
+{
+    NSDate *today = [NSDate date];
+    NSDateFormatter *df = [[NSDateFormatter alloc] init];
+    [df setDateFormat:@"yyyy-MM-dd"];
+    NSString* dateString = [df stringFromDate:today];
+    //NSString *dateStr = [dateString stringByReplacingOccurrencesOfString:@"-" withString:@""];
+    return dateString;
+}
 
 - (void)dateSelect:(UIButton *)btn {
     
@@ -251,7 +305,6 @@
         }else {
             [self showCandle];
         }
-
     }
 }
 
@@ -260,7 +313,7 @@
     if (SingleCader.alpha > 0) {
         [SingleCader dismiss];
     }
-    SingleCader = [[JNSHSingleCalendarView alloc] initWithFrame:CGRectMake(0, 52, KscreenWidth, 300)];
+    SingleCader = [[JNSHSingleCalendarView alloc] initWithFrame:CGRectMake(0, 52, KscreenWidth, KscreenHeight - 52)];
     
     __weak typeof(self) weakSelf = self;
     
@@ -268,12 +321,61 @@
         __strong typeof(self) strongSelf = weakSelf;
         if (_currentTag == 100) {
             [strongSelf.startBtn setTitle:date forState:UIControlStateNormal];
+            strongSelf.startTime = [date stringByAppendingString:@" 00:00:00"];
         }else {
             [strongSelf.EndBtn setTitle:date forState:UIControlStateNormal];
+            strongSelf.endtime = [date stringByAppendingString:@"23:59:59"];
         }
+        
+        [strongSelf requestData:strongSelf.startTime endTime:strongSelf.endtime keyWord:strongSelf.SearchFld.text];
     };
     
     [SingleCader showInView:self.view];
+    
+}
+
+- (void)requestData:(NSString *)startTime endTime:(NSString *)endTime keyWord:(NSString *)keyWord{
+    
+    NSDictionary *dic = @{
+                          @"ts":startTime,
+                          @"te":endTime,
+                          @"orgName":keyWord
+                          };
+    NSString *action = @"OrgChildSts";
+    
+    NSDictionary *resquestDic = @{
+                                  @"action":action,
+                                  @"token":[JNSYUserInfo getUserInfo].userToken,
+                                  @"data":dic
+                                  };
+    NSString *params = [resquestDic JSONFragment];
+    [IBHttpTool postWithURL:JNSHTestUrl params:params success:^(id result) {
+        NSDictionary *resultDic = [result JSONValue];
+        NSString *code = resultDic[@"code"];
+        //NSLog(@"%@",resultDic);
+        if ([code isEqualToString:@"000000"]) {
+            table.hidden = NO;
+            tipLab.hidden = YES;
+            allProfit = [NSString stringWithFormat:@"%@",resultDic[@"allProfit"]];
+            payCount = [NSString stringWithFormat:@"%@",resultDic[@"payCount"]];
+            payPrice = [NSString stringWithFormat:@"%@",resultDic[@"payPrice"]];
+            showTitle = [NSString stringWithFormat:@"%@",resultDic[@"showTile"]];
+            sumProfit = [NSString stringWithFormat:@"%@",resultDic[@"sumProfit"]];
+            count = 1;
+            
+        }else {
+            
+            table.hidden = YES;
+            tipLab.hidden = NO;
+            count = 0;
+        
+        }
+        
+        [table reloadData];
+        
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
     
 }
 
@@ -282,12 +384,13 @@
     
     NSLog(@"搜索");
     
+    [self requestData:self.startTime endTime:self.endtime keyWord:self.SearchFld.text];
+    
 }
-
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    return 10;
+    return count;
     
 }
 
@@ -297,10 +400,12 @@
     
     JNSHSaleStatisticCell *cell = [tableView dequeueReusableCellWithIdentifier:identy];
     if (cell == nil) {
+        
         cell = [[JNSHSaleStatisticCell alloc] init];
-        cell.FenRunNumLab.text = @"11110.10";
-        cell.SaleAmountNumLab.text = @"共20笔     15451.00";
-        cell.TotalFenRunNumLab.text = @"1888888.00";
+        cell.FenRunNumLab.text = [NSString stringWithFormat:@"￥%.2f",[sumProfit floatValue]/100.0];
+        cell.SaleAmountNumLab.text = [NSString stringWithFormat:@"共%@笔     ￥%.2f",payCount,[payPrice floatValue]/100.0];
+        cell.TotalFenRunNumLab.text = [NSString stringWithFormat:@"￥%.2f",[allProfit floatValue]/100.0];
+        
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
@@ -316,7 +421,7 @@
     titleLab.font = [UIFont systemFontOfSize:15];
     titleLab.textColor = ColorText;
     titleLab.textAlignment = NSTextAlignmentLeft;
-    titleLab.text = @"名下全部代理商";
+    titleLab.text = showTitle;
     [view addSubview:titleLab];
     
     [titleLab mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -336,7 +441,6 @@
     
     return view;
 }
-
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     

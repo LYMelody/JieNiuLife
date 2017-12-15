@@ -17,10 +17,8 @@
 
 #define popHeight 247
 
-
 @implementation JNSHPopBankCardView {
     
-   
     NSInteger count;
     
     NSArray *bankArrayCode;
@@ -38,7 +36,6 @@
     
     return self;
 }
-
 
 - (void)setUpViews{
     
@@ -165,8 +162,11 @@
     
 }
 
+
 //获取银行列表、
 - (void)requestForBanks{
+    
+   
     
     NSDictionary *dic = @{
                           @"timestamp":[JNSHAutoSize getTimeNow]
@@ -193,6 +193,9 @@
             [self.tableView reloadData];
             
         }else {
+            
+            
+            
             
             [JNSHAutoSize showMsg:msg];
             
@@ -231,9 +234,7 @@
     float height = 64;
     
     //self.superview.inputViewController.navigationController.navigationBar.translucent
-    
-    
-    
+
     if (self.superview.inputViewController.navigationController.navigationBar.translucent) {
         height = 0;
     }

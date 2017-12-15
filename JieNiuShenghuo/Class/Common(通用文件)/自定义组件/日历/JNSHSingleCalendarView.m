@@ -56,7 +56,6 @@
     
     [self dismiss];
     
-    
 }
 
 - (void)showInView:(UIView *)view {
@@ -64,6 +63,7 @@
     if (!view) {
         return;
     }
+    
     [view addSubview:self];
     [view addSubview:self.contentView];
     [view addSubview:self.calendarView];
@@ -80,6 +80,7 @@
         self.contentView.frame = CGRectMake(0, [JNSHAutoSize height:52], KscreenWidth, [JNSHAutoSize height:300]);
         self.calendarView.frame = CGRectMake(0, [JNSHAutoSize height:52], KscreenWidth, [JNSHAutoSize height:250]);
         self.calendarView.alpha = 1.0;
+        
     }];
     
 }

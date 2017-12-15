@@ -14,6 +14,9 @@
 #import "JNSHOrderStatusView.h"
 #import "JNSHAgentOrderCell.h"
 #import "JNSHDalyFenRunCell.h"
+#import "JNSYUserInfo.h"
+#import "SBJSON.h"
+#import "IBHttpTool.h"
 
 @interface JNSHDalyFenRunViewController ()<UITableViewDataSource,UITableViewDelegate>
 
@@ -25,13 +28,25 @@
 
 @property(nonatomic,strong)UILabel *statusLab;
 
+@property(nonatomic,copy)NSString *startTime;
+
+@property(nonatomic,copy)NSString *endTime;
+
+@property(nonatomic,strong)NSArray *orderList;
+
+@property(nonatomic,assign)NSInteger currentPage;
+
+@property(nonatomic,copy)NSString *status;
+
+@property(nonatomic,copy)NSString *headerMsg;
+
 @end
 
 @implementation JNSHDalyFenRunViewController {
     
     JNSHOrderStatusView *orderView;
     JNSHCalendarView *calendar;
-    
+    UITableView *table;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -130,16 +145,38 @@
         make.height.mas_equalTo([JNSHAutoSize height:41]);
     }];
     
+    self.orderList = [[NSArray alloc] init];
     
     //列表
-    UITableView *table = [[UITableView alloc] initWithFrame:CGRectMake(0, [JNSHAutoSize height:43], KscreenWidth, KscreenHeight - [JNSHAutoSize height:41+64+64-20]) style:UITableViewStylePlain];
+    table = [[UITableView alloc] initWithFrame:CGRectMake(0, [JNSHAutoSize height:43], KscreenWidth, KscreenHeight - [JNSHAutoSize height:41+64+64-20]) style:UITableViewStylePlain];
     table.dataSource = self;
     table.delegate = self;
     table.backgroundColor =ColorTableBackColor;
     table.tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, CGFLOAT_MIN)];
     table.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, CGFLOAT_MIN)];
+    table.sectionHeaderHeight = [JNSHAutoSize height:41];
+    table.sectionFooterHeight = [JNSHAutoSize height:5];
     [self.view addSubview:table];
     
+    //获取今天的订单
+    _startTime = [NSString stringWithFormat:@"%@",[self getToday]];
+    _endTime = [NSString stringWithFormat:@"%@",[self getToday]];
+    _status = @"";
+    self.currentPage = 0;
+    
+    [self requestForInfo:_status statrtime:self.startTime endTime:self.endTime page:self.currentPage];
+    
+}
+
+//获取当时日期
+- (NSString*)getToday
+{
+    NSDate *today = [NSDate date];
+    NSDateFormatter *df = [[NSDateFormatter alloc] init];
+    [df setDateFormat:@"yyyy-MM-dd"];
+    NSString* dateString = [df stringFromDate:today];
+    //NSString *dateStr = [dateString stringByReplacingOccurrencesOfString:@"-" withString:@""];
+    return dateString;
 }
 
 //日期选择
@@ -168,24 +205,22 @@
         
         //确定日期
         calendar.datechoseblock = ^(NSString *startime, NSString *Endtime) {
-            //
-            //            __strong typeof(self) stongSelf = weakSelf;
-            //
-            //            //startime = [startime stringByReplacingOccurrencesOfString:@"-" withString:@""];
-            //            startime = [startime stringByAppendingString:@" 00:00:00"];
-            //            //Endtime = [Endtime stringByReplacingOccurrencesOfString:@"-" withString:@""];
-            //            Endtime = [Endtime stringByAppendingString:@" 23:59:59"];
-            //
-            //            stongSelf.startTime = startime;
-            //            stongSelf.endtime = Endtime;
-            //            //更新当前页
-            //            stongSelf.currentPage = 0;
-            //
-            //            //获取新的订单
-            //            [stongSelf requestForOrderList:stongSelf.startTime endtime:stongSelf.endtime product:stongSelf.currentType page:stongSelf.currentPage];
-            //
-            //            NSLog(@"start:%@ end:%@",startime,Endtime);
-            
+
+            __strong typeof(self) stongSelf = weakSelf;
+
+            //startime = [startime stringByReplacingOccurrencesOfString:@"-" withString:@""];
+            startime = [startime stringByAppendingString:@""];
+            //Endtime = [Endtime stringByReplacingOccurrencesOfString:@"-" withString:@""];
+            Endtime = [Endtime stringByAppendingString:@""];
+
+            stongSelf.startTime = startime;
+            stongSelf.endTime = Endtime;
+            //更新当前页
+            stongSelf.currentPage = 0;
+
+            //获取新的订单
+            [stongSelf requestForInfo:stongSelf.status statrtime:stongSelf.startTime endTime:stongSelf.endTime page:stongSelf.currentPage];
+
             
         };
         
@@ -223,20 +258,18 @@
             strongSelf.selectIndex = index.row;
             strongSelf.statusLab.text = array[index.row];
             strongSelf.statusArrow.image = [UIImage imageNamed:@"order_arror_down"];
-            //            //判断当前类型
-            //            if (strongSelf.selectIndex == 0) {
-            //                strongSelf.currentType = @"";
-            //            }else if (strongSelf.selectIndex == 1) {
-            //                strongSelf.currentType = @"1000";
-            //            }else if (strongSelf.selectIndex == 2) {
-            //                strongSelf.currentType = @"1001";
-            //            }else if (strongSelf.selectIndex == 3) {
-            //                strongSelf.currentType = @"1002";
-            //            }
-            //            //跟新当前页
-            //            strongSelf.currentPage = 0;
-            //获取新的订单
-            // [strongSelf requestForOrderList:strongSelf.startTime endtime:strongSelf.endtime product:strongSelf.currentType page:strongSelf.currentPage];
+                //判断当前类型
+                if (strongSelf.selectIndex == 0) {
+                    strongSelf.status = @"";
+                }else if (strongSelf.selectIndex == 1) {
+                    strongSelf.status = @"2";
+                }else if (strongSelf.selectIndex == 2) {
+                    strongSelf.status = @"0";
+                }
+                //跟新当前页
+                strongSelf.currentPage = 0;
+           
+            [strongSelf requestForInfo:strongSelf.status statrtime:strongSelf.startTime endTime:strongSelf.endTime page:strongSelf.currentPage];
         };
         
         orderView.dismissBlock = ^{
@@ -252,9 +285,50 @@
     
 }
 
+- (void)requestForInfo:(NSString *)status statrtime:(NSString *)startTime endTime:(NSString *)endTime page:(NSInteger)page {
+    
+    NSDictionary *dic = @{
+                          @"stsStatus":status,
+                          @"ts":startTime,
+                          @"te":endTime,
+                          @"page":[NSString stringWithFormat:@"%ld",page],
+                          @"limit":[NSString stringWithFormat:@"%d",10]
+                          };
+    NSString *action = @"OrgProfitDay";
+    
+    NSDictionary *requestDic = @{
+                                 @"action":action,
+                                 @"token":[JNSYUserInfo getUserInfo].userToken,
+                                 @"data":dic
+                                 };
+    NSString *params = [requestDic JSONFragment];
+    
+    [IBHttpTool postWithURL:JNSHTestUrl params:params success:^(id result) {
+        NSDictionary *resultDic = [result JSONValue];
+        NSString *code = resultDic[@"code"];
+        NSLog(@"%@",resultDic);
+        if ([code isEqualToString:@"000000"]) {
+            NSString *allPrice = resultDic[@"allProfit"];
+            _headerMsg = [NSString stringWithFormat:@"当前分润汇总:￥%.2f",[allPrice intValue]/100.0];
+            
+            if ([resultDic[@"records"] isKindOfClass:[NSArray class]]) {
+                self.orderList = resultDic[@"records"];
+                [table reloadData];
+            }
+        }else {
+            NSString *msg = resultDic[@"msg"];
+            [JNSHAutoSize showMsg:msg];
+        }
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
+    
+}
+
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    return 15;
+    return self.orderList.count;
+    
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -265,9 +339,17 @@
     
     if (cell == nil) {
         cell = [[JNSHDalyFenRunCell alloc] init];
-        cell.fenRunTimeLab.text = @"2017-12-01";
-        cell.cashStatusLab.text = @"已入账";
-        cell.amountLab.text = @"￥200.00";
+        cell.fenRunTimeLab.text = self.orderList[indexPath.row][@"profitDay"];
+        NSString *status = [NSString stringWithFormat:@"%@",self.orderList[indexPath.row][@"stsStatus"]];
+        if ([status isEqualToString:@"0"]) {
+            cell.cashStatusLab.text = @"未入账";
+            cell.cashStatusLab.textColor = [UIColor redColor];
+        }else {
+            cell.cashStatusLab.text = @"已入账";
+            cell.cashStatusLab.textColor = GreenColor;
+        }
+        
+        cell.amountLab.text = [NSString stringWithFormat:@"￥%.2f",[self.orderList[indexPath.row][@"profitPrice"] intValue]/100.0];
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
@@ -289,7 +371,7 @@
     titleLab.font = [UIFont systemFontOfSize:15];
     titleLab.textColor = ColorText;
     titleLab.textAlignment = NSTextAlignmentLeft;
-    titleLab.text = @"当前分润汇总 ￥1231234.00";
+    titleLab.text = _headerMsg;
     [view addSubview:titleLab];
     
     [titleLab mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -309,8 +391,6 @@
     
     return view;
 }
-
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

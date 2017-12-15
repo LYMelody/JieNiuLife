@@ -79,7 +79,7 @@
     [self.fenRunTimeLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(self.timeLab);
         make.left.equalTo(self.timeLab.mas_right).offset([JNSHAutoSize width:10]);
-        make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:120], [JNSHAutoSize height:15]));
+        make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:130], [JNSHAutoSize height:15]));
     }];
     
     [self.cashStatusLab mas_makeConstraints:^(MASConstraintMaker *make) {

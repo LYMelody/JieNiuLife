@@ -34,9 +34,6 @@
 #import "JNSHUsageViewController.h"
 
 
-
-
-
 @interface JNSHMyViewController ()<UITableViewDelegate,UITableViewDataSource,UIGestureRecognizerDelegate,UINavigationControllerDelegate>
 
 @end
@@ -51,7 +48,6 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
-    
     
     [super viewWillAppear:animated];
 
@@ -97,8 +93,43 @@
     
     blcok(@"tom",20);
     
+//    dispatch_queue_t queue = dispatch_queue_create("test.queue", DISPATCH_QUEUE_SERIAL);
+//
+//    dispatch_sync(queue, ^{
+//        [self syncMain];
+//    });
+    
+   // [self syncMain];
 
 }
+
+
+
+- (void)syncMain {
+    
+    NSLog(@"syncMain---begin");
+    
+    dispatch_queue_t queue = dispatch_get_main_queue();
+    
+    dispatch_sync(queue, ^{
+        for (int i = 0; i < 5; i++) {
+            NSLog(@"1--------%@",[NSThread currentThread]);
+        }
+    });
+    
+    dispatch_sync(queue, ^{
+        for (int i = 0; i < 5; i++) {
+            NSLog(@"2--------%@",[NSThread currentThread]);
+        }
+    });
+    
+    dispatch_sync(queue, ^{
+        for (int i = 0; i < 5; i++) {
+            NSLog(@"3------%@",[NSThread currentThread]);
+        }
+    });
+}
+
 
 -(BOOL)gestureRecognizerShouldBegin:(UIGestureRecognizer *)gestureRecognizer {
     

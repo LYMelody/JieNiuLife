@@ -24,4 +24,8 @@
 
 + (NSString *)getTimeNow;
 
++ (NSString *)getFilePathWithImageName:(NSString *)imageName;
+
++ (BOOL)isFileExistWithFilePath:(NSString *)filePath;
+
 @end

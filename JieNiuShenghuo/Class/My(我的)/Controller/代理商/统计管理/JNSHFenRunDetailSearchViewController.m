@@ -10,12 +10,21 @@
 #import "Masonry.h"
 #import "JNSHFenRunDetailCell.h"
 #import "UIViewController+Cloudox.h"
+#import "JNSYUserInfo.h"
+#import "SBJSON.h"
+#import "IBHttpTool.h"
 
 @interface JNSHFenRunDetailSearchViewController ()<UITableViewDelegate,UITableViewDataSource>
 
+@property(nonatomic,strong)NSArray *orderList;
+
 @end
 
-@implementation JNSHFenRunDetailSearchViewController
+@implementation JNSHFenRunDetailSearchViewController {
+    
+    UITableView *table;
+    UILabel *FenRunLab;
+}
 
 - (void)viewWillAppear:(BOOL)animated {
     
@@ -25,8 +34,9 @@
     self.navBarBgAlpha = @"1.0";
     self.view.backgroundColor = ColorTableBackColor;
     
+    [self requestForOrderList:self.startTime endTime:self.endTime page:0];
+    
 }
-
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -41,7 +51,7 @@
         make.height.mas_equalTo([JNSHAutoSize height:51]);
     }];
     
-    UILabel *FenRunLab = [[UILabel alloc] init];
+    FenRunLab = [[UILabel alloc] init];
     FenRunLab.text = @"当前共888笔交易，合计分润￥8888.00";
     FenRunLab.textColor = ColorText;
     FenRunLab.textAlignment = NSTextAlignmentLeft;
@@ -55,23 +65,67 @@
         make.height.mas_equalTo([JNSHAutoSize height:20]);
     }];
     
-    
+    self.orderList = [[NSArray alloc] init];
     
     //tableview
-    UITableView *table = [[UITableView alloc] initWithFrame:CGRectMake(0, [JNSHAutoSize height:51], KscreenWidth, KscreenHeight - [JNSHAutoSize height:51+64]) style:UITableViewStylePlain];
+    table = [[UITableView alloc] initWithFrame:CGRectMake(0, [JNSHAutoSize height:51], KscreenWidth, KscreenHeight - [JNSHAutoSize height:51+64]) style:UITableViewStylePlain];
     table.delegate = self;
     table.dataSource = self;
     table.backgroundColor = ColorTableBackColor;
     table.tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, CGFLOAT_MIN)];
     [self.view addSubview:table];
     
+}
+
+- (void)requestForOrderList:(NSString *)startTime endTime:(NSString *)endTime page:(NSInteger)page {
     
+    NSDictionary *dic = @{
+                          @"ts":startTime,
+                          @"te":endTime,
+                          @"page":[NSString stringWithFormat:@"%ld",page],
+                          @"limit":[NSString stringWithFormat:@"%d",10]
+                          };
     
+    NSString *action = @"OrgProfitRecord";
+    
+    NSDictionary *requestDic = @{
+                                 @"action":action,
+                                 @"token":[JNSYUserInfo getUserInfo].userToken,
+                                 @"data":dic
+                                 };
+    
+    NSString *params = [requestDic JSONFragment];
+    
+    [IBHttpTool postWithURL:JNSHTestUrl params:params success:^(id result) {
+        NSDictionary *resultDic = [result JSONValue];
+        
+        NSString *code = resultDic[@"code"];
+        if ([code isEqualToString:@"000000"]) {
+            if ([resultDic[@"records"] isKindOfClass:[NSArray class]]) {
+                self.orderList = resultDic[@"records"];
+                
+                NSString *allcount = resultDic[@"allCount"];
+                NSString *allPrice = resultDic[@"allPrice"];
+            
+                FenRunLab.text = [NSString stringWithFormat:@"当前共交易%@笔，合计分润￥%.2f",allcount,[allPrice intValue]/100.0];
+                [table reloadData];
+                
+            }
+        }else {
+            
+            NSString *msg = resultDic[@"msg"];
+            [JNSHAutoSize showMsg:msg];
+            
+        }
+        
+    } failure:^(NSError *error) {
+        NSLog(@"%@",error);
+    }];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    return 10;
+    return self.orderList.count;
     
 }
 
@@ -82,11 +136,20 @@
     JNSHFenRunDetailCell *cell = [tableView dequeueReusableCellWithIdentifier:identy];
     if (cell == nil) {
         cell = [[JNSHFenRunDetailCell alloc] init];
-        cell.orderNumLab.text = @"￥20000.00";
-        cell.fenRunCashLab.text = @"￥200.00";
-        cell.saleTimeLab.text = @"2017-12-01 12:20:20";
-        cell.orderTypeLab.text = @"无卡快捷";
-        cell.orderNoLab.text = @"201711301220207897";
+        cell.orderNumLab.text = [NSString stringWithFormat:@"￥%.2f",[self.orderList[indexPath.row][@"profitPrice"] intValue]/100.0];
+        cell.fenRunCashLab.text = [NSString stringWithFormat:@"￥%.2f",[self.orderList[indexPath.row][@"amountPrice"] intValue]/100.0];
+        cell.saleTimeLab.text = [NSString stringWithFormat:@"%@",self.orderList[indexPath.row][@"orderTime"]];
+        NSString *payType = [NSString stringWithFormat:@"%@",self.orderList[indexPath.row][@"payType"]];
+        if ([payType isEqualToString:@"1"]) {
+            cell.orderTypeLab.text = @"无卡快捷";
+        }else if ([payType isEqualToString:@"11"]) {
+            cell.orderTypeLab.text = @"银联H5";
+        }else if ([payType isEqualToString:@"7"]) {
+            cell.orderTypeLab.text = @"银联扫码";
+        }else {
+            cell.orderTypeLab.text = @"蓝牙卡头";
+        }
+        cell.orderNoLab.text = [NSString stringWithFormat:@"%@",self.orderList[indexPath.row][@"orderNo"]];
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;

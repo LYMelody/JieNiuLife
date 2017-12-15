@@ -20,7 +20,6 @@
     
     [super viewDidLoad];
     
-    
     //返回按钮
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:self action:nil];
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];

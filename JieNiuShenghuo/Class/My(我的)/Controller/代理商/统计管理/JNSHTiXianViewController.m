@@ -217,6 +217,8 @@
     if ([self.TextFld.text isEqualToString:@""]) {
         [JNSHAutoSize showMsg:@"请输入金额"];
         return;
+    }else if ([self.TextFld.text integerValue] < 5) {
+        [JNSHAutoSize showMsg:@"最低金额大于等于5元"];
     }else if ([self.TextFld.text integerValue] > [self.avaiableCash integerValue]) {
         [JNSHAutoSize showMsg:@"不能超过可提现金额"];
     }

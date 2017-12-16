@@ -64,14 +64,14 @@
     
 }
 
-//获取当时日期
-- (NSString*)getToday
+//获取当时日期 changeday:需要提前或者延后的天数
+- (NSString*)getToday:(NSInteger)changeday
 {
     NSDate *today = [NSDate date];
+    NSDate *targetday = [today dateByAddingTimeInterval:24*60*60*changeday];
     NSDateFormatter *df = [[NSDateFormatter alloc] init];
     [df setDateFormat:@"yyyy-MM-dd"];
-    NSString* dateString = [df stringFromDate:today];
-    //NSString *dateStr = [dateString stringByReplacingOccurrencesOfString:@"-" withString:@""];
+    NSString* dateString = [df stringFromDate:targetday];
     return dateString;
 }
 
@@ -89,7 +89,7 @@
     self.orderList = [[NSArray alloc] init];
     
     //列表
-    table = [[UITableView alloc] initWithFrame:CGRectMake(0, [JNSHAutoSize height:43], KscreenWidth, KscreenHeight - [JNSHAutoSize height:41]) style:UITableViewStylePlain];
+    table = [[UITableView alloc] initWithFrame:CGRectMake(0, [JNSHAutoSize height:43], KscreenWidth, KscreenHeight - [JNSHAutoSize height:41+64]) style:UITableViewStylePlain];
     table.dataSource = self;
     table.delegate = self;
     table.backgroundColor =ColorTableBackColor;
@@ -98,11 +98,11 @@
     [self.view addSubview:table];
     
     //获取今天的订单
-    _startTime = [NSString stringWithFormat:@"%@ %@",[self getToday],@"00:00:00"];
-    _endTime = [NSString stringWithFormat:@"%@ %@",[self getToday],@"23:59:59"];
+    _startTime = [NSString stringWithFormat:@"%@ %@",[self getToday:-15],@"00:00:00"];
+    _endTime = [NSString stringWithFormat:@"%@ %@",[self getToday:0],@"23:59:59"];
     _status = @"";
     
-    [self searchForOrderList:_status userName:@"" startName:_startTime endTime:_endTime page:10];
+    [self searchForOrderList:_status userName:@"" startName:_startTime endTime:_endTime page:0];
     
 }
 
@@ -322,6 +322,7 @@
     
 }
 
+//获取订单列表
 - (void)searchForOrderList:(NSString *)orderStatus userName:(NSString *)userName startName:(NSString *)startName endTime:(NSString *)endTime page:(NSInteger)page {
     
     NSDictionary *dic = @{
@@ -375,7 +376,7 @@
         cell.numLab.text = [NSString stringWithFormat:@"￥%.2lf",[self.orderList[indexPath.row][@"orderPrice"] intValue]/100.0];
         cell.userNameLab.text = self.orderList[indexPath.row][@"userName"];
         cell.orderNoLab.text = self.orderList[indexPath.row][@"orderNo"];
-        NSString *orderType = [NSString stringWithFormat:@"%@",self.orderList[indexPath.row][@"orderType"]];
+        NSString *orderType = [NSString stringWithFormat:@"%@",self.orderList[indexPath.row][@"orderStatus"]];
         if ([orderType isEqualToString:@"10"]) {
             cell.SaleStatusLab.text = @"初始化";
             cell.SaleStatusLab.textColor = [UIColor orangeColor];
@@ -410,10 +411,15 @@
     
 }
 
-
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)dealloc {
+    
+    NSLog(@"dealloc");
+    
 }
 
 /*

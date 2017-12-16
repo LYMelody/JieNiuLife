@@ -319,6 +319,7 @@
     }
 }
 
+//获取商户列表
 - (void)searchForUserInfo:(NSString *)status usrAccount:(NSString *)userAccount startTime:(NSString *)startTime endTime:(NSString *)endTime page:(NSInteger)page {
     
     NSDictionary *dic = @{
@@ -371,9 +372,9 @@
     
     if (cell == nil) {
         cell = [[JNSHUserManagerCell alloc] init];
-        cell.UserNameLab.text = self.orderList[indexPath.row][@"userAccount"];
-        cell.ResignTimeLab.text = self.orderList[indexPath.row][@"regDate"];
-        cell.NumPhoneLab.text = self.orderList[indexPath.row][@"userPhone"];
+        cell.UserNameLab.text = [NSString stringWithFormat:@"%@",self.orderList[indexPath.row][@"userAccount"]];
+        cell.ResignTimeLab.text = [NSString stringWithFormat:@"%@",self.orderList[indexPath.row][@"regDate"]];
+        cell.NumPhoneLab.text = [NSString stringWithFormat:@"%@",self.orderList[indexPath.row][@"userPhone"]];
         NSString *status = [NSString stringWithFormat:@"%@",self.orderList[indexPath.row][@"userStatus"]];
         if([status isEqualToString:@"10"]) {
             cell.ResignStatusLab.text = @"初始化";

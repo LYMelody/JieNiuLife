@@ -131,7 +131,7 @@
     tipsLab.font = [UIFont systemFontOfSize:12];
     tipsLab.textColor = ColorText;
     tipsLab.textAlignment = NSTextAlignmentLeft;
-    tipsLab.text = @"温馨提示：提现时间为工作日10：00-17：00。";
+    tipsLab.text = @"温馨提示：提现时间为工作日10:00-17:00。";
     [backImg addSubview:tipsLab];
     
     [tipsLab mas_makeConstraints:^(MASConstraintMaker *make) {

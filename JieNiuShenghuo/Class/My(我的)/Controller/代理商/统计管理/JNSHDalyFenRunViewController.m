@@ -159,8 +159,8 @@
     [self.view addSubview:table];
     
     //获取今天的订单
-    _startTime = [NSString stringWithFormat:@"%@",[self getToday]];
-    _endTime = [NSString stringWithFormat:@"%@",[self getToday]];
+    _startTime = [NSString stringWithFormat:@"%@",[self getToday:-15]];
+    _endTime = [NSString stringWithFormat:@"%@",[self getToday:0]];
     _status = @"";
     self.currentPage = 0;
     
@@ -168,14 +168,14 @@
     
 }
 
-//获取当时日期
-- (NSString*)getToday
+//获取当时日期 changeday:需要提前或者延后的天数
+- (NSString*)getToday:(NSInteger)changeday
 {
     NSDate *today = [NSDate date];
+    NSDate *targetday = [today dateByAddingTimeInterval:24*60*60*changeday];
     NSDateFormatter *df = [[NSDateFormatter alloc] init];
     [df setDateFormat:@"yyyy-MM-dd"];
-    NSString* dateString = [df stringFromDate:today];
-    //NSString *dateStr = [dateString stringByReplacingOccurrencesOfString:@"-" withString:@""];
+    NSString* dateString = [df stringFromDate:targetday];
     return dateString;
 }
 

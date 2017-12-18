@@ -350,7 +350,6 @@
                 //隐藏提现视图
                 if (self.TiXianAlertView) {
                     [self.TiXianAlertView dismiss];
-                    
                 }
                 //提示提现状态
                 self.HUD.mode = MBProgressHUDModeText;
@@ -358,6 +357,9 @@
                 [self.HUD hide:YES afterDelay:1.5];
                 //更新可提现金额
                 [self requestSettleAmount];
+                //更新提现记录
+                 [self requestForSettleRecord:_startTime endtime:_endtime page:0];
+                
             }
         }else {
             NSString *msg = resultDic[@"msg"];
@@ -368,10 +370,17 @@
         }
         
     } failure:^(NSError *error) {
-        NSLog(@"%@",error);
+        
+        if (self.HUD) {
+            [self.HUD hide:YES];
+        }
+        
+        [JNSHAutoSize showMsg:NetInAvaiable];
+        
     }];
-    
 }
+
+#pragma mark - UITableViewDataSource
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
@@ -395,12 +404,12 @@
         if ([status isEqualToString:@"20"]) {
             cell.cashStatusLab.text = @"处理成功";
             cell.cashStatusLab.textColor = GreenColor;
-        }else if ([status isEqualToString:@""]) {
-            cell.cashStatusLab.text = @"初始化";
-            cell.cashStatusLab.textColor = [UIColor orangeColor];
-        }else {
+        }else if ([status isEqualToString:@"21"]) {
             cell.cashStatusLab.text = @"处理失败";
             cell.cashStatusLab.textColor = [UIColor redColor];
+        }else {
+            cell.cashStatusLab.text = @"处理中";
+            cell.cashStatusLab.textColor = [UIColor orangeColor];
         }
         cell.amountLab.text = [NSString stringWithFormat:@"￥%.2f",[self.orderList[indexPath.row][@"orderPrice"] floatValue]/100.0];
         

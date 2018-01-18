@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+typedef void(^SureBlock)(void);
+
 @interface JNSHUpdateView : UIView
 
 @property(nonatomic,strong)UIView *coustView;
@@ -15,6 +17,7 @@
 @property(nonatomic,strong)UILabel *contentLab;
 @property(nonatomic,strong)UIButton *cancleBtn;
 @property(nonatomic,strong)UIButton *sureBtn;
+@property(nonatomic,copy)SureBlock sureBlock;
 
 - (void)show:(NSString *)title message:(NSString *)message inView:(UIWindow *)view;
 

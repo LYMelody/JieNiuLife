@@ -82,7 +82,7 @@
     [super viewDidLoad];
 
     //切换APPstore状态
-    [JNSYUserInfo getUserInfo].IS_APPSTORE = NO;
+    [JNSYUserInfo getUserInfo].IS_APPSTORE = YES;
     
     //接收通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pushToAD) name:@"pushtoAd" object:nil];
@@ -326,7 +326,7 @@
     [ExpressLogoImg mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(ExpressBackImg);
         make.left.equalTo(ExpressBackImg).offset([JNSHAutoSize width:33]);
-        make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:43], [JNSHAutoSize height:43]));
+        make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:40], [JNSHAutoSize height:40]));
     }];
     
     ExpressLab = [[UILabel alloc] init];
@@ -877,6 +877,7 @@
     NSString *url = [kUserDefaults objectForKey:@"HomeBtnUrl0"];
     if([url isEqualToString:@"jnlife://syt"]) {
         JNSHCashDeskViewController *jnshCashDeskVc = [[JNSHCashDeskViewController alloc] init];
+        jnshCashDeskVc.title = @"收银台";
         jnshCashDeskVc.hidesBottomBarWhenPushed = YES;
         [self.navigationController pushViewController:jnshCashDeskVc animated:YES];
     }else {
@@ -921,6 +922,7 @@
     
     if ([url isEqualToString:@"jnlife://unionh5"]) {
         JNSHCashDeskViewController *CashDeskVc = [[JNSHCashDeskViewController alloc] init];
+        CashDeskVc.title = @"银联快捷";
         CashDeskVc.hidesBottomBarWhenPushed = YES;
         CashDeskVc.tag = 2;
         [self.navigationController pushViewController:CashDeskVc animated:YES];
@@ -1040,26 +1042,47 @@
         if(indexPageModel[0][@"title"] != nil && !([indexPageModel[0][@"title"] isEqualToString:@""])) {
             
             [kUserDefaults setObject:indexPageModel[0][@"title"] forKey:@"HomeBtnTitleOne"]; //存title
+            //设置标题
+            CashLab.text = indexPageModel[0][@"title"];
+            //设置图片
             NSString *imageurl = indexPageModel[0][@"pic"];
-            [self reSetImageCache:imageurl key:@"HomeBtnImgOne"];        //存图片
+            if (imageurl) {
+                [CashLogo sd_setImageWithURL:[NSURL URLWithString:imageurl]];
+                [self reSetImageCache:imageurl key:@"HomeBtnImgOne"];        //存图片
+            }
+        
         }
         if (indexPageModel[1][@"title"] != nil && !([indexPageModel[1][@"title"] isEqualToString:@""])) {
             
             [kUserDefaults setObject:indexPageModel[1][@"title"] forKey:@"HomeBtnTitleTwo"];
+            VipLab.text = indexPageModel[1][@"title"];
             NSString *imageurl = indexPageModel[1][@"pic"];
-            [self reSetImageCache:imageurl key:@"HomeBtnImgTwo"];
+            if (imageurl) {
+                [VipLogoImg sd_setImageWithURL:[NSURL URLWithString:imageurl]];
+                [self reSetImageCache:imageurl key:@"HomeBtnImgTwo"];
+            }
+            
         }
         if (indexPageModel[2][@"title"] != nil && !([indexPageModel[2][@"title"] isEqualToString:@""])) {
             
             [kUserDefaults setObject:indexPageModel[2][@"title"] forKey:@"HomeBtnTitleThree"];
+            CardLab.text = indexPageModel[2][@"title"];
             NSString *imageUrl = indexPageModel[2][@"pic"];
-            [self reSetImageCache:imageUrl key:@"HomeBtnImgThree"];
+            if (imageUrl) {
+                [CardLogoImg sd_setImageWithURL:[NSURL URLWithString:imageUrl]];
+                [self reSetImageCache:imageUrl key:@"HomeBtnImgThree"];
+            }
         }
         if (indexPageModel[3][@"title"] != nil && !([indexPageModel[3][@"title"] isEqualToString:@""])) {
             
             [kUserDefaults setObject:indexPageModel[3][@"title"] forKey:@"HomeBtnTitleFour"];
+            ExpressLab.text = indexPageModel[3][@"title"];
             NSString *imageUrl = indexPageModel[3][@"pic"];
-            [self reSetImageCache:imageUrl key:@"HomeBtnImgFour"];
+            if (imageUrl) {
+                [ExpressLogoImg sd_setImageWithURL:[NSURL URLWithString:imageUrl]];
+                [self reSetImageCache:imageUrl key:@"HomeBtnImgFour"];
+            }
+        
         }
         //存URL
         for (NSInteger i = 0; i < indexPageModel.count; i++) {

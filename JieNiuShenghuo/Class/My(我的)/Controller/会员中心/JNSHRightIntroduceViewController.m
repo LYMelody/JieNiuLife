@@ -61,7 +61,7 @@
         titleLab.text = @"费率一览（交易2万/笔对比）";
         img.image = [UIImage imageNamed:@"rate"];
         
-        attr = [[NSMutableAttributedString alloc] initWithString:@"说明：\n以交易2万/笔为例，[捷牛生活App]会员用户最高可节约76元/笔，非会员用户最高可节约48元/笔，一年节约成本数千至上万元！费率优势巨大！"];
+        attr = [[NSMutableAttributedString alloc] initWithString:@"说明：\n以交易2万/笔为例，[捷牛生活App]会员用户最高可节约66元/笔，非会员用户最高可节约38元/笔，一年节约成本数千至上万元！费率优势巨大！"];
         [attr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:15] range:NSMakeRange(0, 3)];
         [attr addAttribute:NSForegroundColorAttributeName value:[UIColor blackColor] range:NSMakeRange(0, 3)];
         [attr addAttribute:NSForegroundColorAttributeName value:ColorText range:NSMakeRange(3, attr.length- 3)];
@@ -77,6 +77,7 @@
         detailLab.textColor = ColorText;
         
     }
+    
     [detailLab sizeToFit];
     [self.view addSubview:detailLab];
     

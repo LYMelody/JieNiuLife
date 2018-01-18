@@ -10,9 +10,6 @@
 #import "Masonry.h"
 
 
-
-
-
 @implementation JNSHUpdateView
 
 - (id)initWithFrame:(CGRect)frame {
@@ -58,7 +55,7 @@
     self.titleLab.font = [UIFont systemFontOfSize:15];
     self.titleLab.textAlignment = NSTextAlignmentCenter;
     self.titleLab.textColor = [UIColor colorWithRed:255/255.0 green:102/255.0 blue:0 alpha:1];
-    self.titleLab.text = @"全新2.0正式来袭";
+    self.titleLab.text = @"全新1.2.3正式来袭";
     [self.coustView addSubview:self.titleLab];
     
     [self.titleLab mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -71,7 +68,7 @@
     self.contentLab.textAlignment = NSTextAlignmentLeft;
     self.contentLab.numberOfLines = 0;
     self.contentLab.textColor = ColorText;
-    self.contentLab.text = @"1.界面更新优化;\n2.修复了一些使用中的bug；\n3.新增多种玩法，等你来发现。";
+    self.contentLab.text = @"1.界面更新优化;\n2.修复了一些使用中的bug;\n3.新增多种玩法，等你来发现。";
     self.contentLab.font = [UIFont systemFontOfSize:13];
     [self.coustView addSubview:self.contentLab];
     
@@ -101,7 +98,7 @@
         make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:86], [JNSHAutoSize height:26]));
     }];
     self.sureBtn = [[UIButton alloc] init];
-    [self.sureBtn setTitle:@"立即更新" forState:UIControlStateNormal];
+    [self.sureBtn setTitle:@"去看看" forState:UIControlStateNormal];
     self.sureBtn.layer.cornerRadius = 2;
     self.sureBtn.layer.masksToBounds = YES;
     self.sureBtn.titleLabel.font = [UIFont systemFontOfSize:14];
@@ -123,10 +120,13 @@
     [self dismiss];
     
 }
+
 //立即更新
 - (void)sure{
     
-    
+    if (self.sureBlock) {
+        self.sureBlock();
+    }
     
 }
 
@@ -139,7 +139,10 @@
     [view addSubview:self];
     [view addSubview:self.coustView];
     
-    //_messageLab.text = message;
+    //self.titleLab.text = [NSString stringWithFormat:@"全新的%@版本正式来袭",message];
+    self.titleLab.text = title;
+    self.contentLab.text = message;
+    
     
     [UIView animateWithDuration:0.2 animations:^{
         

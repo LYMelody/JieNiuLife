@@ -14,6 +14,10 @@
 
 @property(nonatomic,strong)NSTimer *timer;
 
+@property(nonatomic,copy)NSString *currentUrl;
+
+@property(nonatomic,copy)NSString *wxPayUrl;
+
 @end
 
 static NSTimeInterval const KtimeInterval = 0.03;
@@ -80,14 +84,26 @@ static NSTimeInterval const KtimeInterval = 0.03;
     if ([self.Navtitle isEqualToString:@"订单支付"]) {
         [self.navigationController popToRootViewControllerAnimated:YES];
     }else if (web.canGoBack) {
+        
+//        if ([_currentUrl hasPrefix:@"https://tour.tempus.cn/tour-wap/payment/notify"]) {
+//
+//            [self.navigationController popToRootViewControllerAnimated:YES];
+//
+//        }else {
+//
+//             [web goBack];
+//
+//        }
+        
         [web goBack];
+        
+
     }else {
         
         [self.navigationController popViewControllerAnimated:YES];
         
     }
 }
-
 
 #define mark - webViewDelegate
 - (void)webViewDidStartLoad:(UIWebView *)webView {
@@ -98,7 +114,21 @@ static NSTimeInterval const KtimeInterval = 0.03;
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
     
+    NSString *url = webView.request.URL.absoluteString;
+    
+    NSLog(@"#########url:%@",url);
+    
+    if ([url hasPrefix:@"https://wx.tenpay.com"]) {
+        _wxPayUrl = url;
+    }
+    if ([url hasPrefix:@"https://tour.tempus.cn/tour-wap/payment/notify"]) {
+        _currentUrl = url;
+    }
+    NSLog(@"微信url:%@,支付完成url：%@",_wxPayUrl,_currentUrl);
+    //https://tour.tempus.cn/tour-wap/payment/notify/P1801157876265#
+    //https://wx.tenpay.com/cgi-bin/mmpayweb-bin/checkmweb?prepay_id=wx20180115155039fac7ba51080887225700&package=868840695&redirect_url=https%3A%2F%2Ftour.tempus.cn%2Ftour-wap%2Fpayment%2Fnotify%2FP1801153236270
     [self finishedLoad];
+    
 }
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {

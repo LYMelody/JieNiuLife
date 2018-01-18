@@ -20,15 +20,14 @@
  
  */
 
-#define JNSHTestUrl @"http://api.test.life.hzjieniu.com/app/action"
-#define TOKEN @"63b407c3d510bf14851ce46df94662b5"
-#define KEY @"UBKKWNA216MXCGVJWG5W69VOORNWKV82"
+#define JNSHTestUrl @"http://api.life.hzjieniu.com/app/action"
+#define TOKEN @"IatWXu8DhM3bIsB6MnnHCEHu6CDEnYIu"
+#define KEY @"NLMIU6LKM2VE51311F2VPMGXA8HOLAS7"
 
 #define BundleID [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString *)kCFBundleVersionKey]
 #define AppVersion [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"]
 #define SystemVersion [[UIDevice currentDevice] systemVersion]
 #define kUserDefaults [NSUserDefaults standardUserDefaults]
-
 
 #define KscreenWidth [UIScreen mainScreen].bounds.size.width
 #define KscreenHeight [UIScreen mainScreen].bounds.size.height
@@ -64,7 +63,5 @@
 #define IS_IOS9 ([[[UIDevice currentDevice] systemVersion] floatValue] < 10.0)
 
 #define NetInAvaiable @"您好像没有连接网络，请连接网络重试。"
-
-
 
 #endif /* JNSHCommon_h */

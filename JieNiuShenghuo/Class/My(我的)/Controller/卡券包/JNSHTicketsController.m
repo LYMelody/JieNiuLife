@@ -198,17 +198,15 @@
             CashDeskVc.hidesBottomBarWhenPushed = YES;
             [self.navigationController pushViewController:CashDeskVc animated:YES];
         };
-        //是否过期
-        //NSString *isUsed =self.listArray[indexPath.row][@""];
-        
-        if (self.tag == 2) {
-           
-                cell.isUsed = YES;
+       
+        NSString *vouchersStatus = [NSString stringWithFormat:@"%@",self.listArray[indexPath.row][@"vouchersStatus"]];
+        if ([vouchersStatus isEqualToString:@"2"]) {
+            cell.isUsed = YES;
+        }else if ([vouchersStatus isEqualToString:@"9"]) {
+            cell.isUpDate = YES;
+        }else {
             
-//                cell.titleLab.text = @"生日刷卡抵用券";
-//                cell.isUpDate = YES;
         }
-        
     }
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;

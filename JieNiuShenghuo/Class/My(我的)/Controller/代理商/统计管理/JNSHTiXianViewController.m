@@ -16,9 +16,11 @@
 #import "IBHttpTool.h"
 #import "JNSHPreTiXianModel.h"
 #import "MBProgressHUD.h"
+#import "MJRefresh.h"
+#import "JNSHKeyBoardView.h"
+#import "UITextField+ExtentRange.h"
 
-
-@interface JNSHTiXianViewController ()<UITableViewDelegate,UITableViewDataSource>
+@interface JNSHTiXianViewController ()<UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate>
 
 @property(nonatomic,copy)NSString *startTime;
 
@@ -30,9 +32,14 @@
 
 @property(nonatomic,strong)UITextField *TextFld;
 
+@property(nonatomic,strong)UILabel *moneyLab;
+
 @property(nonatomic,strong)MBProgressHUD *HUD;
 
 @property(nonatomic,strong)JNSHTiXianAlertView *TiXianAlertView;
+
+@property(nonatomic,assign)NSInteger currentPage;
+
 
 @end
 
@@ -40,6 +47,7 @@
     
     UITableView *table;
     UILabel *TipsLab;
+    JNSHKeyBoardView *keyBoardView;
     
 }
 
@@ -56,14 +64,14 @@
     
 }
 
-//获取当时日期
-- (NSString*)getToday
+//获取当时日期 changeday:需要提前或者延后的天数
+- (NSString*)getToday:(NSInteger)changeday
 {
     NSDate *today = [NSDate date];
+    NSDate *targetday = [today dateByAddingTimeInterval:24*60*60*changeday];
     NSDateFormatter *df = [[NSDateFormatter alloc] init];
     [df setDateFormat:@"yyyy-MM-dd"];
-    NSString* dateString = [df stringFromDate:today];
-    //NSString *dateStr = [dateString stringByReplacingOccurrencesOfString:@"-" withString:@""];
+    NSString* dateString = [df stringFromDate:targetday];
     return dateString;
 }
 
@@ -111,20 +119,40 @@
     }];
     
     //金额输入框
-    self.TextFld = [[UITextField alloc] init];
-    self.TextFld.placeholder = @"可提现金额￥0.0";
-    self.TextFld.font = [UIFont systemFontOfSize:14];
-    self.TextFld.textAlignment = NSTextAlignmentLeft;
-    self.TextFld.textColor = ColorText;
-    self.TextFld.keyboardType = UIKeyboardTypeNumberPad;
+//    self.TextFld = [[UITextField alloc] init];
+//    self.TextFld.placeholder = @"可提现金额￥0.0";
+//    self.TextFld.font = [UIFont systemFontOfSize:14];
+//    self.TextFld.textAlignment = NSTextAlignmentLeft;
+//    self.TextFld.textColor = ColorText;
+//    //self.TextFld.keyboardType = UIKeyboardTypeNumberPad;
+//    self.TextFld.delegate = self;
+//
+//    [backImg addSubview:self.TextFld];
+//
+//    [self.TextFld mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.top.equalTo(backImg).offset([JNSHAutoSize height:38]);
+//        make.left.equalTo(leftLab.mas_right).offset([JNSHAutoSize width:10]);
+//        make.right.equalTo(TiXianBtn.mas_left).offset(-[JNSHAutoSize width:60]);
+//    }];
     
-    [backImg addSubview:self.TextFld];
+    self.moneyLab = [[UILabel alloc] init];
+    self.moneyLab.textAlignment = NSTextAlignmentLeft;
+    self.moneyLab.textColor =ColorLightText;
+    self.moneyLab.text = @"可提现金额￥0.0";
+    self.moneyLab.font = [UIFont systemFontOfSize:14];
+    self.moneyLab.userInteractionEnabled = YES;
+    [backImg addSubview:self.moneyLab];
     
-    [self.TextFld mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.moneyLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(backImg).offset([JNSHAutoSize height:38]);
         make.left.equalTo(leftLab.mas_right).offset([JNSHAutoSize width:10]);
         make.right.equalTo(TiXianBtn.mas_left).offset(-[JNSHAutoSize width:60]);
     }];
+    
+    UITapGestureRecognizer *tapKeyBoard = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(selectNum)];
+    tapKeyBoard.numberOfTapsRequired = 1;
+    [self.moneyLab addGestureRecognizer:tapKeyBoard];
+    
     
     //温馨提示
     UILabel *tipsLab = [[UILabel alloc] init];
@@ -175,9 +203,9 @@
     table = [[UITableView alloc] init];
     table.delegate = self;
     table.dataSource = self;
-    //table.separatorStyle = ui
     table.tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, CGFLOAT_MIN)];
     table.backgroundColor = ColorTableBackColor;
+    
     [self.view addSubview:table];
     
     [table mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -185,27 +213,47 @@
         make.left.right.bottom.equalTo(self.view);
     }];
     
-    //获取今天的订单
-    _startTime = [NSString stringWithFormat:@"%@ %@",[self getToday],@"00:00:00"];
-    _endtime = [NSString stringWithFormat:@"%@ %@",[self getToday],@"23:59:59"];
+    //下拉刷新
+    table.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+        
+        _currentPage = 0;
+        //请求数据
+        [self requestForSettleRecord:_startTime endtime:_endtime page:0];
+        
+    }];
     
+    //上拉加载
+    table.mj_footer = [MJRefreshAutoStateFooter footerWithRefreshingBlock:^{
+        //请求数据
+        self.currentPage ++;
+        [self requestForSettleRecord:_startTime endtime:_endtime page:_currentPage];
+        
+    }];
+    
+    
+    //获取今天的订单
+    _startTime = [NSString stringWithFormat:@"%@ %@",[self getToday:-15],@"00:00:00"];
+    _endtime = [NSString stringWithFormat:@"%@ %@",[self getToday:0],@"23:59:59"];
+    
+    //提现记录
     [self requestForSettleRecord:_startTime endtime:_endtime page:0];
     
     self.avaiableCash = @"";
-    
+    //设置kvo
     [self addObserver:self forKeyPath:@"avaiableCash" options:NSKeyValueObservingOptionNew context:nil];
     
+    //keyboard
 }
 
 //kvo回调
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
     
-    id oldName = [change objectForKey:NSKeyValueChangeOldKey];
+    //id oldName = [change objectForKey:NSKeyValueChangeOldKey];
     id newName = [change objectForKey:NSKeyValueChangeNewKey];
     
-    self.TextFld.placeholder = [NSString stringWithFormat:@"可提现金额￥%@",newName];
+    self.moneyLab.text = [NSString stringWithFormat:@"可提现金额￥%@",newName];
+    self.moneyLab.textColor = ColorLightText;
     
-    NSLog(@"oldName:%@,newName:%@",oldName,newName);
 
 }
 
@@ -214,19 +262,18 @@
     
     NSLog(@"提现");
     
-    if ([self.TextFld.text isEqualToString:@""]) {
+    if ([self.moneyLab.text isEqualToString:@""]) {
         [JNSHAutoSize showMsg:@"请输入金额"];
         return;
-    }else if ([self.TextFld.text integerValue] < 5) {
+    }else if ([self.moneyLab.text integerValue] < 5) {
         [JNSHAutoSize showMsg:@"最低金额大于等于5元"];
-    }else if ([self.TextFld.text integerValue] > [self.avaiableCash integerValue]) {
+    }else if ([self.moneyLab.text integerValue] > [self.avaiableCash integerValue]) {
         [JNSHAutoSize showMsg:@"不能超过可提现金额"];
     }
     else {
-        //隐藏键盘
-        [self.TextFld resignFirstResponder];
+       
         //请求数据
-        [self preSettleDisplayInfo:self.TextFld.text settleType:@"0"];
+        [self preSettleDisplayInfo:self.moneyLab.text settleType:@"0"];
         
     }
 }
@@ -237,7 +284,7 @@
     NSDictionary *dic = @{
                           @"ts":startTime,
                           @"te":endTime,
-                          @"page":[NSString stringWithFormat:@"%ld",page],
+                          @"page":[NSString stringWithFormat:@"%ld",(long)page],
                           @"limit":[NSString stringWithFormat:@"%d",10]
                           };
     NSString *action = @"OrgBalanceSettleRecord";
@@ -256,21 +303,39 @@
         if ([resultdic[@"records"] isKindOfClass:[NSArray class]]) {
             NSArray *array = resultdic[@"records"];
             if (array.count > 0) {  //有数据显示table
-                
-                self.orderList = array;
+                if (page == 0) {
+                    self.orderList = array;
+                }else {
+                    [self.orderList arrayByAddingObjectsFromArray:array];
+                }
                 
                 table.hidden = NO;
                 TipsLab.hidden = YES;
                 [table reloadData];
                 
-            }else {                 //没有数据隐藏label，展示提示
+            }else {  //没有数据隐藏label，展示提示
+                
+                if (self.orderList.count > 0) {
+                    
+                }else {
+                    table.hidden = YES;
+                    TipsLab.hidden = NO;
+                }
+            
+            }
+        }else {
+            if (self.orderList.count > 0) {
+                
+            }else {
                 table.hidden = YES;
                 TipsLab.hidden = NO;
             }
-        }else {
-            table.hidden = YES;
-            TipsLab.hidden = NO;
         }
+        
+        //停止更新
+        [table.mj_header endRefreshing];
+        [table.mj_footer endRefreshing];
+        
         
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
@@ -293,7 +358,7 @@
     
     [IBHttpTool postWithURL:JNSHTestUrl params:params success:^(id result) {
         NSDictionary *resultDic = [result JSONValue];
-        NSLog(@"%@",resultDic);
+        //NSLog(@"%@",resultDic);
         NSString *code = resultDic[@"code"];
         if ([code isEqualToString:@"000000"]) {
             self.avaiableCash = [NSString stringWithFormat:@"%.2f",[resultDic[@"residuePrice"] integerValue]/100.0];
@@ -311,7 +376,7 @@
 - (void)preSettleDisplayInfo:(NSString *)amount settleType:(NSString *)settleType {
     
     NSDictionary *dic = @{
-                          @"amount":[NSString stringWithFormat:@"%ld",[amount integerValue]*100],
+                          @"amount":[NSString stringWithFormat:@"%f",[amount floatValue]*100],
                           @"preview":settleType
                           };
     NSString *action = @"OrgBalanceSettle";
@@ -323,10 +388,11 @@
     NSString *params = [requestDic JSONFragment];
     [IBHttpTool postWithURL:JNSHTestUrl params:params success:^(id result) {
         NSDictionary *resultDic = [result JSONValue];
-        NSLog(@"%@",resultDic);
+        //NSLog(@"%@",resultDic);
         NSString *code = resultDic[@"code"];
         if ([code isEqualToString:@"000000"]) {
             if ([settleType isEqualToString:@"0"]) {
+                
                 JNSHPreTiXianModel *model = [[JNSHPreTiXianModel alloc] init];
                 model.totalAmount = [resultDic[@"amount"] floatValue]/100.0;
                 model.rateTax = [resultDic[@"rateTax"] floatValue]/100.0;
@@ -338,7 +404,7 @@
                 self.TiXianAlertView.sureTiXianBlock = ^{
                     __strong typeof(self) strongSelf = weakSelf;
                     strongSelf.HUD = [MBProgressHUD showHUDAddedTo:strongSelf.view animated:YES];
-                    [strongSelf preSettleDisplayInfo:strongSelf.TextFld.text settleType:@"1"];
+                    [strongSelf preSettleDisplayInfo:strongSelf.moneyLab.text settleType:@"1"];
                 };
                 
                 self.TiXianAlertView.model = model;
@@ -379,6 +445,142 @@
         
     }];
 }
+
+//tap方法
+- (void)selectNum {
+    
+    if ([self.moneyLab.text hasPrefix:@"可提现金额"]) {
+        self.moneyLab.text = @"0";
+    }else if ([self.moneyLab.text isEqualToString:@"0"]) {
+        //self.moneyLab.text = @"";
+    }
+    
+    
+    if (keyBoardView.IsShowed) {
+        
+    }else {
+        
+        keyBoardView = [[JNSHKeyBoardView alloc] initWithFrame:CGRectMake(0, 100, KscreenWidth, KscreenHeight)];
+        [keyBoardView showInView:self.view];
+        
+        __weak typeof(JNSHKeyBoardView) *weakKeyBoard = keyBoardView;
+        __weak typeof(self) weakSelf = self;
+        keyBoardView.itemSelectBlock = ^(NSInteger selectTag,NSString *title) {
+        
+            __strong typeof(JNSHKeyBoardView) *strongKeyBoard = weakKeyBoard;
+            __strong typeof(self) strongSelf = weakSelf;
+            
+            if([strongSelf.moneyLab.text hasPrefix:@"可提现金额"]) {
+                strongSelf.moneyLab.text = @"0";
+            }
+            strongSelf.moneyLab.textColor = ColorText;
+            
+            if (selectTag < 9) {  //1~9
+                
+                if (strongSelf.moneyLab.text.length > 7) { //限定8位
+                    return;
+                }
+                
+                if ([strongSelf.moneyLab.text containsString:@"."]) {  //判断小数点后位数
+                    
+                    NSArray *array = [strongSelf.moneyLab.text componentsSeparatedByString:@"."];
+                    NSString *lastStr = array.lastObject;
+                    if (lastStr.length > 1) {
+                        
+                        [JNSHAutoSize showMsg:@"精确到分"];
+                        
+                        return;
+                    }
+                    
+                }
+                
+                if (![strongSelf.moneyLab.text isEqualToString:@"0"]) {
+                    
+                    
+                    strongSelf.moneyLab.text = [NSString stringWithFormat:@"%@%@",strongSelf.moneyLab.text,title];
+                    
+                }else {
+                    
+                    strongSelf.moneyLab.text = [NSString stringWithFormat:@"%@",title];
+                    
+                }
+            }else if (selectTag == 9) {   //.
+                
+                if ([strongSelf.moneyLab.text containsString:@"."]) {  //判断之前有没有小数点
+                    return;
+                }else {
+                    
+                    NSString *laststr = [strongSelf.moneyLab.text substringFromIndex:strongSelf.moneyLab.text.length -1];
+                    if (![laststr isEqualToString:@"."]) {
+                        strongSelf.moneyLab.text = [NSString stringWithFormat:@"%@%@",strongSelf.moneyLab.text,title];
+                    }
+                }
+                
+                
+            }else if (selectTag == 10) {  //0
+                if (![strongSelf.moneyLab.text isEqualToString:@"0"]) {
+                    
+                    if ([strongSelf.moneyLab.text containsString:@"."]) {  //判断小数点后位数
+                        
+                        NSArray *array = [strongSelf.moneyLab.text componentsSeparatedByString:@"."];
+                        NSString *lastStr = array.lastObject;
+                        if (lastStr.length > 1) {
+                            
+                            //[self show:@"精确到分" cancle:nil sureStr:@"确定"];
+                            
+                            [JNSHAutoSize showMsg:@"精确到分"];
+                            
+                            return;
+                        }
+                        
+                    }
+                    
+                    //NSString *str = [NSString stringWithFormat:@"%@%@",strongSelf.moneyLab.text,title];
+        
+                    strongSelf.moneyLab.text = [NSString stringWithFormat:@"%@0",strongSelf.moneyLab.text];
+                    
+                }
+                
+            }else if (selectTag == 11) {  //X
+                
+                strongSelf.moneyLab.text = @"0";
+                strongSelf.moneyLab.text = [NSString stringWithFormat:@"可提现金额%@",strongSelf.avaiableCash];
+            }else if (selectTag == 12) {  //全清
+                
+                //textField.text = @"0";
+                
+                if (![strongSelf.moneyLab.text isEqualToString:@"0"]) {
+                    
+                    if (1 >= strongSelf.moneyLab.text.length) {
+                        strongSelf.moneyLab.text = @"0";
+                        strongSelf.moneyLab.text = [NSString stringWithFormat:@"可提现金额%@",strongSelf.avaiableCash];
+                    }else{
+                        strongSelf.moneyLab.text = [strongSelf.moneyLab.text substringToIndex:strongSelf.moneyLab.text.length-1];
+                    }
+                }
+                
+            }else if (selectTag == 13) {  //确定
+                
+                if ([strongSelf.moneyLab.text floatValue] < 5) {
+                    //[self show:@"单笔交易不能低于5元" cancle:nil sureStr:@"确定"];
+                    return;
+                }
+                
+                [strongKeyBoard dismiss];
+                
+            }
+        };
+        
+    }
+    
+}
+
+
+
+
+#define mark textFieldelege
+
+
 
 #pragma mark - UITableViewDataSource
 

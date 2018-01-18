@@ -192,7 +192,7 @@
     ratingSubLab.font = [UIFont systemFontOfSize:11];
     ratingSubLab.textColor = ColorLightText;
     ratingSubLab.textAlignment = NSTextAlignmentLeft;
-    ratingSubLab.text = @"0.25+3/笔";
+    ratingSubLab.text = @"0.3+3/笔";
     
     [ratingBackImg addSubview:ratingSubLab];
     
@@ -539,7 +539,7 @@
     NSString *time = [JNSHAutoSize getTimeNow];
     //NSString *goodsName = @"商户会员购买";
     
-    NSString *MinMoney = [NSString stringWithFormat:@"%d",[totalPrice integerValue]*100];
+    NSString *MinMoney = [NSString stringWithFormat:@"%ld",[totalPrice integerValue]*100];
     
     NSDictionary *dic = @{
                           @"payType":@"1",
@@ -595,13 +595,13 @@
     
     UIView *selectView = sender.view;
     
-    NSString *str = [NSString stringWithFormat:@"总价：￥%d",[mealDic[0][@"price"] integerValue]/100];
+    NSString *str = [NSString stringWithFormat:@"总价：￥%ld",[mealDic[0][@"price"] integerValue]/100];
     
     if (selectView == nityImg) {
         
         nityImg.backgroundColor = lightOrgeron;
         halfYearImg.backgroundColor = [UIColor whiteColor];
-        totalPrice = [NSString stringWithFormat:@"%d",[mealDic[0][@"price"] integerValue]/100];
+        totalPrice = [NSString stringWithFormat:@"%ld",[mealDic[0][@"price"] integerValue]/100];
         vipcode = mealDic[0][@"code"];
                    
     }else if (selectView == halfYearImg) {
@@ -609,8 +609,8 @@
         nityImg.backgroundColor = [UIColor whiteColor];
         halfYearImg.backgroundColor = lightOrgeron;
         //设置总价
-        str = [NSString stringWithFormat:@"总价：￥%d",[mealDic[1][@"price"] integerValue]/100];
-        totalPrice = [NSString stringWithFormat:@"%d",[mealDic[1][@"price"] integerValue]/100];
+        str = [NSString stringWithFormat:@"总价：￥%ld",[mealDic[1][@"price"] integerValue]/100];
+        totalPrice = [NSString stringWithFormat:@"%ld",[mealDic[1][@"price"] integerValue]/100];
         vipcode = mealDic[1][@"code"];
     }
     
@@ -643,7 +643,7 @@
         //NSLog(@"%@",resultdic);
         NSString *msg = resultdic[@"msg"];
         if ([code isEqualToString:@"000000"]) {
-            //NSString *rate = resultdic[@"vipRate"];
+            NSString *rate = resultdic[@"vipRate"];
             NSString *birthdayCount = resultdic[@"birthdayCount"];
             NSString *Vip = [NSString stringWithFormat:@"%@",resultdic[@"isVip"]];
             if ([Vip isEqualToString:@"1"]) {
@@ -660,19 +660,19 @@
             mealDic = resultdic[@"meal"];
             if([resultdic[@"meal"] isKindOfClass:[NSArray class]]) {
                 if((totalPrice == nil) || [totalPrice isEqualToString:@""]) {
-                    totalPrice = [NSString stringWithFormat:@"%d",[mealDic[0][@"price"] integerValue]/100];
+                    totalPrice = [NSString stringWithFormat:@"%ld",[mealDic[0][@"price"] integerValue]/100];
                 }
                 leftLab.text = mealDic[0][@"title"];
-                NityrightLab.text = [NSString stringWithFormat:@"￥%d",[mealDic[0][@"price"] integerValue]/100];
+                NityrightLab.text = [NSString stringWithFormat:@"￥%ld",[mealDic[0][@"price"] integerValue]/100];
                 halfYearLab.text = mealDic[1][@"title"];
-                halfLab.text = [NSString stringWithFormat:@"￥%d",[mealDic[1][@"price"] integerValue]/100];
-                NSString *strr = [NSString stringWithFormat:@"总价：%d",[mealDic[0][@"price"] integerValue]/100];
+                halfLab.text = [NSString stringWithFormat:@"￥%ld",[mealDic[1][@"price"] integerValue]/100];
+                NSString *strr = [NSString stringWithFormat:@"总价：%ld",[mealDic[0][@"price"] integerValue]/100];
                 NSMutableAttributedString *attri = [[NSMutableAttributedString alloc] initWithString:strr];
                 [attri addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:NSMakeRange(3, (strr.length - 3))];
                 totalPriceLab.attributedText = attri;
             }
             
-            //ratingSubLab.text = rate;
+            ratingSubLab.text = rate;
             birthSubLab.text = [NSString stringWithFormat:@"送%@张抵用券",birthdayCount];
             
         }else {

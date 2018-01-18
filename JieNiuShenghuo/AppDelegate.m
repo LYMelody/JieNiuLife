@@ -14,7 +14,7 @@
 #import "SBJSON.h"
 #import "IBHttpTool.h"
 #import "JNSHUpdateView.h"
-
+#import "AFNetworking.h"
 //ShareSDK
 #import "ShareSDK/ShareSDK.h"
 #import "ShareSDKConnector/ShareSDKConnector.h"
@@ -25,8 +25,8 @@
 //#import "JPUSHService.h"
 //#import <UserNotifications/UserNotifications.h>
 //蒲公英
-#import "PgySDK/PgyManager.h"
-#import "PgyUpdate/PgyUpdateManager.h"
+//#import "PgySDK/PgyManager.h"
+//#import "PgyUpdate/PgyUpdateManager.h"
 //友盟
 #import "UMMobClick/MobClick.h"
 
@@ -53,11 +53,8 @@
     
     //[NSThread sleepForTimeInterval:1];
     //蒲公英
-    [[PgyManager sharedPgyManager] startManagerWithAppId:PgyAPPID];
-    [[PgyManager sharedPgyManager] setEnableFeedback:NO];
-//    //检测更新
-//    [[PgyUpdateManager sharedPgyManager] startManagerWithAppId:PgyAPPID];
-    
+//    [[PgyManager sharedPgyManager] startManagerWithAppId:PgyAPPID];
+//    [[PgyManager sharedPgyManager] setEnableFeedback:NO];
     //友盟
     UMConfigInstance.appKey = UmengAPPkey;
     UMConfigInstance.channelId = @"Exterprise";
@@ -208,46 +205,15 @@
         advertiseView.filePath = filePath;
         advertiseView.timeduration = [kUserDefaults objectForKey:@"ADDuration"];
         advertiseView.jumpflag = [kUserDefaults objectForKey:@"Jumpflag"];
-        //NSLog(@"%@",);
         [advertiseView show];
         
     }else {
         
-        //下载默认广告图片
-        
-//        NSString *defaultFilePath = [self getFilePathWithImageName:@"20122220201612322865.png"];
-//
-//        BOOL exist = [self isFileExistWithFilePath:defaultFilePath];
-        
-//        if (exist) {
-//
-//            advertiseView.filePath = defaultFilePath;
-//            [advertiseView show];
-//
-//        }else {
-//
-//            //显示状态栏
-//            [[UIApplication sharedApplication] setStatusBarHidden:NO];
-//
-//            NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:@"http://pic.paopaoche.net/up/2012-2/20122220201612322865.png"]];
-//            UIImage *image = [UIImage imageWithData:data];
-//
-//            if ([UIImagePNGRepresentation(image) writeToFile:defaultFilePath atomically:YES]) {
-//
-//            }else {
-//
-//            };
-//            //版本更新
-//            //[self VersionUpdate];
-//            [[PgyUpdateManager sharedPgyManager] checkUpdate];
-//        }
-        
         //显示状态栏
         [[UIApplication sharedApplication] setStatusBarHidden:NO];
-        //版本更新
-        //[self VersionUpdate];
+        //检测app
+        [self VersionUpdate];
         
-        [[PgyUpdateManager sharedPgyManager] checkUpdate];
     }
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -319,36 +285,12 @@
                 //[self downloadAdImageWithUrl:imageURL imageName:imageName];
                 [self downloadAdImageWithUrl:imageURL imageName:imageName imageLink:linkURL imageDuration:duration jumpFlag:jumpflag];
             }
-//            //存储广告链接
-//            [kUserDefaults setObject:linkURL forKey:@"ADURL"];
-//            //存储展示时间
-//            [kUserDefaults setObject:duration forKey:@"ADDuration"];
-//            //存储是否可跳转
-//
-//            [kUserDefaults synchronize];
-            
         }
         
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
     }];
     
-//    // 这里原本采用美团的广告接口，现在了一些固定的图片url代替
-//    NSArray *imageArray = @[@"http://imgsrc.baidu.com/forum/pic/item/9213b07eca80653846dc8fab97dda144ad348257.jpg", @"http://pic.paopaoche.net/up/2012-2/20122220201612322865.png", @"http://img5.pcpop.com/ArticleImages/picshow/0x0/20110801/2011080114495843125.jpg", @"http://www.mangowed.com/uploads/allimg/130410/1-130410215449417.jpg"];
-//    NSString *imageUrl = imageArray[arc4random() % imageArray.count];
-//    imageUrl = @"http://pic.paopaoche.net/up/2012-2/20122220201612322865.png";
-//    // 获取图片名:43-130P5122Z60-50.jpg
-//    //NSArray *stringArr = [imageUrl componentsSeparatedByString:@"/"];
-//    NSString *imageName = @"20122220201612322865.png";
-//
-//    // 拼接沙盒路径
-//    NSString *filePath = [self getFilePathWithImageName:imageName];
-//    BOOL isExist = [self isFileExistWithFilePath:filePath];
-//    if (!isExist){// 如果该图片不存在，则删除老图片，下载新图片
-//
-//        [self downloadAdImageWithUrl:imageUrl imageName:imageName];
-//
-//    }
 }
 
 /**
@@ -397,30 +339,41 @@
     }
 }
 
-//版本检测
+//
 - (void)VersionUpdate {
     
-    NSDictionary *dic = @{
-                          @"os":@"IOS"
-                          };
-    NSString *action = @"AppVersionState";
+        NSDictionary *dic = @{
+                              @"os":@"IOS",
+                              @"version":BundleID
+                              };
+        NSString *action = @"AppVersionState";
     
-    NSDictionary *requestDic = @{
-                                 @"action":action,
-                                 @"token":TOKEN,
-                                 @"data":dic
-                                 };
-    NSString *params = [requestDic JSONFragment];
-    [IBHttpTool postWithURL:JNSHTestUrl params:params success:^(id result) {
-        NSDictionary *resultDic = [params JSONValue];
-        NSLog(@"%@",resultDic);
-        
-        JNSHUpdateView *updateView = [[JNSHUpdateView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight)];
-        [updateView show:@"" message:@"" inView:[UIApplication sharedApplication].keyWindow];
-        
-    } failure:^(NSError *error) {
-        NSLog(@"%@",error);
-    }];
+        NSDictionary *requestDic = @{
+                                     @"action":action,
+                                     @"token":TOKEN,
+                                     @"data":dic
+                                     };
+        NSString *params = [requestDic JSONFragment];
+    
+        [IBHttpTool postWithURL:JNSHTestUrl params:params success:^(id result) {
+            NSDictionary *resultDic = [result JSONValue];
+            //NSLog(@"%@",resultDic);
+            NSString *versionCode =resultDic[@"versionCode"];
+            NSString *appstoreUrl = @"https://itunes.apple.com/us/app/%E6%8D%B7%E7%89%9B%E7%94%9F%E6%B4%BB/id1266515484?l=zh&ls=1&mt=8";
+            NSString *updateMsg = resultDic[@"updateMsg"];
+            NSString *updateTitle = resultDic[@"updateTitle"];
+            if ([versionCode compare:AppVersion options:NSNumericSearch] == NSOrderedDescending) {
+                //NSLog(@"版本升级!");
+                JNSHUpdateView *updateView = [[JNSHUpdateView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight)];
+                [updateView show:updateTitle message:updateMsg inView:[UIApplication sharedApplication].keyWindow];
+                updateView.sureBlock = ^{
+                    [[UIApplication sharedApplication] openURL:[NSURL URLWithString:appstoreUrl]];
+                };
+            }
+        } failure:^(NSError *error) {
+            NSLog(@"%@",error);
+        }];
+    
 }
 
 //#define mark - apns

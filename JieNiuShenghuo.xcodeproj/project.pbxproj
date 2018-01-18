@@ -130,6 +130,8 @@
 		CCA784421F5FC1F600AC5288 /* JNSHSystemViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CCA784411F5FC1F600AC5288 /* JNSHSystemViewController.m */; };
 		CCA784451F5FC6A600AC5288 /* JNSHSystemMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CCA784441F5FC6A600AC5288 /* JNSHSystemMessageCell.m */; };
 		CCA9A0411F9F21A6003D424F /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CCA9A03F1F9F21A5003D424F /* ViewController.m */; };
+		CCAD47431FE9FBD6006B6396 /* JNSHKeyBoardView.m in Sources */ = {isa = PBXBuildFile; fileRef = CCAD47421FE9FBD6006B6396 /* JNSHKeyBoardView.m */; };
+		CCAD47461FEA1312006B6396 /* UITextField+ExtentRange.m in Sources */ = {isa = PBXBuildFile; fileRef = CCAD47451FEA1312006B6396 /* UITextField+ExtentRange.m */; };
 		CCADF9D71FC51942008C0128 /* JNSHLabBtnCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CCADF9D61FC51942008C0128 /* JNSHLabBtnCell.m */; };
 		CCADF9DB1FC51EAB008C0128 /* JNSHSaleStatisticViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = CCADF9DA1FC51EAB008C0128 /* JNSHSaleStatisticViewController.m */; };
 		CCADF9DE1FC563F2008C0128 /* JNSHSingleCalendarView.m in Sources */ = {isa = PBXBuildFile; fileRef = CCADF9DD1FC563F2008C0128 /* JNSHSingleCalendarView.m */; };
@@ -428,6 +430,10 @@
 		CCA784441F5FC6A600AC5288 /* JNSHSystemMessageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JNSHSystemMessageCell.m; sourceTree = "<group>"; };
 		CCA9A03F1F9F21A5003D424F /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		CCA9A0401F9F21A5003D424F /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		CCAD47411FE9FBD6006B6396 /* JNSHKeyBoardView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JNSHKeyBoardView.h; sourceTree = "<group>"; };
+		CCAD47421FE9FBD6006B6396 /* JNSHKeyBoardView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JNSHKeyBoardView.m; sourceTree = "<group>"; };
+		CCAD47441FEA1312006B6396 /* UITextField+ExtentRange.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UITextField+ExtentRange.h"; sourceTree = "<group>"; };
+		CCAD47451FEA1312006B6396 /* UITextField+ExtentRange.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UITextField+ExtentRange.m"; sourceTree = "<group>"; };
 		CCADF9D51FC51942008C0128 /* JNSHLabBtnCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JNSHLabBtnCell.h; sourceTree = "<group>"; };
 		CCADF9D61FC51942008C0128 /* JNSHLabBtnCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JNSHLabBtnCell.m; sourceTree = "<group>"; };
 		CCADF9D91FC51EAB008C0128 /* JNSHSaleStatisticViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JNSHSaleStatisticViewController.h; sourceTree = "<group>"; };
@@ -968,6 +974,7 @@
 				CC95DD101F31620400539A03 /* 引导页:广告页 */,
 				CC95DCFB1F31620400539A03 /* Common(通用文件) */,
 				CC95DCFE1F31620400539A03 /* Home(首页) */,
+				CC1406591F3C01BF00675AA7 /* 底部弹出银行卡 */,
 				CC95DD0C1F31620400539A03 /* Store(商城) */,
 				CC95DD1B1F3163A600539A03 /* Service(服务) */,
 				CC95DD041F31620400539A03 /* My(我的) */,
@@ -1293,6 +1300,15 @@
 			path = "消息(cell)";
 			sourceTree = "<group>";
 		};
+		CCAD47401FE9FBB6006B6396 /* JNSHKeyBoardView */ = {
+			isa = PBXGroup;
+			children = (
+				CCAD47411FE9FBD6006B6396 /* JNSHKeyBoardView.h */,
+				CCAD47421FE9FBD6006B6396 /* JNSHKeyBoardView.m */,
+			);
+			path = JNSHKeyBoardView;
+			sourceTree = "<group>";
+		};
 		CCADF9D81FC51DE0008C0128 /* 统计管理 */ = {
 			isa = PBXGroup;
 			children = (
@@ -1476,6 +1492,8 @@
 				CCF7E3501F627C8E00B29DC9 /* UINavigationController+Cloudox.m */,
 				CCF7E3511F627C8E00B29DC9 /* UIViewController+Cloudox.h */,
 				CCF7E3521F627C8E00B29DC9 /* UIViewController+Cloudox.m */,
+				CCAD47441FEA1312006B6396 /* UITextField+ExtentRange.h */,
+				CCAD47451FEA1312006B6396 /* UITextField+ExtentRange.m */,
 			);
 			path = category;
 			sourceTree = "<group>";
@@ -1540,13 +1558,13 @@
 		CCF890DF1F383FFF0045FD4D /* 自定义组件 */ = {
 			isa = PBXGroup;
 			children = (
+				CCAD47401FE9FBB6006B6396 /* JNSHKeyBoardView */,
 				CCF1C8181FCC042700F69A37 /* XHSegmentController */,
 				CCF8E7F21F79EB8C00C820F6 /* 启动广告 */,
 				CC10BE1B1F663079006B9640 /* 广告轮播 */,
 				CC2C444E1F44148800B4982B /* 日历 */,
 				CCC440F71F3D57C500672F60 /* 弹出提示框 */,
 				CCC440F31F3D579900672F60 /* 背景图片按钮 */,
-				CC1406591F3C01BF00675AA7 /* 底部弹出银行卡 */,
 				CCB7D4631F39471A00132C59 /* ImageView高亮 */,
 				CCB7D4621F39470800132C59 /* 倒计时 */,
 				CCB7D4611F3946EB00132C59 /* 进度条 */,
@@ -1620,7 +1638,7 @@
 				TargetAttributes = {
 					CC95DCDC1F315F4500539A03 = {
 						CreatedOnToolsVersion = 8.3.3;
-						DevelopmentTeam = X8CH365KCN;
+						DevelopmentTeam = ZP26G972X9;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.Push = {
@@ -1799,6 +1817,7 @@
 				CC95DD271F31643100539A03 /* JNSHMainBarController.m in Sources */,
 				CC64BB281F4FD49700A1B692 /* SBJsonParser.m in Sources */,
 				CC3F19AD1F8B57A5005177D9 /* JNSHUpdateView.m in Sources */,
+				CCAD47461FEA1312006B6396 /* UITextField+ExtentRange.m in Sources */,
 				CC2C445D1F44148800B4982B /* DAYIndicatorView.m in Sources */,
 				CC6CFEF11F8C957F0020C342 /* JNSHAgentmsgCell.m in Sources */,
 				CCD1E8251F725C0E000DB60B /* JNSHActiveMessageCell.m in Sources */,
@@ -1837,6 +1856,7 @@
 				CC64BB291F4FD49700A1B692 /* SBJsonWriter.m in Sources */,
 				CCF1C8241FCC049400F69A37 /* JNSHAgentManagerViewController.m in Sources */,
 				CC5D853B1F42CF1900C13022 /* JNSHOrderCell.m in Sources */,
+				CCAD47431FE9FBD6006B6396 /* JNSHKeyBoardView.m in Sources */,
 				CC1406551F3BEC0400675AA7 /* JNSHTitleCell.m in Sources */,
 				CC92B1C51FCD3C8E00477B63 /* JNSHOrderManagerViewController.m in Sources */,
 				CCF83D5A1F6A816E00121B89 /* JNSHTicketsSuccessView.m in Sources */,
@@ -2014,14 +2034,14 @@
 				CODE_SIGN_ENTITLEMENTS = JieNiuShenghuo/JieNiuShenghuo.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = X8CH365KCN;
+				DEVELOPMENT_TEAM = ZP26G972X9;
 				ENABLE_BITCODE = NO;
 				GCC_PREFIX_HEADER = /Users/rongfeng/Desktop/JieNiuShenghuo/JieNiuShenghuo/JNSHPreFixHeader.h;
 				INFOPLIST_FILE = JieNiuShenghuo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = com.jieniujnsh;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jieniu.jieniushenghuo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -2038,14 +2058,14 @@
 				CODE_SIGN_ENTITLEMENTS = JieNiuShenghuo/JieNiuShenghuo.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer: Huiping Zhou (LDRA57SQ58)";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = X8CH365KCN;
+				DEVELOPMENT_TEAM = ZP26G972X9;
 				ENABLE_BITCODE = NO;
 				GCC_PREFIX_HEADER = /Users/rongfeng/Desktop/JieNiuShenghuo/JieNiuShenghuo/JNSHPreFixHeader.h;
 				INFOPLIST_FILE = JieNiuShenghuo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				ONLY_ACTIVE_ARCH = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = com.jieniujnsh;
+				PRODUCT_BUNDLE_IDENTIFIER = com.jieniu.jieniushenghuo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = 1;

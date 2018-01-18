@@ -28,8 +28,6 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     
-    self.title = @"收银台";
-    
     self.view.backgroundColor = ColorTabBarBackColor;
     
     self.navigationController.navigationBar.barTintColor = ColorTabBarBackColor;
@@ -38,16 +36,14 @@
 }
 
 - (void)viewDidLoad {
+    
     [super viewDidLoad];
     
     //返回按钮
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:self action:nil];
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
-    
-//    UIImageView *NavBarBackImg = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, 64)];
-//    NavBarBackImg.backgroundColor = ColorTabBarBackColor;
-//    [self.view addSubview:NavBarBackImg];
-    
+
+    //self.title = @"收银台";
     
     //灰色背景
     UIImageView *backImg = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight)];
@@ -140,7 +136,7 @@
     [attrStr addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:NSMakeRange(8, 7)];
     
     if(self.tag == 2) {
-        attrStr = [[NSMutableAttributedString alloc] initWithString:@"温馨提示：\n1、费率(不带积分):会员0.25%+3，非会员0.39%+3；\n2、单笔1万，单卡不限；\n3、实时到账时间09:00-21:00。"];
+        attrStr = [[NSMutableAttributedString alloc] initWithString:@"温馨提示：\n1、费率(不带积分):会员0.3%+3，非会员0.44%+3；\n2、单笔2万，单卡不限；\n3、实时到账时间09:00-21:00。"];
         [attrStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:14] range:NSMakeRange(0, 5)];
         [attrStr addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:NSMakeRange(8, 8)];
     }
@@ -239,9 +235,9 @@
             
             NSString *str = [NSString stringWithFormat:@"%@%@",moneyLab.text,sender.titleLabel.text];
             
-            if ([str floatValue] > 20000) {  //金额不能大于2W
+            if ([str floatValue] > 50000) {  //金额不能大于2W
                 
-                [self show:@"金额不能超过20000" cancle:nil sureStr:@"确定"];
+                [self show:@"单笔金额超限，请输入较小金额" cancle:nil sureStr:@"确定"];
                 
                 return;
             }
@@ -286,9 +282,9 @@
             
             NSString *str = [NSString stringWithFormat:@"%@%@",moneyLab.text,sender.titleLabel.text];
             
-            if ([str floatValue] > 20000) {  //金额不能大于2W
+            if ([str floatValue] > 50000) {  //金额不能大于2W
                 
-                [self show:@"金额不能超过20000" cancle:nil sureStr:@"确定"];
+                [self show:@"单笔金额超限，请输入较小金额" cancle:nil sureStr:@"确定"];
                 
                 return;
             }
@@ -339,7 +335,6 @@
             
             [self SetOrder];
             
-            
         }
     }
     
@@ -353,7 +348,7 @@
     NSString *goodsName = @"商户收款";
     
     //元转分
-    NSString *Minmoney = [NSString stringWithFormat:@"%d",[moneyLab.text integerValue]*100];
+    NSString *Minmoney = [NSString stringWithFormat:@"%ld",[moneyLab.text integerValue]*100];
     
     HUD = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     

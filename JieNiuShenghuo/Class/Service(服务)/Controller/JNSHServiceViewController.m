@@ -40,10 +40,13 @@
     self.navigationController.navigationBar.translucent = NO;
     self.view.backgroundColor = [UIColor whiteColor];
     
-    [table reloadData];
+    //获取服务信息
+    [self getserviceInfo];
+
 }
 
 - (void)viewDidLoad {
+    
     [super viewDidLoad];
     
     //返回按钮
@@ -79,9 +82,6 @@
         self.serviceList = [[NSArray alloc] init];
         
     }
-    
-    //获取服务信息
-    [self getserviceInfo];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         //获取轮播图片

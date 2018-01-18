@@ -11,7 +11,9 @@
 #import "JNSHUpdateView.h"
 #import "SBJSON.h"
 #import "IBHttpTool.h"
-#import "PgyUpdateManager.h"
+#import "AFNetworking.h"
+
+//#import "PgyUpdateManager.h"
 @interface JNSHAdvertiseView()
 
 @property(nonatomic,strong)UIImageView *adView;
@@ -161,9 +163,9 @@
     
         [self removeFromSuperview];
         //检测更新
-        //[self VersionUpdate];
+        [self VersionUpdate];
         
-        [[PgyUpdateManager sharedPgyManager] checkUpdate];
+       // [[PgyUpdateManager sharedPgyManager] checkUpdate];
         
     }];
     
@@ -201,7 +203,8 @@
 - (void)VersionUpdate {
     
     NSDictionary *dic = @{
-                          @"os":@"IOS"
+                          @"os":@"IOS",
+                          @"version":BundleID
                           };
     NSString *action = @"AppVersionState";
     
@@ -211,17 +214,26 @@
                                  @"data":dic
                                  };
     NSString *params = [requestDic JSONFragment];
+    
     [IBHttpTool postWithURL:JNSHTestUrl params:params success:^(id result) {
-        NSDictionary *resultDic = [params JSONValue];
-        NSLog(@"%@",resultDic);
-        
-        JNSHUpdateView *updateView = [[JNSHUpdateView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight)];
-        [updateView show:@"" message:@"" inView:[UIApplication sharedApplication].keyWindow];
-        
-        
+        NSDictionary *resultDic = [result JSONValue];
+        //NSLog(@"%@",resultDic);
+        NSString *versionCode =resultDic[@"versionCode"];
+        NSString *appstoreUrl = @"http://itunes.apple.com/lookup?id=1266515484";
+        NSString *updateMsg = resultDic[@"updateMsg"];
+        NSString *updateTitle = resultDic[@"updateTitle"];
+        if ([versionCode compare:AppVersion options:NSNumericSearch] == NSOrderedDescending) {
+            //NSLog(@"版本升级!");
+            JNSHUpdateView *updateView = [[JNSHUpdateView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight)];
+            [updateView show:updateTitle message:updateMsg inView:[UIApplication sharedApplication].keyWindow];
+            updateView.sureBlock = ^{
+                [[UIApplication sharedApplication] openURL:[NSURL URLWithString:appstoreUrl]];
+            };
+        }
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
     }];
+    
 }
 
 - (void)setJumpflag:(NSString *)jumpflag {

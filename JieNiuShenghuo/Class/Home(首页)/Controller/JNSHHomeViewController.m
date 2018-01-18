@@ -82,7 +82,7 @@
     [super viewDidLoad];
 
     //切换APPstore状态
-    [JNSYUserInfo getUserInfo].IS_APPSTORE = NO;
+    [JNSYUserInfo getUserInfo].IS_APPSTORE = YES;
     
     //接收通知
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(pushToAD) name:@"pushtoAd" object:nil];
@@ -130,9 +130,11 @@
 //    ADimgView.frame = CGRectMake(0,-64, KscreenWidth,KscreenHeight*0.37);
 //    [self.view addSubview:ADimgView];
     
-    NSArray *imgaeArray = [NSArray arrayWithObjects:[UIImage imageNamed:@"banner01"],[UIImage imageNamed:@"AD04.png"],[UIImage imageNamed:@"APP05.png"], nil];
+    //NSArray *imgaeArray = [NSArray arrayWithObjects:[UIImage imageNamed:@"banner01"],[UIImage imageNamed:@"AD04.png"],[UIImage imageNamed:@"APP05.png"], nil];
     
-    ADScrollView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0, 0, KscreenWidth, [JNSHAutoSize height:188]) shouldInfiniteLoop:YES imageNamesGroup:imgaeArray];
+    NSMutableArray *imageArray = [NSMutableArray arrayWithCapacity:4];
+    
+    ADScrollView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0, 0, KscreenWidth, [JNSHAutoSize height:188]) shouldInfiniteLoop:YES imageNamesGroup:imageArray];
     ADScrollView.delegate = self;
     ADScrollView.pageControlStyle = SDCycleScrollViewPageContolStyleAnimated;
     [self.view addSubview:ADScrollView];
@@ -324,7 +326,7 @@
     [ExpressLogoImg mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(ExpressBackImg);
         make.left.equalTo(ExpressBackImg).offset([JNSHAutoSize width:33]);
-        make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:43], [JNSHAutoSize height:43]));
+        make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:40], [JNSHAutoSize height:40]));
     }];
     
     ExpressLab = [[UILabel alloc] init];
@@ -391,7 +393,7 @@
     
     ConutDownView = [[JNSHTimeCountDownView alloc] initWithFrame:CGRectMake(KscreenWidth - [JNSHAutoSize width:80], [JNSHAutoSize height:10], [JNSHAutoSize width:65], [JNSHAutoSize height:20])];
     //ConutDownView.time = 1000;
-   
+    
     NSLog(@"%ld",(long)ConutDownView.time);
     
     [titleBackImg addSubview:ConutDownView];
@@ -506,12 +508,6 @@
     [self startTimer];
     
     //获取广告信息
-    
-   // dispatch_queue_t queue = dispatch_queue_create(@"com.getad.queue", NULL);
-    
-//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0 ), ^{
-//
-//    });
     
     [self getAdvertisingImage];
     
@@ -641,7 +637,7 @@
             timetag = @"TheirLuckAm";
             //抢券信息
             [self requestForTicketStatus:timetag];
-        }else if( ([hour integerValue] >= 14) && ([hour integerValue] < 18)){                        //14-18点获取下午场
+        }else if( ([hour integerValue] >= 14) && ([hour integerValue] < 18)){       //14-18点获取下午场
             timetag = @"TheirLuckPm";
             //抢券信息
             [self requestForTicketStatus:timetag];
@@ -762,7 +758,6 @@
         }];
         
     }
-
 }
 
 //获取广告轮播图片
@@ -828,7 +823,6 @@
     
     }
     
-    
 }
 
 //抢券成功，弹出视图
@@ -869,12 +863,9 @@
         [self presentViewController:nav animated:YES completion:nil];
         
     }else {
-        
         messageCountLab.hidden = YES;
-        
         JNSHNoticeViewController *NoticeVc = [[JNSHNoticeViewController alloc] init];
         NoticeVc.hidesBottomBarWhenPushed = YES;
-        
         [self.navigationController pushViewController:NoticeVc animated:YES];
         
     }
@@ -883,20 +874,15 @@
 //收银台
 - (void)CashTapAction {
     
-    NSLog(@"收银台");
-    
-    JNSHCashDeskViewController *jnshCashDeskVc = [[JNSHCashDeskViewController alloc] init];
-    jnshCashDeskVc.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:jnshCashDeskVc animated:YES];
-    
-//    if([self.logoList[0][@"url"] isEqualToString:@"jnlife://syt"]) {
-//        JNSHCashDeskViewController *jnshCashDeskVc = [[JNSHCashDeskViewController alloc] init];
-//        jnshCashDeskVc.hidesBottomBarWhenPushed = YES;
-//        [self.navigationController pushViewController:jnshCashDeskVc animated:YES];
-//    }else {
-//        [JNSHAutoSize showMsg:@"跳转参数出错"];
-//    }
-    
+    NSString *url = [kUserDefaults objectForKey:@"HomeBtnUrl0"];
+    if([url isEqualToString:@"jnlife://syt"]) {
+        JNSHCashDeskViewController *jnshCashDeskVc = [[JNSHCashDeskViewController alloc] init];
+        jnshCashDeskVc.title = @"收银台";
+        jnshCashDeskVc.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:jnshCashDeskVc animated:YES];
+    }else {
+        [JNSHAutoSize showMsg:@"跳转参数出错"];
+    }
     
 }
 //开通会员
@@ -904,67 +890,83 @@
     
     
     if ([JNSYUserInfo getUserInfo].isLoggedIn) {
-        JNSHVipViewController *VipVc = [[JNSHVipViewController alloc] init];
-        VipVc.hidesBottomBarWhenPushed = YES;
-        [self.navigationController pushViewController:VipVc animated:YES];
+        
+        NSString *url = [kUserDefaults objectForKey:@"HomeBtnUrl1"];
+        if ([url isEqualToString:@"jnlife://openvip"]) { //跳转会员
+            JNSHVipViewController *VipVc = [[JNSHVipViewController alloc] init];
+            VipVc.hidesBottomBarWhenPushed = YES;
+            [self.navigationController pushViewController:VipVc animated:YES];
+        }else if(url){                                   //跳转web
+            JNSHWebViewController *webVc = [[JNSHWebViewController alloc] init];
+            webVc.hidesBottomBarWhenPushed = YES;
+            webVc.title = [kUserDefaults objectForKey:@"HomeBtnTitleTwo"];
+            webVc.url = url;
+            [self.navigationController pushViewController:webVc animated:YES];
+        }else {
+             [JNSHAutoSize showMsg:@"跳转参数出错"];
+        }
+        
     }else {
         
         JNSHLoginController *LogInVc = [[JNSHLoginController alloc] init];
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:LogInVc];
         [self presentViewController:nav animated:YES completion:nil];
-        
-//        if ([self.logoList[1][@"url"] isEqualToString:@"jnlife://openvip"]) {
-//            JNSHLoginController *LogInVc = [[JNSHLoginController alloc] init];
-//            UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:LogInVc];
-//            [self presentViewController:nav animated:YES completion:nil];
-//        }else {
-//            [JNSHAutoSize showMsg:@"跳转参数出错"];
-//        }
-        
+       
     }
 }
 
 //银联快捷
 - (void)CardTapAction {
     
-    JNSHCashDeskViewController *CashDeskVc = [[JNSHCashDeskViewController alloc] init];
-    CashDeskVc.hidesBottomBarWhenPushed = YES;
-    CashDeskVc.tag = 2;
-    [self.navigationController pushViewController:CashDeskVc animated:YES];
+    NSString *url = [kUserDefaults objectForKey:@"HomeBtnUrl2"];
     
-//    if ([self.logoList[2][@"url"] isEqualToString:@"jnlife://unionh5"]) {
-//        JNSHCashDeskViewController *CashDeskVc = [[JNSHCashDeskViewController alloc] init];
-//        CashDeskVc.hidesBottomBarWhenPushed = YES;
-//        CashDeskVc.tag = 2;
-//        [self.navigationController pushViewController:CashDeskVc animated:YES];
-//    }
+    if ([url isEqualToString:@"jnlife://unionh5"]) {
+        JNSHCashDeskViewController *CashDeskVc = [[JNSHCashDeskViewController alloc] init];
+        CashDeskVc.title = @"银联快捷";
+        CashDeskVc.hidesBottomBarWhenPushed = YES;
+        CashDeskVc.tag = 2;
+        [self.navigationController pushViewController:CashDeskVc animated:YES];
+    }else if(url){
+        
+        JNSHWebViewController *webVc = [[JNSHWebViewController alloc] init];
+        webVc.hidesBottomBarWhenPushed = YES;
+        webVc.title = [kUserDefaults objectForKey:@"HomeBtnTitleThree"];;
+        webVc.url = url;
+        [self.navigationController pushViewController:webVc animated:YES];
+        
+    }else {
+        [JNSHAutoSize showMsg:@"跳转参数出错"];
+    }
 
 }
+
 //贷款、用卡百科
 - (void)daiKuan {
     
     JNSHWebViewController *webVc = [[JNSHWebViewController alloc] init];
-    webVc.url = @"http://wap.test.life.hzjieniu.com/service/delivery.htm";
-    /*
-     快递助手：http://wap.life.hzjieniu.com/service/baike.htm
-     我要贷款:http://www.hiima.cn/promot/product/index/scene_id/3
-     */
-    webVc.hidesBottomBarWhenPushed = YES;
-    if([JNSYUserInfo getUserInfo].IS_APPSTORE) {
-        webVc.Navtitle = @"用卡百科";
-        webVc.url = @"http://wap.life.hzjieniu.com/service/baike.htm";
+//    webVc.url = @"http://wap.test.life.hzjieniu.com/service/delivery.htm";
+//    /*
+//     快递助手：http://wap.life.hzjieniu.com/service/baike.htm
+//     我要贷款:http://www.hiima.cn/promot/product/index/scene_id/3
+//     */
+//    webVc.hidesBottomBarWhenPushed = YES;
+//    if([JNSYUserInfo getUserInfo].IS_APPSTORE) {
+//        webVc.Navtitle = @"用卡百科";
+//        webVc.url = @"http://wap.life.hzjieniu.com/service/baike.htm";
+//    }else {
+//        webVc.Navtitle = @"我要贷款";
+//        webVc.url = @"http://www.hiima.cn/promot/product/index/scene_id/3";
+//    }
+    NSString *url = [kUserDefaults objectForKey:@"HomeBtnUrl3"];
+    if (url != nil && ![url isEqualToString:@""]) {
+        webVc.Navtitle = [kUserDefaults objectForKey:@"HomeBtnTitleFour"];
+        webVc.url = url;
+        webVc.hidesBottomBarWhenPushed = YES;
+        [self.navigationController pushViewController:webVc animated:YES];
     }else {
-        webVc.Navtitle = @"我要贷款";
-        webVc.url = @"http://www.hiima.cn/promot/product/index/scene_id/3";
+        [JNSHAutoSize showMsg:@"跳转参数出错"];
     }
     
-//    if (self.logoList[3][@"url"] != nil && ![self.logoList[3][@"url"] isEqualToString:@""]) {
-//        webVc.Navtitle = self.logoList[3][@"title"];
-//        webVc.url = self.logoList[3][@"url"];
-//    }
-
-    
-    [self.navigationController pushViewController:webVc animated:YES];
 }
 
 //跳转广告
@@ -1038,28 +1040,58 @@
         }
         
         if(indexPageModel[0][@"title"] != nil && !([indexPageModel[0][@"title"] isEqualToString:@""])) {
-            //CashLab.text = indexPageModel[0][@"title"];
-            [kUserDefaults setObject:indexPageModel[0][@"title"] forKey:@"HomeBtnTitleOne"];
+            
+            [kUserDefaults setObject:indexPageModel[0][@"title"] forKey:@"HomeBtnTitleOne"]; //存title
+            //设置标题
+            CashLab.text = indexPageModel[0][@"title"];
+            //设置图片
             NSString *imageurl = indexPageModel[0][@"pic"];
-            [self reSetImageCache:imageurl key:@"HomeBtnImgOne"];
+            if (imageurl) {
+                [CashLogo sd_setImageWithURL:[NSURL URLWithString:imageurl]];
+                [self reSetImageCache:imageurl key:@"HomeBtnImgOne"];        //存图片
+            }
+        
         }
         if (indexPageModel[1][@"title"] != nil && !([indexPageModel[1][@"title"] isEqualToString:@""])) {
-            //VipLab.text = indexPageModel[1][@"title"];
+            
             [kUserDefaults setObject:indexPageModel[1][@"title"] forKey:@"HomeBtnTitleTwo"];
+            VipLab.text = indexPageModel[1][@"title"];
             NSString *imageurl = indexPageModel[1][@"pic"];
-            [self reSetImageCache:imageurl key:@"HomeBtnImgTwo"];
+            if (imageurl) {
+                [VipLogoImg sd_setImageWithURL:[NSURL URLWithString:imageurl]];
+                [self reSetImageCache:imageurl key:@"HomeBtnImgTwo"];
+            }
+            
         }
         if (indexPageModel[2][@"title"] != nil && !([indexPageModel[2][@"title"] isEqualToString:@""])) {
-            //CardLab.text = indexPageModel[2][@"title"];
+            
             [kUserDefaults setObject:indexPageModel[2][@"title"] forKey:@"HomeBtnTitleThree"];
+            CardLab.text = indexPageModel[2][@"title"];
             NSString *imageUrl = indexPageModel[2][@"pic"];
-            [self reSetImageCache:imageUrl key:@"HomeBtnImgThree"];
+            if (imageUrl) {
+                [CardLogoImg sd_setImageWithURL:[NSURL URLWithString:imageUrl]];
+                [self reSetImageCache:imageUrl key:@"HomeBtnImgThree"];
+            }
         }
         if (indexPageModel[3][@"title"] != nil && !([indexPageModel[3][@"title"] isEqualToString:@""])) {
-            //ExpressLab.text = indexPageModel[3][@"title"];
+            
             [kUserDefaults setObject:indexPageModel[3][@"title"] forKey:@"HomeBtnTitleFour"];
+            ExpressLab.text = indexPageModel[3][@"title"];
             NSString *imageUrl = indexPageModel[3][@"pic"];
-            [self reSetImageCache:imageUrl key:@"HomeBtnImgFour"];
+            if (imageUrl) {
+                [ExpressLogoImg sd_setImageWithURL:[NSURL URLWithString:imageUrl]];
+                [self reSetImageCache:imageUrl key:@"HomeBtnImgFour"];
+            }
+        
+        }
+        //存URL
+        for (NSInteger i = 0; i < indexPageModel.count; i++) {
+            NSString *url = indexPageModel[i][@"url"];
+            if (url!=nil && (![url isEqualToString:@""])) {
+                
+                [kUserDefaults setObject:url forKey:[NSString stringWithFormat:@"HomeBtnUrl%ld",i]];
+                
+            }
         }
         
     } failure:^(NSError *error) {

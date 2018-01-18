@@ -132,10 +132,13 @@
     NSLog(@"搜索");
     
     [self searchForOrderList:@"" userName:Fld.text startName:self.startTime endTime:self.endTime page:0];
-    
-    
+
 }
 
+
+
+
+//获取订单列表
 - (void)searchForOrderList:(NSString *)orderStatus userName:(NSString *)userName startName:(NSString *)startName endTime:(NSString *)endTime page:(NSInteger)page {
     
     NSDictionary *dic = @{
@@ -198,9 +201,9 @@
     if (cell == nil) {
         cell = [[JNSHAgentOrderCell alloc] init];
         cell.numLab.text = [NSString stringWithFormat:@"￥%.2lf",[self.orderList[indexPath.row][@"orderPrice"] intValue]/100.0];
-        cell.userNameLab.text = self.orderList[indexPath.row][@"goodsName"];
+        cell.userNameLab.text = self.orderList[indexPath.row][@"userName"];
         cell.orderNoLab.text = self.orderList[indexPath.row][@"orderNo"];
-        NSString *orderType = [NSString stringWithFormat:@"%@",self.orderList[indexPath.row][@"orderType"]];
+        NSString *orderType = [NSString stringWithFormat:@"%@",self.orderList[indexPath.row][@"orderStatus"]];
         if ([orderType isEqualToString:@"10"]) {
             cell.SaleStatusLab.text = @"初始化";
             cell.SaleStatusLab.textColor = [UIColor orangeColor];

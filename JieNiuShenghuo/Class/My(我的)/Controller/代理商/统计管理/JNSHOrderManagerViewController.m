@@ -19,6 +19,7 @@
 #import "JNSYUserInfo.h"
 #import "SBJSON.h"
 #import "IBHttpTool.h"
+#import "MJRefresh.h"
 
 @interface JNSHOrderManagerViewController ()<UITableViewDelegate,UITableViewDataSource>
 
@@ -44,7 +45,6 @@
 
 @property(nonatomic,copy)NSString *status;
 
-
 @end
 
 @implementation JNSHOrderManagerViewController {
@@ -64,14 +64,14 @@
     
 }
 
-//获取当时日期
-- (NSString*)getToday
+//获取当时日期 changeday:需要提前或者延后的天数
+- (NSString*)getToday:(NSInteger)changeday
 {
     NSDate *today = [NSDate date];
+    NSDate *targetday = [today dateByAddingTimeInterval:24*60*60*changeday];
     NSDateFormatter *df = [[NSDateFormatter alloc] init];
     [df setDateFormat:@"yyyy-MM-dd"];
-    NSString* dateString = [df stringFromDate:today];
-    //NSString *dateStr = [dateString stringByReplacingOccurrencesOfString:@"-" withString:@""];
+    NSString* dateString = [df stringFromDate:targetday];
     return dateString;
 }
 
@@ -89,7 +89,7 @@
     self.orderList = [[NSArray alloc] init];
     
     //列表
-    table = [[UITableView alloc] initWithFrame:CGRectMake(0, [JNSHAutoSize height:43], KscreenWidth, KscreenHeight - [JNSHAutoSize height:41]) style:UITableViewStylePlain];
+    table = [[UITableView alloc] initWithFrame:CGRectMake(0, [JNSHAutoSize height:43], KscreenWidth, KscreenHeight - [JNSHAutoSize height:41+64]) style:UITableViewStylePlain];
     table.dataSource = self;
     table.delegate = self;
     table.backgroundColor =ColorTableBackColor;
@@ -97,15 +97,36 @@
     table.tableHeaderView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 0, CGFLOAT_MIN)];
     [self.view addSubview:table];
     
+    //下拉刷新
+    table.mj_header = [MJRefreshStateHeader headerWithRefreshingBlock:^{
+        //
+        _page = 0;
+        //获取订单列表
+        [self searchForOrderList:_status userName:@"" startName:_startTime endTime:_endTime page:0];
+        
+    }];
+    
+    table.mj_footer = [MJRefreshAutoStateFooter footerWithRefreshingBlock:^{
+        
+        _page ++;
+        //获取订单列表
+        [self searchForOrderList:_status userName:@"" startName:_startTime endTime:_endTime page:_page];
+        
+    }];
+    
+    
+    
     //获取今天的订单
-    _startTime = [NSString stringWithFormat:@"%@ %@",[self getToday],@"00:00:00"];
-    _endTime = [NSString stringWithFormat:@"%@ %@",[self getToday],@"23:59:59"];
+    _startTime = [NSString stringWithFormat:@"%@ %@",[self getToday:-15],@"00:00:00"];
+    _endTime = [NSString stringWithFormat:@"%@ %@",[self getToday:0],@"23:59:59"];
     _status = @"";
     
-    [self searchForOrderList:_status userName:@"" startName:_startTime endTime:_endTime page:10];
+    //获取订单列表
+    [self searchForOrderList:_status userName:@"" startName:_startTime endTime:_endTime page:0];
     
 }
 
+//创建View
 - (void)setPickView {
     
     UIButton *searchBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -209,7 +230,6 @@
     searchVc.hidesBottomBarWhenPushed = YES;
     [self.navigationController pushViewController:searchVc animated:YES];
     
-    
 }
 
 //日期选择
@@ -254,7 +274,7 @@
         //获取新的订单
             
         [stongSelf searchForOrderList:stongSelf.status userName:@"" startName:stongSelf.startTime endTime:stongSelf.endTime page:stongSelf.page];
-            
+    
         NSLog(@"start:%@ end:%@",startime,Endtime);
             
         };
@@ -271,7 +291,7 @@
     
     //NSLog(@"状态选择");
     
-    NSArray *array = @[@"全部",@"初始化",@"支付成功",@"支付失败"];
+    NSArray *array = @[@"全部",@"支付成功",@"支付失败"];
     
     if (calendar.alpha > 0) {
         _dateArrow.image = [UIImage imageNamed:@"order_arror_down"];
@@ -297,10 +317,8 @@
             if (strongSelf.selectIndex == 0) {
                 strongSelf.status = @"";
             }else if (strongSelf.selectIndex == 1) {
-                strongSelf.status = @"10";
-            }else if (strongSelf.selectIndex == 2) {
                 strongSelf.status = @"20";
-            }else if (strongSelf.selectIndex == 3) {
+            }else if (strongSelf.selectIndex == 2) {
                 strongSelf.status = @"21";
             }
             //跟新当前页
@@ -322,6 +340,7 @@
     
 }
 
+//获取订单列表
 - (void)searchForOrderList:(NSString *)orderStatus userName:(NSString *)userName startName:(NSString *)startName endTime:(NSString *)endTime page:(NSInteger)page {
     
     NSDictionary *dic = @{
@@ -329,7 +348,7 @@
                           @"userName":userName,
                           @"ts":startName,
                           @"te":endTime,
-                          @"page":[NSString stringWithFormat:@"%ld",page],
+                          @"page":[NSString stringWithFormat:@"%ld",(long)page],
                           @"limit":[NSString stringWithFormat:@"%d",10]
                           };
     NSString *action = @"OrgChildUserOrder";
@@ -347,16 +366,33 @@
         NSLog(@"%@",resultDic);
         
         if ([resultDic[@"records"] isKindOfClass:[NSArray class]]) {
-            self.orderList = resultDic[@"records"];
+            
+            NSArray *array = resultDic[@"records"];
+            
+            //self.orderList = resultDic[@"records"];
+            
+            if (page == 0) {
+                self.orderList = array;
+            }else {
+                self.orderList = [self.orderList arrayByAddingObjectsFromArray:array];
+            }
+            
             [table reloadData];
         }
         
+        [table.mj_footer endRefreshing];
+        [table.mj_header endRefreshing];
+        
+        
     } failure:^(NSError *error) {
         NSLog(@"%@",error);
+        
+        [table.mj_footer endRefreshing];
+        [table.mj_header endRefreshing];
+        
     }];
 
 }
-
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
@@ -375,15 +411,18 @@
         cell.numLab.text = [NSString stringWithFormat:@"￥%.2lf",[self.orderList[indexPath.row][@"orderPrice"] intValue]/100.0];
         cell.userNameLab.text = self.orderList[indexPath.row][@"userName"];
         cell.orderNoLab.text = self.orderList[indexPath.row][@"orderNo"];
-        NSString *orderType = [NSString stringWithFormat:@"%@",self.orderList[indexPath.row][@"orderType"]];
+        NSString *orderType = [NSString stringWithFormat:@"%@",self.orderList[indexPath.row][@"orderStatus"]];
         if ([orderType isEqualToString:@"10"]) {
             cell.SaleStatusLab.text = @"初始化";
             cell.SaleStatusLab.textColor = [UIColor orangeColor];
         }else if ([orderType isEqualToString:@"20"]) {
             cell.SaleStatusLab.textColor = GreenColor;
             cell.SaleStatusLab.text = @"支付成功";
-        }else {
+        }else if([orderType isEqualToString:@"21"]){
             cell.SaleStatusLab.text = @"支付失败";
+            cell.SaleStatusLab.textColor = [UIColor redColor];
+        }else {
+            cell.SaleStatusLab.text = @"支付中";
             cell.SaleStatusLab.textColor = [UIColor redColor];
         }
         cell.saleTimeLab.text = self.orderList[indexPath.row][@"orderPayTime"];
@@ -410,10 +449,15 @@
     
 }
 
-
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)dealloc {
+    
+    NSLog(@"dealloc");
+    
 }
 
 /*

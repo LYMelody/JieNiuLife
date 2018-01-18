@@ -70,42 +70,45 @@
         make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:62], [JNSHAutoSize height:15]));
     }];
     
-    btnOne = [UIButton buttonWithType:UIButtonTypeCustom];
-    [btnOne setImage:[UIImage imageNamed:@"unchecked"] forState:UIControlStateNormal];
-    [btnOne setImage:[UIImage imageNamed:@"---checkmark"] forState:UIControlStateSelected];
-    [btnOne addTarget:self action:@selector(select:) forControlEvents:UIControlEventTouchUpInside];
-    btnOne.tag = 100;
-    btnOne.selected = YES;
-    [headBackImg addSubview:btnOne];
-    
-    [btnOne mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(searchLab);
-        make.left.equalTo(searchLab.mas_right).offset([JNSHAutoSize width:15]);
-        make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:15], [JNSHAutoSize width:15]));
-    }];
-    
-    UILabel *LabOne = [[UILabel alloc] init];
-    LabOne.text = @"办事处";
-    LabOne.textColor = ColorLightText;
-    LabOne.font = [UIFont systemFontOfSize:13];
-    LabOne.textAlignment = NSTextAlignmentLeft;
-    [headBackImg addSubview:LabOne];
-    [LabOne mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(btnOne);
-        make.left.equalTo(btnOne.mas_right).offset([JNSHAutoSize width:10]);
-        make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:40], [JNSHAutoSize height:15]));
-    }];
+//
+//    btnOne = [UIButton buttonWithType:UIButtonTypeCustom];
+//    [btnOne setImage:[UIImage imageNamed:@"unchecked"] forState:UIControlStateNormal];
+//    [btnOne setImage:[UIImage imageNamed:@"---checkmark"] forState:UIControlStateSelected];
+//    [btnOne addTarget:self action:@selector(select:) forControlEvents:UIControlEventTouchUpInside];
+//    btnOne.tag = 100;
+//    btnOne.selected = YES;
+//    [headBackImg addSubview:btnOne];
+//
+//    [btnOne mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.top.equalTo(searchLab);
+//        make.left.equalTo(searchLab.mas_right).offset([JNSHAutoSize width:15]);
+//        make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:15], [JNSHAutoSize width:15]));
+//    }];
+//
+//    UILabel *LabOne = [[UILabel alloc] init];
+//    LabOne.text = @"办事处";
+//    LabOne.textColor = ColorLightText;
+//    LabOne.font = [UIFont systemFontOfSize:13];
+//    LabOne.textAlignment = NSTextAlignmentLeft;
+//    [headBackImg addSubview:LabOne];
+//    [LabOne mas_makeConstraints:^(MASConstraintMaker *make) {
+//        make.top.equalTo(btnOne);
+//        make.left.equalTo(btnOne.mas_right).offset([JNSHAutoSize width:10]);
+//        make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:40], [JNSHAutoSize height:15]));
+//    }];
+//
     
     btnTwo = [UIButton buttonWithType:UIButtonTypeCustom];
     [btnTwo setImage:[UIImage imageNamed:@"unchecked"] forState:UIControlStateNormal];
     [btnTwo setImage:[UIImage imageNamed:@"---checkmark"] forState:UIControlStateSelected];
     [btnTwo addTarget:self action:@selector(select:) forControlEvents:UIControlEventTouchUpInside];
     btnTwo.tag = 101;
+    btnTwo.selected = YES;
     [headBackImg addSubview:btnTwo];
-    
+
     [btnTwo mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(searchLab);
-        make.left.equalTo(LabOne.mas_right).offset([JNSHAutoSize width:10]);
+        make.left.equalTo(searchLab.mas_right).offset([JNSHAutoSize width:10]);
         make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:15], [JNSHAutoSize width:15]));
     }];
     
@@ -114,10 +117,17 @@
     labTwo.textColor = ColorLightText;
     labTwo.font = [UIFont systemFontOfSize:13];
     labTwo.textAlignment = NSTextAlignmentLeft;
+    labTwo.userInteractionEnabled = YES;
+    labTwo.tag = 201;
     [headBackImg addSubview:labTwo];
     
+    UITapGestureRecognizer *TapOne = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(GestureSelect:)];
+    TapOne.numberOfTouchesRequired = 1;
+    TapOne.numberOfTapsRequired = 1;
+    [labTwo addGestureRecognizer:TapOne];
+    
     [labTwo mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(btnTwo);
+        make.top.equalTo(searchLab);
         make.left.equalTo(btnTwo.mas_right).offset([JNSHAutoSize width:10]);
         make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:70], [JNSHAutoSize height:15]));
     }];
@@ -140,7 +150,13 @@
     labThree.textColor = ColorLightText;
     labThree.font = [UIFont systemFontOfSize:13];
     labThree.textAlignment = NSTextAlignmentLeft;
+    labThree.userInteractionEnabled = YES;
+    labThree.tag = 202;
     [headBackImg addSubview:labThree];
+    
+    UITapGestureRecognizer *TapTwo = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(GestureSelect:)];
+    TapTwo.numberOfTouchesRequired = 1;
+    [labThree addGestureRecognizer:TapTwo];
     
     [labThree mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.equalTo(btnThree);
@@ -164,8 +180,6 @@
     
     count = 2;
     
-    //self.orderList = [[NSArray alloc] init];
-    
     //table
     table = [[UITableView alloc] initWithFrame:CGRectMake(0, [JNSHAutoSize height:68], KscreenWidth, self.view.bounds.size.height - [JNSHAutoSize height:(128+50)]) style:UITableViewStylePlain];
     
@@ -176,12 +190,35 @@
     [self.view addSubview:table];
     
     //[table reloadData];
-    type = @"L30";
+    type = @"L31";
     //请求数据
-    [self requestForInfo:@"L30" page:0];
+    [self requestForInfo:@"L31" page:0];
     
 }
 
+//点击文字方法
+- (void)GestureSelect:(UITapGestureRecognizer *) sender{
+    
+    NSLog(@"%ld",sender.view.tag);
+    
+    NSInteger tag = sender.view.tag;
+    
+    if(tag == 201) {  //以及代理
+        
+        btnTwo.selected = YES;
+        btnThree.selected = NO;
+        type = @"L31";
+    }else {
+        btnTwo.selected = NO;
+        btnThree.selected = YES;
+        type = @"L32";
+    }
+    
+     [self requestForInfo:type page:0];
+    
+}
+
+//按钮点击
 - (void)select:(UIButton *)sender {
     
     if (sender.selected) {
@@ -254,7 +291,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     
-    NSLog(@"%@,%ld,%ld",_orderList,_orderList.count*6 + _orderList.count>0?(_orderList.count - 1):0,_orderList.count);
+    //NSLog(@"%@,%ld,%ld",_orderList,_orderList.count*6 + _orderList.count>0?(_orderList.count - 1):0,_orderList.count);
     
     return (_orderList.count*6 + (_orderList.count>0?(_orderList.count - 1):0));
     

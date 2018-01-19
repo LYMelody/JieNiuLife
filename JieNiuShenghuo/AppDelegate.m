@@ -362,6 +362,8 @@
             NSString *appstoreUrl = @"https://itunes.apple.com/us/app/%E6%8D%B7%E7%89%9B%E7%94%9F%E6%B4%BB/id1266515484?l=zh&ls=1&mt=8";
             NSString *updateMsg = resultDic[@"updateMsg"];
             NSString *updateTitle = resultDic[@"updateTitle"];
+            
+            //判断App版本号
             if ([versionCode compare:AppVersion options:NSNumericSearch] == NSOrderedDescending) {
                 //NSLog(@"版本升级!");
                 JNSHUpdateView *updateView = [[JNSHUpdateView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight)];

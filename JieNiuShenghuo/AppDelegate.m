@@ -365,7 +365,6 @@
             
             //判断App版本号
             if ([versionCode compare:AppVersion options:NSNumericSearch] == NSOrderedDescending) {
-                //NSLog(@"版本升级!");
                 JNSHUpdateView *updateView = [[JNSHUpdateView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight)];
                 [updateView show:updateTitle message:updateMsg inView:[UIApplication sharedApplication].keyWindow];
                 updateView.sureBlock = ^{

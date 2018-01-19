@@ -15,9 +15,6 @@
 		CC10BE301F663079006B9640 /* SDCollectionViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = CC10BE271F663079006B9640 /* SDCollectionViewCell.m */; };
 		CC10BE311F663079006B9640 /* SDCycleScrollView.m in Sources */ = {isa = PBXBuildFile; fileRef = CC10BE291F663079006B9640 /* SDCycleScrollView.m */; };
 		CC10BE321F663079006B9640 /* UIView+SDExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = CC10BE2B1F663079006B9640 /* UIView+SDExtension.m */; };
-		CC10BE361F663382006B9640 /* AD04.png in Resources */ = {isa = PBXBuildFile; fileRef = CC10BE331F663382006B9640 /* AD04.png */; };
-		CC10BE371F663382006B9640 /* APP05.png in Resources */ = {isa = PBXBuildFile; fileRef = CC10BE341F663382006B9640 /* APP05.png */; };
-		CC10BE381F663382006B9640 /* banner01@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = CC10BE351F663382006B9640 /* banner01@2x.png */; };
 		CC12E9011F32B545008C8FDB /* libicucore.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = CC12E9001F32B545008C8FDB /* libicucore.tbd */; };
 		CC12E9031F32B54D008C8FDB /* libz.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = CC12E9021F32B54D008C8FDB /* libz.tbd */; };
 		CC12E9051F32B558008C8FDB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CC12E9041F32B558008C8FDB /* Foundation.framework */; };
@@ -221,9 +218,6 @@
 		CC10BE291F663079006B9640 /* SDCycleScrollView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDCycleScrollView.m; sourceTree = "<group>"; };
 		CC10BE2A1F663079006B9640 /* UIView+SDExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+SDExtension.h"; sourceTree = "<group>"; };
 		CC10BE2B1F663079006B9640 /* UIView+SDExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+SDExtension.m"; sourceTree = "<group>"; };
-		CC10BE331F663382006B9640 /* AD04.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AD04.png; sourceTree = "<group>"; };
-		CC10BE341F663382006B9640 /* APP05.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = APP05.png; sourceTree = "<group>"; };
-		CC10BE351F663382006B9640 /* banner01@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "banner01@2x.png"; sourceTree = "<group>"; };
 		CC12E8FF1F32B21D008C8FDB /* JNSHPreFixHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JNSHPreFixHeader.h; sourceTree = "<group>"; };
 		CC12E9001F32B545008C8FDB /* libicucore.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libicucore.tbd; path = usr/lib/libicucore.tbd; sourceTree = SDKROOT; };
 		CC12E9021F32B54D008C8FDB /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
@@ -1211,9 +1205,6 @@
 			isa = PBXGroup;
 			children = (
 				CCA591661F74B19D00EE4648 /* 代理商-.png */,
-				CC10BE331F663382006B9640 /* AD04.png */,
-				CC10BE341F663382006B9640 /* APP05.png */,
-				CC10BE351F663382006B9640 /* banner01@2x.png */,
 			);
 			path = "首页";
 			sourceTree = "<group>";
@@ -1671,7 +1662,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CC10BE361F663382006B9640 /* AD04.png in Resources */,
 				CCA5916B1F74C4B100EE4648 /* launchback.png in Resources */,
 				CC23AC961F73BC5E009F0B6C /* jnsh.txt in Resources */,
 				CC704EEB1F95D71100144D68 /* back@2x.png in Resources */,
@@ -1680,8 +1670,6 @@
 				CC7D611D1F677F1400F2BE88 /* 引导页3.png in Resources */,
 				CC7D611B1F677F1400F2BE88 /* 引导页1.png in Resources */,
 				CCA591671F74B19D00EE4648 /* 代理商-.png in Resources */,
-				CC10BE371F663382006B9640 /* APP05.png in Resources */,
-				CC10BE381F663382006B9640 /* banner01@2x.png in Resources */,
 				CC95DCED1F315F4500539A03 /* Assets.xcassets in Resources */,
 				CCB6FAC31F41BB63005C29FA /* provinces.plist in Resources */,
 				CC95DCEB1F315F4500539A03 /* Main.storyboard in Resources */,
@@ -2036,7 +2024,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = ZP26G972X9;
 				ENABLE_BITCODE = NO;
-				GCC_PREFIX_HEADER = /Users/rongfeng/Desktop/JieNiuShenghuo/JieNiuShenghuo/JNSHPreFixHeader.h;
+				GCC_PREFIX_HEADER = "/Users/zhouhuiping/Documents/iOS项目/JieNiuLife/JieNiuShenghuo/JNSHPreFixHeader.h";
 				INFOPLIST_FILE = JieNiuShenghuo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -2060,7 +2048,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEVELOPMENT_TEAM = ZP26G972X9;
 				ENABLE_BITCODE = NO;
-				GCC_PREFIX_HEADER = /Users/rongfeng/Desktop/JieNiuShenghuo/JieNiuShenghuo/JNSHPreFixHeader.h;
+				GCC_PREFIX_HEADER = "/Users/zhouhuiping/Documents/iOS项目/JieNiuLife/JieNiuShenghuo/JNSHPreFixHeader.h";
 				INFOPLIST_FILE = JieNiuShenghuo/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

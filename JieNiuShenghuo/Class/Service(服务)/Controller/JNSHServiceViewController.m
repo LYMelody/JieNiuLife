@@ -64,8 +64,8 @@
     headerView.backgroundColor = [UIColor grayColor];
     headerView.userInteractionEnabled = YES;
     table.tableHeaderView = headerView;
-    NSArray *imgaeArray = [NSArray arrayWithObjects:[UIImage imageNamed:@"banner01"],[UIImage imageNamed:@"AD04.png"],[UIImage imageNamed:@"APP05.png"], nil];
-    imgaeArray = [[NSArray alloc]init];
+    
+    NSArray *imgaeArray = [[NSArray alloc]init];
     ADScrollView = [SDCycleScrollView cycleScrollViewWithFrame:CGRectMake(0, 0, KscreenWidth, [JNSHAutoSize height:188]) shouldInfiniteLoop:YES imageNamesGroup:imgaeArray];
     ADScrollView.delegate = self;
     ADScrollView.bannerImageViewContentMode = UIViewContentModeScaleAspectFill;

@@ -47,6 +47,9 @@
     [self.navigationController.navigationBar setTitleTextAttributes:@{
                                                                       NSForegroundColorAttributeName:[UIColor whiteColor]
                                                                       }];
+    
+    
+    
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -65,15 +68,12 @@
      //self.navigationController.navigationBar.hidden = YES;
     
     User = [NSUserDefaults standardUserDefaults];
-    BOOL isTaihe = [User boolForKey:@"IsTaiHe"];
-    
     
     //返回按钮
     self.navigationItem.backBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"" style:UIBarButtonItemStylePlain target:self action:nil];
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
     
     UIImageView *backimg = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, KscreenWidth, KscreenHeight)];
-    backimg.backgroundColor = [UIColor whiteColor];
     backimg.image = [UIImage imageNamed:@"thumb-1920-438689"];
     backimg.userInteractionEnabled = YES;
     [self.view addSubview:backimg];
@@ -92,24 +92,13 @@
     
     UIImageView *logoImgView = [[UIImageView alloc] init];
     logoImgView.image = [UIImage imageNamed:@"捷牛生活-logo-"];
-    if (isTaihe) {
-        logoImgView.image = [UIImage imageNamed:@"login_logo_01"];
-    }
     [backimg addSubview:logoImgView];
-    // 区分布局
-    if (isTaihe) {
-        [logoImgView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.centerX.equalTo(backimg);
-            make.top.equalTo(backimg).offset([JNSHAutoSize height:129]);
-            make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:170], [JNSHAutoSize height:70]));
-        }];
-    } else {
-        [logoImgView mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.centerX.equalTo(backimg);
-            make.top.equalTo(backimg).offset([JNSHAutoSize height:129]);
-            make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:170], [JNSHAutoSize height:60]));
-        }];
-    }
+    
+    [logoImgView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(backimg);
+        make.top.equalTo(backimg).offset([JNSHAutoSize height:129]);
+        make.size.mas_equalTo(CGSizeMake([JNSHAutoSize width:170], [JNSHAutoSize height:60]));
+    }];
     
     UIImageView *logoBackImage = [[UIImageView alloc] init];
     logoBackImage.backgroundColor = [UIColor whiteColor];
@@ -155,9 +144,6 @@
    
     UIImageView *accountLogoImg = [[UIImageView alloc] init];
     accountLogoImg.image = [UIImage imageNamed:@"account"];
-    if (isTaihe) {
-        accountLogoImg.image = [UIImage imageNamed:@"login_icon_phone"];
-    }
     [accountLeftView addSubview:accountLogoImg];
     
     [accountLogoImg mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -210,17 +196,12 @@
         if ([User objectForKey:@"UserPwd"]) {
             pwdTextFiled.text = [User objectForKey:@"UserPwd"];
         }
+        
     }
     
     UIImageView *pwdLeftView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, [JNSHAutoSize width:60], [JNSHAutoSize height:50])];
     UIImageView *pwdLogoImg = [[UIImageView alloc] init];
     pwdLogoImg.image = [UIImage imageNamed:@"key"];
-    if (isTaihe) {
-        pwdLogoImg.image = [UIImage imageNamed:@"login_icon_code"];
-        pwdLeftView.frame = CGRectMake(0, 0, [JNSHAutoSize width:60], [JNSHAutoSize height:30]);
-    } else {
-        pwdLeftView.frame = CGRectMake(0, 0, [JNSHAutoSize width:60], [JNSHAutoSize height:50]);
-    }
     [pwdLeftView addSubview:pwdLogoImg];
     
     [pwdLogoImg mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -253,7 +234,6 @@
     
     //登录
     LogoInBtn = [[JNSHCommonButton alloc] init];
-    LogoInBtn.isLogin = YES;
     LogoInBtn.enabled =  NO;
     [LogoInBtn setTitle:@"登录" forState:UIControlStateNormal];
     [LogoInBtn addTarget:self action:@selector(logIn) forControlEvents:UIControlEventTouchUpInside];

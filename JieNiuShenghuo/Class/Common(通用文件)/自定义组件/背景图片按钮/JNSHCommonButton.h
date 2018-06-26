@@ -10,6 +10,7 @@
 
 @interface JNSHCommonButton : UIButton
 
-@property(nonatomic,assign)BOOL isLogin;
+
+
 
 @end

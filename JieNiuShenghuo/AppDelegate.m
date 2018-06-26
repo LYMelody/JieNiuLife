@@ -60,11 +60,6 @@
     UMConfigInstance.channelId = @"Exterprise";
     [MobClick startWithConfigure:UMConfigInstance];
     
-    
-    
-    
-    
-    
     //适配tableView ios11
     if (@available(iOS 11.0, *)) {
         UIScrollView.appearance.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
@@ -94,10 +89,7 @@
         self.window.rootViewController = barVc;
         
     }
-    
     [self.window makeKeyAndVisible];
-    // 区分“捷牛生活”和“泰禾E生活”
-    [user setBool:YES forKey:@"IsTaiHe"];
     
     //设置状态栏
     [application setStatusBarStyle:UIStatusBarStyleLightContent animated:NO];

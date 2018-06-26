@@ -22,7 +22,6 @@
 // THE SOFTWARE.
 
 #import "IQUIView+Hierarchy.h"
-#import "IQUITextFieldView+Additions.h"
 
 #import <UIKit/UICollectionView.h>
 #import <UIKit/UIAlertController.h>
@@ -151,7 +150,7 @@
     NSMutableArray<UIView*> *tempTextFields = [[NSMutableArray alloc] init];
     
     for (UIView *textField in siblings)
-        if ((textField == self || textField.ignoreSwitchingByNextPrevious == NO) && [textField _IQcanBecomeFirstResponder])
+        if ([textField _IQcanBecomeFirstResponder])
             [tempTextFields addObject:textField];
     
     return tempTextFields;
@@ -163,7 +162,7 @@
     
     for (UIView *textField in self.subviews)
     {
-        if ((textField == self || textField.ignoreSwitchingByNextPrevious == NO) && [textField _IQcanBecomeFirstResponder])
+        if ([textField _IQcanBecomeFirstResponder])
         {
             [textFields addObject:textField];
         }

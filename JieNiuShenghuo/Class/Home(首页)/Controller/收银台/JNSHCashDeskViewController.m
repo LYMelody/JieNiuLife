@@ -131,9 +131,9 @@
     textView.font = [UIFont systemFontOfSize:13];
     textView.userInteractionEnabled = NO;
     textView.textColor = ColorText;
-    NSMutableAttributedString *attrStr = [[NSMutableAttributedString alloc] initWithString:@"温馨提示：\n1、费率(带积分):会员0.39%+3，非会员0.53%+3；\n2、单笔2万，单卡5万；\n3、实时到账时间09:00-21:00。"];
+    NSMutableAttributedString *attrStr = [[NSMutableAttributedString alloc] initWithString:@"温馨提示：\n1、费率(带积分):会员0.45%+3，非会员0.58%+3；\n2、单笔2万，单卡5万；\n3、实时到账时间09:00-21:00。"];
     [attrStr addAttribute:NSFontAttributeName value:[UIFont systemFontOfSize:14] range:NSMakeRange(0, 5)];
-    [attrStr addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:NSMakeRange(8, 7)];
+    [attrStr addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:NSMakeRange(18, 18)];
     
     if(self.tag == 2) {
         attrStr = [[NSMutableAttributedString alloc] initWithString:@"温馨提示：\n1、费率(不带积分):会员0.3%+3，非会员0.44%+3；\n2、单笔2万，单卡不限；\n3、实时到账时间09:00-21:00。"];

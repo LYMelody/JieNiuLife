@@ -25,8 +25,8 @@
 //#import "JPUSHService.h"
 //#import <UserNotifications/UserNotifications.h>
 //蒲公英
-//#import "PgySDK/PgyManager.h"
-//#import "PgyUpdate/PgyUpdateManager.h"
+#import "PgySDK/PgyManager.h"
+#import "PgyUpdate/PgyUpdateManager.h"
 //友盟
 #import "UMMobClick/MobClick.h"
 
@@ -53,8 +53,8 @@
     
     //[NSThread sleepForTimeInterval:1];
     //蒲公英
-//    [[PgyManager sharedPgyManager] startManagerWithAppId:PgyAPPID];
-//    [[PgyManager sharedPgyManager] setEnableFeedback:NO];
+    [[PgyManager sharedPgyManager] startManagerWithAppId:PgyAPPID];
+    [[PgyManager sharedPgyManager] setEnableFeedback:NO];
     //友盟
     UMConfigInstance.appKey = UmengAPPkey;
     UMConfigInstance.channelId = @"Exterprise";

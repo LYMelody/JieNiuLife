@@ -1,33 +1,30 @@
 PODS:
   - IQKeyboardManager (4.0.13)
-  - JCore (1.1.5)
-  - JPush (3.0.6):
-    - JCore (~> 1.1.1)
-  - Masonry (1.0.2)
+  - Masonry (1.1.0)
   - MBProgressHUD (0.9.2)
-  - MJRefresh (3.1.12)
-  - MOBFoundation (3.0.2)
-  - Pgyer (2.8.7)
-  - PgyUpdate (1.5)
+  - MJRefresh (3.1.15.3)
+  - MOBFoundation (3.1.6)
+  - Pgyer (2.8.9)
+  - PgyUpdate (1.6)
   - SBJson (5.0.0)
-  - SDWebImage (4.1.0):
-    - SDWebImage/Core (= 4.1.0)
-  - SDWebImage/Core (4.1.0)
-  - ShareSDK3 (4.0.1):
+  - SDWebImage (4.4.1):
+    - SDWebImage/Core (= 4.4.1)
+  - SDWebImage/Core (4.4.1)
+  - ShareSDK3 (4.0.4):
     - MOBFoundation
-    - ShareSDK3/ShareSDK (= 4.0.1)
-  - ShareSDK3/ShareSDK (4.0.1):
+    - ShareSDK3/ShareSDK (= 4.0.4)
+  - ShareSDK3/ShareSDK (4.0.4):
     - MOBFoundation
-  - ShareSDK3/ShareSDKPlatforms/SinaWeibo (4.0.1):
+  - ShareSDK3/ShareSDKPlatforms/SinaWeibo (4.0.4):
     - MOBFoundation
-  - ShareSDK3/ShareSDKPlatforms/WeChat (4.0.1):
+  - ShareSDK3/ShareSDKPlatforms/WeChat (4.0.4):
     - MOBFoundation
-  - ShareSDK3/ShareSDKUI (4.0.1):
+  - ShareSDK3/ShareSDKUI (4.0.4):
     - MOBFoundation
+  - UMengAnalytics (4.2.4)
 
 DEPENDENCIES:
-  - IQKeyboardManager
-  - JPush
+  - IQKeyboardManager (~> 4.0.13)
   - Masonry
   - MBProgressHUD (~> 0.9.2)
   - MJRefresh
@@ -40,21 +37,35 @@ DEPENDENCIES:
   - ShareSDK3/ShareSDKPlatforms/SinaWeibo
   - ShareSDK3/ShareSDKPlatforms/WeChat
   - ShareSDK3/ShareSDKUI
+  - UMengAnalytics
+
+SPEC REPOS:
+  https://github.com/CocoaPods/Specs.git:
+    - IQKeyboardManager
+    - Masonry
+    - MBProgressHUD
+    - MJRefresh
+    - MOBFoundation
+    - Pgyer
+    - PgyUpdate
+    - SBJson
+    - SDWebImage
+    - ShareSDK3
+    - UMengAnalytics
 
 SPEC CHECKSUMS:
   IQKeyboardManager: 8eab4d8111418414619d1df8e4779ce5d0f8d7e2
-  JCore: 9bd9c770c877c583d98b90a68792b8361974c231
-  JPush: c41be50eb1a574a66aeb68d237f00a4ec6ec3a82
-  Masonry: 7c429b56da9d4ee0bbb3ed77a5ea710d6a5df39e
+  Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   MBProgressHUD: 1569cf7ace17a8bac47aabfbb8580a49690386d1
-  MJRefresh: b96cdb21c4aa75a7b07654311ab2f315c497e806
-  MOBFoundation: d5e27c4638d911d3c7501aa5df458955d4814359
-  Pgyer: 94e52b954e7595c86fa5ba70a154cb1d31d4be0d
-  PgyUpdate: bad71685b91bba4aa520b7fe29356a476700fdf2
+  MJRefresh: b48380ae2b927b46c4ef000de9adb8dc748e1df7
+  MOBFoundation: a87c5f11fb87f873337189c3ec0add4d3ec6221a
+  Pgyer: 830654e51e23f754cce5d8b3ea9ba72be68452eb
+  PgyUpdate: cd6c2ada5928f36a9f904d8f96a9b3b53e190755
   SBJson: 73c848dc34be51fda282fab12bda6c426f5ead08
-  SDWebImage: 0e435c14e402a6730315a0fb79f95e68654d55a4
-  ShareSDK3: 6983a9b5209b63f2f4297fb0328d9a8dd6abd5f1
+  SDWebImage: 47e9b5b925cbce75946c23f0c42dd19464189af4
+  ShareSDK3: 75b57bab0cbe3119e281c7668eaad9d48adf3fde
+  UMengAnalytics: ef8d45f94c0e5771dc364cf6a5731d9d3b101da2
 
-PODFILE CHECKSUM: 1d13b9ce0c41651976619de39a8ff0f2ff2724f3
+PODFILE CHECKSUM: 18bda690014924c0db0692acc7511d80e8eea72a
 
-COCOAPODS: 1.1.1
+COCOAPODS: 1.5.0.beta.1

@@ -3,7 +3,7 @@ source 'https://github.com/CocoaPods/Specs.git'
 target 'JieNiuShenghuo' do
  
   pod 'Masonry'
-  pod 'IQKeyboardManager'
+  pod 'IQKeyboardManager', '~> 4.0.13'
   pod 'SBJson'
   pod 'MBProgressHUD', '~> 0.9.2'
   pod 'SDWebImage'
@@ -14,6 +14,7 @@ target 'JieNiuShenghuo' do
   pod 'ShareSDK3/ShareSDKPlatforms/SinaWeibo'
   pod 'MJRefresh'
   pod 'UMengAnalytics'
-
+  pod 'Pgyer'
+  pod 'PgyUpdate'
 end 
 

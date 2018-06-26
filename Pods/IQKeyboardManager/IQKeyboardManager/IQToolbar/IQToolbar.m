@@ -38,22 +38,25 @@
 {
     [super initialize];
 
-    IQToolbar *appearanceProxy = [self appearance];
+    //Tint Color
+    [[self appearance] setTintColor:nil];
 
-    [appearanceProxy setBarTintColor:nil];
+    [[self appearance] setBarTintColor:nil];
     
-    NSArray <NSNumber*> *positions = @[@(UIBarPositionAny),@(UIBarPositionBottom),@(UIBarPositionTop),@(UIBarPositionTopAttached)];
-
-    for (NSNumber *position in positions)
-    {
-        UIToolbarPosition toolbarPosition = [position unsignedIntegerValue];
-
-        [appearanceProxy setBackgroundImage:nil forToolbarPosition:toolbarPosition barMetrics:UIBarMetricsDefault];
-        [appearanceProxy setShadowImage:nil forToolbarPosition:toolbarPosition];
-    }
+    //Background image
+    [[self appearance] setBackgroundImage:nil forToolbarPosition:UIBarPositionAny           barMetrics:UIBarMetricsDefault];
+    [[self appearance] setBackgroundImage:nil forToolbarPosition:UIBarPositionBottom        barMetrics:UIBarMetricsDefault];
+    [[self appearance] setBackgroundImage:nil forToolbarPosition:UIBarPositionTop           barMetrics:UIBarMetricsDefault];
+    [[self appearance] setBackgroundImage:nil forToolbarPosition:UIBarPositionTopAttached   barMetrics:UIBarMetricsDefault];
+    
+    //Shadow image
+    [[self appearance] setShadowImage:nil forToolbarPosition:UIBarPositionAny];
+    [[self appearance] setShadowImage:nil forToolbarPosition:UIBarPositionBottom];
+    [[self appearance] setShadowImage:nil forToolbarPosition:UIBarPositionTop];
+    [[self appearance] setShadowImage:nil forToolbarPosition:UIBarPositionTopAttached];
     
     //Background color
-    [appearanceProxy setBackgroundColor:nil];
+    [[self appearance] setBackgroundColor:nil];
 }
 
 -(void)initialize
@@ -165,12 +168,8 @@
 -(void)layoutSubviews
 {
     [super layoutSubviews];
-
-    //If running on Xcode9 (iOS11) only then we'll validate for iOS version, otherwise for older versions of Xcode (iOS10 and below) we'll just execute the tweak
-#ifdef __IPHONE_11_0
-    if (@available(iOS 11.0, *)) {}
-    else
-#endif
+    
+    if (IQ_IS_IOS11_OR_GREATER == NO)
     {
         CGRect leftRect = CGRectNull;
         CGRect rightRect = CGRectNull;

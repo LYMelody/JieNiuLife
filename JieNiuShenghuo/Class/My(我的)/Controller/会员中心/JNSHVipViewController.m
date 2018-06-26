@@ -192,7 +192,7 @@
     ratingSubLab.font = [UIFont systemFontOfSize:11];
     ratingSubLab.textColor = ColorLightText;
     ratingSubLab.textAlignment = NSTextAlignmentLeft;
-    ratingSubLab.text = @"0.3+3/笔";
+    ratingSubLab.text = @"0.45+3/笔";
     
     [ratingBackImg addSubview:ratingSubLab];
     
@@ -246,7 +246,7 @@
     safeSubLab.font = [UIFont systemFontOfSize:11];
     safeSubLab.textColor = ColorLightText;
     safeSubLab.textAlignment = NSTextAlignmentLeft;
-    safeSubLab.text = @"赠交通意外险";
+    safeSubLab.text = @"账户安全保障";
     
     [safeBackImg addSubview:safeSubLab];
     
@@ -765,20 +765,20 @@
 //专属费率
 - (void)tapForVip {
     
-    JNSHRightIntroduceViewController *RightVc = [[JNSHRightIntroduceViewController alloc] init];
-    RightVc.typetag = 100;
-    RightVc.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:RightVc animated:YES];
+//    JNSHRightIntroduceViewController *RightVc = [[JNSHRightIntroduceViewController alloc] init];
+//    RightVc.typetag = 100;
+//    RightVc.hidesBottomBarWhenPushed = YES;
+//    [self.navigationController pushViewController:RightVc animated:YES];
     
 }
 
 //PICC介绍
 - (void)TapForPICC {
     
-    JNSHRightIntroduceViewController *RightVc = [[JNSHRightIntroduceViewController alloc] init];
-    RightVc.typetag = 101;
-    RightVc.hidesBottomBarWhenPushed = YES;
-    [self.navigationController pushViewController:RightVc animated:YES];
+//    JNSHRightIntroduceViewController *RightVc = [[JNSHRightIntroduceViewController alloc] init];
+//    RightVc.typetag = 101;
+//    RightVc.hidesBottomBarWhenPushed = YES;
+//    [self.navigationController pushViewController:RightVc animated:YES];
     
 }
 

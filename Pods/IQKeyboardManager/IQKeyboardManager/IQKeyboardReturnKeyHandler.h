@@ -26,10 +26,10 @@
 #import <Foundation/NSObject.h>
 #import <Foundation/NSObjCRuntime.h>
 
-#import <UIKit/UITextInputTraits.h>
+#import <UIKit/UITextField.h>
+#import <UIKit/UITextView.h>
 
-@class UITextField, UIView, UIViewController;
-@protocol UITextFieldDelegate, UITextViewDelegate;
+@class UITextField,UIView, UIViewController;
 
 /**
  Manages the return key to work like next/done in a view hierarchy.

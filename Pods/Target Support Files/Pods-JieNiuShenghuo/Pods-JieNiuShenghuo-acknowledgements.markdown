@@ -76,7 +76,7 @@ THE SOFTWARE.
 
 ## MOBFoundation
 
-Copyright © 2012-2015 mob
+Copyright © 2012-2018 mob
 
 ## Masonry
 
@@ -99,6 +99,16 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
+
+## PgyUpdate
+
+Copyright 2015 pgyer.com. All rights reserved.
+
+
+## Pgyer
+
+Copyright 2017 pgyer.com. All rights reserved.
+
 
 ## SBJson
 

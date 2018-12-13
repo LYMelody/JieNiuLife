@@ -51,6 +51,9 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
+    
+    
+    
     //[NSThread sleepForTimeInterval:1];
     //蒲公英
     [[PgyManager sharedPgyManager] startManagerWithAppId:PgyAPPID];
